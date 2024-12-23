@@ -1,2 +1,2 @@
-# intent
+# Intent
 Intent main app
