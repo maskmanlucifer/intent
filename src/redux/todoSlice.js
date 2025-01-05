@@ -8,6 +8,14 @@ const initialState = {
   activeTodo: null,
 };
 
+const clearAlarm = (id) => {
+  chrome.storage.local.get(["alarms"], (data) => {
+    const alarms = data.alarms || {};
+    delete alarms[id];
+    chrome.storage.local.set({ alarms });
+  });
+}
+
 createReducer(initialState, builder => {
   builder.addCase('TODO_REHYDRATE', (state, action) => {})
 })
@@ -75,6 +83,7 @@ const todoSlice = createSlice({
 
       if (chrome.alarms) {
         chrome.alarms.clear(id.toString());
+        clearAlarm(id);
       }
     },
     toggleTaskState: (state, action) => {
@@ -111,6 +120,7 @@ const todoSlice = createSlice({
 
       if (chrome.alarms && !task.isCompleted) {
         chrome.alarms.clear(id.toString());
+        clearAlarm(id);
       }
 
       state.todos = state.todos.map((todo) =>
@@ -245,6 +255,12 @@ const todoSlice = createSlice({
           chrome.alarms.create(id.toString(), {
             when: alarmTime.getTime(),
           });
+
+          chrome.storage.local.get(["alarms"], (data) => {
+            const alarms = data.alarms || {};
+            alarms[id.toString()] = alarmTime.getTime();
+            chrome.storage.local.set({ alarms });
+          });
         });
       }
 
@@ -376,6 +392,7 @@ const todoSlice = createSlice({
 
       if (chrome.alarms) {
         chrome.alarms.clear(id.toString());
+        clearAlarm(id);
       }
 
       const newTask = getNewSubtask({
