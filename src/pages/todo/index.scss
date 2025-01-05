@@ -1,0 +1,35 @@
+
+
+.todo-page {
+    margin-left: 25%;
+    margin-top: calc(100% / 16);
+
+    .heading {
+        display: inline-block;
+        font-family: var(--secondary-font);
+        font-size: 40px;
+        font-size: 48px;
+        background-image: linear-gradient(90.42deg, #3898d3 0.58%, #445def 37.22%, #ea2eb5 73.87%, #FF7C51 112.26%);
+        background-size: 100%;
+        background-repeat: repeat;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: #566CEC;
+    }
+
+    .sub-heading {
+        display: inline-block;
+        margin-left: 8px;
+        color: #98A2B3;
+        font-size: 14px;
+    }
+
+    .empty-state {
+        display: flex;
+        margin-top: 40px;
+    }
+
+    .competed-task-rm-btn {
+        margin-top: 200px;
+    }
+}

@@ -1,0 +1,33 @@
+.todo-item {
+    display: flex;
+    flex-direction: column;
+
+    &.subtask {
+        margin-left: 24px;
+    }
+
+    .todo-item-task {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        position: relative;
+
+        .todo-actions {
+            position: absolute;
+        }
+
+        .todo-text-container {
+            min-width: 200px;
+            width: 100%;
+
+            .todo-text {
+                outline: none;
+                padding: 0px;
+                border: none;
+                font-size: 16px;
+                width: 100%;
+                font-family: var(--primary-font);
+            }
+        }
+    }
+}

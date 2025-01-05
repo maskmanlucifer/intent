@@ -1,0 +1,22 @@
+.break-page {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    font-family: var(--secondary-font);
+    background: radial-gradient(circle, #98EBC1 0%, #C9F3DE 20%, #E1F6ED 72%, #F9FAFB 95%);
+
+    h1 {
+        margin: 0;
+        padding: 0;
+        text-transform: uppercase;
+    }
+
+    .break-header {
+        font-size: 36px;
+        position: absolute;
+        top: calc(100% / 4);
+        left: calc(100% / 4);
+    }
+}

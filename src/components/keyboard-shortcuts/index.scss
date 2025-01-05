@@ -1,0 +1,21 @@
+.keyboard-shortcuts {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+    .shortcut-list {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        justify-content: space-between;
+
+        .keyboard-shortcut-key {
+            padding: 0px 8px;
+            border-radius: 4px;
+            background-color: #A6F4C5;
+            color: #667085;
+        }
+    }
+}

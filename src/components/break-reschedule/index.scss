@@ -1,0 +1,44 @@
+.break-reschedule {
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    border: 1px solid #e8f3e3;
+    padding: 4px 12px;
+    transform: translate(-50%); 
+    background-color: #f6fff9;
+    border-radius: 8px;
+    font-size: 16px;
+
+    svg {
+        margin-left: 8px;
+    }
+
+    .break-postpone {
+        display: flex;
+        gap: 4px;
+        align-items: center;
+        font-family: var(--secondary-font);
+
+        button {
+            color: #475467;
+            border: 1px solid #98A2B3;
+            font-size: 14px;
+
+            div {
+                display: none;
+            }
+
+            &:first-of-type {
+                margin-left: 8px;
+            }
+        }
+    }
+}
+
+.end-break-feedbacks {
+    display: flex;
+    flex-direction: column;
+}
