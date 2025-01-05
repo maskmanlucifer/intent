@@ -216,7 +216,15 @@ const todoSlice = createSlice({
       state.activeTodo = newTask.id;
     },
     clearCompletedTasks: (state) => {
+      const tasksToRemove = state.todos.filter((todo) => todo.isCompleted);
       state.todos = state.todos.filter((todo) => !todo.isCompleted);
+
+      tasksToRemove.forEach((task) => {
+        if (chrome.alarms) {
+          chrome.alarms.clear(task.id.toString());
+          clearAlarm(task.id);
+        }
+      });
     },
     changeTaskTime: (state, action) => {
       const { id, parentId, startTime, endTime } = action.payload;
