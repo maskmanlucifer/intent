@@ -12,16 +12,16 @@ const InfoDropdown = () => {
   });
 
   const openMail = (subject) => {
-    window.open(`mailto:maskmanaman@gmail.com?subject=${subject}`, "_blank");
+    window.open(`mailto:brightpixellabs@gmail.com?subject=${subject}`, "_blank");
   };
 
-  const handleHowItWorks = () => {
-    setModalData({
-      visible: true,
-      type: "video",
-      title: "How Intent works",
-    });
-  };
+  // const handleHowItWorks = () => {
+  //   setModalData({
+  //     visible: true,
+  //     type: "video",
+  //     title: "How Intent works",
+  //   });
+  // };
 
   const items = [
     {
@@ -129,41 +129,41 @@ const InfoDropdown = () => {
       ),
     },
 
-    {
-      key: "4",
-      label: (
-        <button
-          target="_blank"
-          rel="noopener noreferrer"
-          className="info-dropdown-items"
-          onClick={handleHowItWorks}
-        >
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 16 16"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <g clip-path="url(#clip0_80_257)">
-              <path
-                d="M5.33335 12L0.666687 14.6667V4.00001L5.33335 1.33334M5.33335 12L10.6667 14.6667M5.33335 12V1.33334M10.6667 14.6667L15.3334 12V1.33334L10.6667 4.00001M10.6667 14.6667V4.00001M10.6667 4.00001L5.33335 1.33334"
-                stroke="#1677ff"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </g>
-            <defs>
-              <clipPath id="clip0_80_257">
-                <rect width="16" height="16" fill="white" />
-              </clipPath>
-            </defs>
-          </svg>
-          How it works
-        </button>
-      ),
-    },
+    // {
+    //   key: "4",
+    //   label: (
+    //     <button
+    //       target="_blank"
+    //       rel="noopener noreferrer"
+    //       className="info-dropdown-items"
+    //       onClick={handleHowItWorks}
+    //     >
+    //       <svg
+    //         width="16"
+    //         height="16"
+    //         viewBox="0 0 16 16"
+    //         fill="none"
+    //         xmlns="http://www.w3.org/2000/svg"
+    //       >
+    //         <g clip-path="url(#clip0_80_257)">
+    //           <path
+    //             d="M5.33335 12L0.666687 14.6667V4.00001L5.33335 1.33334M5.33335 12L10.6667 14.6667M5.33335 12V1.33334M10.6667 14.6667L15.3334 12V1.33334L10.6667 4.00001M10.6667 14.6667V4.00001M10.6667 4.00001L5.33335 1.33334"
+    //             stroke="#1677ff"
+    //             strokeWidth="1.5"
+    //             strokeLinecap="round"
+    //             strokeLinejoin="round"
+    //           />
+    //         </g>
+    //         <defs>
+    //           <clipPath id="clip0_80_257">
+    //             <rect width="16" height="16" fill="white" />
+    //           </clipPath>
+    //         </defs>
+    //       </svg>
+    //       How it works
+    //     </button>
+    //   ),
+    // },
   ];
 
   return (
