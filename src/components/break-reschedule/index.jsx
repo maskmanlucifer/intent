@@ -19,6 +19,12 @@ const BreakReschedule = () => {
       chrome.alarms.create("genericAlarm", {
         delayInMinutes: time,
       });
+      
+      chrome.storage.local.get(["alarms"], (data) => {
+        const alarms = data.alarms || {};
+        alarms["genericAlarm"] = Date.now() + time * 60000;
+        chrome.storage.local.set({ alarms });
+      });
     });
     messageApi.success(`Break postponed for ${time} minutes`);
   };
