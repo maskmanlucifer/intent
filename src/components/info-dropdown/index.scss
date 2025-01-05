@@ -1,0 +1,18 @@
+.info-dropdown {
+    position: absolute;
+    bottom: calc(100% / 16);
+    right: calc(100% / 24);
+    cursor: pointer;
+}
+
+.info-dropdown-items {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    padding-left: 0;
+    padding-right: 0;
+    font-size: 14px;
+}
