@@ -24,12 +24,20 @@
         font-size: 14px;
     }
 
+    .todo-list-wrapper {
+        min-height: 200px;
+
+        &.empty {
+            min-height: 0;
+        }
+    }
+
     .empty-state {
         display: flex;
         margin-top: 40px;
     }
 
     .competed-task-rm-btn {
-        margin-top: 200px;
+        margin-top: 50px;
     }
 }

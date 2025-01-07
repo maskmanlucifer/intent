@@ -438,7 +438,12 @@ export const selectTodoList = createSelector(
   (state) => state.todos.todos,
   (todos) =>
     [...todos]
-      .sort((a, b) => a.order - b.order)
+      .sort((a, b) => {
+        if (a.isCompleted === b.isCompleted) {
+          return new Date(a.startTime) - new Date(b.startTime);
+        }
+        return a.isCompleted ? 1 : -1;
+      })
       .map((todo) => ({
         ...todo,
         subtasks: [...todo.subtasks].sort((a, b) => a.order - b.order),

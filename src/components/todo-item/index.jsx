@@ -52,6 +52,12 @@ const TodoItem = ({
   const [textContent, setTextContent] = useState(text);
 
   const handleKeyDown = (e) => {
+    if (e.metaKey && e.key === "Enter") {
+      e.preventDefault();
+      handleTodoToggle();
+      return;
+    }
+
     if (e.key === "Enter") {
       e.preventDefault();
 
