@@ -13,16 +13,24 @@ function App() {
   const [activePage, setActivePage] = useState(PAGES.TODO);
 
   useEffect(() => {
-    chrome.storage.local.get(["breakActive"]).then((result) => {
-      if (result && result.breakActive) {
-        setActivePage(PAGES.BREAK);
-      }
-    });
+    if (chrome.storage) {
+      chrome.storage.local.get(["breakActive"]).then((result) => {
+        if (result && result.breakActive) {
+          setActivePage(PAGES.BREAK);
+        }
+      });
+    }
   }, []);
 
   useEffect(() => {
+    if (!chrome.storage) {
+      return;
+    }
     const handleStorageChange = (changes) => {
-      if (changes.breakActive && changes.breakActive.newValue !== changes.breakActive.oldValue) {
+      if (
+        changes.breakActive &&
+        changes.breakActive.newValue !== changes.breakActive.oldValue
+      ) {
         setActivePage(changes.breakActive.newValue ? PAGES.BREAK : PAGES.TODO);
       }
     };
@@ -53,7 +61,7 @@ function App() {
       theme={{
         token: {
           controlHeight: 32, // Sets the global button height
-          fontFamily: "Roboto"
+          fontFamily: "Roboto",
         },
       }}
     >

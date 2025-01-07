@@ -21,12 +21,13 @@ const TimeRangePicker = ({ startTime, endTime, onRangeChange }) => {
   return (
     <div className="date-picker">
       <RangePicker
-        format="HH:mm"
+        format="hh:mm A"
         onChange={onChange}
         value={range}
         size="small"
         picker="time"
-        placeholder={["00:00", "00:00"]}
+        placeholder={["12:00 AM", "12:00 AM"]}
+        height={'60px'}
       />
     </div>
   );
