@@ -163,7 +163,7 @@ const TodoItem = ({
   return (
     <div className={classNames("todo-item", { subtask: isSubtask })}>
       <div className="todo-item-task">
-        {!isSubtask && (
+        {!isSubtask && !isCompleted && (
           <DatePicker
             startTime={startTime}
             endTime={endTime}
