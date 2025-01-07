@@ -5,6 +5,11 @@ const dayjs = require("dayjs");
 
 const { RangePicker } = DatePicker;
 
+const isCurrentRangeEligible = (startTime, endTime) => {
+  const currentTime = dayjs().valueOf();
+  return currentTime >= startTime && currentTime <= endTime;
+};
+
 const TimeRangePicker = ({ startTime, endTime, onRangeChange }) => {
   const [range, setRange] = useState([
     startTime ? dayjs(startTime) : startTime,
@@ -20,6 +25,11 @@ const TimeRangePicker = ({ startTime, endTime, onRangeChange }) => {
 
   return (
     <div className="date-picker">
+      {isCurrentRangeEligible(startTime, endTime) && (
+        <div className="date-picker-indicator">
+          <div className="circle"></div>
+        </div>
+      )}
       <RangePicker
         format="hh:mm A"
         onChange={onChange}
@@ -27,7 +37,7 @@ const TimeRangePicker = ({ startTime, endTime, onRangeChange }) => {
         size="small"
         picker="time"
         placeholder={["12:00 AM", "12:00 AM"]}
-        height={'60px'}
+        height={"60px"}
       />
     </div>
   );

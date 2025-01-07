@@ -12,6 +12,7 @@ import {
 import { Button, Empty, message, Popconfirm } from "antd";
 import { MESSAGE_TYPES } from "../../constant";
 import UserContextInfo from "../../components/context-info";
+import classNames from "classnames";
 
 const Todo = () => {
   const todoItems = useSelector(selectTodoList);
@@ -49,6 +50,7 @@ const Todo = () => {
       <h1 className="heading">Today</h1>{" "}
       <span className="sub-heading"> / {getTodaysDate()}</span>
       {contextHolder}
+      <div className={classNames("todo-list-wrapper", { empty: todoItems.length === 0 })}>
       {todoItems.map((todo) => (
         <TodoItem
           key={todo.id}
@@ -58,6 +60,7 @@ const Todo = () => {
           showMessage={showMessage}
         />
       ))}
+      </div>
       {todoItems.length === 0 && (
         <div className="empty-state">
           <Empty
