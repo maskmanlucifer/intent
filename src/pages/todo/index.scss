@@ -41,3 +41,15 @@
         margin-top: 50px;
     }
 }
+
+@media (max-width: 1600px) {
+    .todo-page {
+        margin-top: 15px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .todo-page {
+        margin-top: 10px;
+    }
+}
