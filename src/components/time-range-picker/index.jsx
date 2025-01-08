@@ -31,8 +31,8 @@ const TimeRangePicker = ({ startTime, endTime, onRangeChange }) => {
         </div>
       )}
       <RangePicker
-        format="hh:mm A"
         onChange={onChange}
+        showTime={{ format: "hh:mm A", minuteStep: 5 }}
         value={range}
         size="small"
         picker="time"
