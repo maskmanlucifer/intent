@@ -1,0 +1,84 @@
+.note-item {
+
+    .card-time {
+        font-size: 14px;
+        color: #0000004d;
+        font-weight: 400;
+    }
+
+    .edit-note-btn {
+        span {
+            color: #1677ff;
+        }
+        &:hover {
+            span {
+                color: #1677ff;
+            }
+        }
+    }
+    
+    .ant-card-actions {
+        height: 40px;
+        display: flex;
+        align-items: center;
+    }
+
+    .ant-card-body {
+        height: 200px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        overflow: hidden;
+        margin-bottom: 24px;
+        margin-top: -12px;
+
+        .heading {
+            font-size: 32px;
+            font-weight: 500;
+            line-height: normal;
+            font-family: var(--secondary-font);
+        }
+
+        .sub-heading {
+            font-size: 24px;
+            font-family: var(--secondary-font);
+        }
+    }
+
+    .ant-card-head {
+        min-height: 40px;
+    }
+
+    .card-title {
+        height: 8px;
+        width: 8px;
+        border-radius: 50%;
+        background-color: #1677ff;
+    }
+}
+
+.note-modal {
+    &.ant-modal {
+        min-width: 800px;
+    }
+    
+    .ant-modal-header {
+        margin-left: 20px;
+        margin-top: 20px;
+
+        .ant-modal-title {
+            font-size: 24px;
+            font-weight: 500;
+            margin-left: 26px;
+
+            #title-input {
+                font-size: 24px;
+                font-weight: 500;
+                border: none;
+                outline: none;
+                width: 100%;
+                min-width: 400px;
+            }
+        }
+    }
+}

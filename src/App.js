@@ -7,7 +7,7 @@ import Todo from "./pages/todo";
 import InfoDropdown from "./components/info-dropdown";
 import { ConfigProvider } from "antd";
 import Break from "./pages/break";
-import { rehydrateStore } from "./redux/store";
+import Notes from "./pages/notes";
 
 function App() {
   const [activePage, setActivePage] = useState(PAGES.TODO);
@@ -45,7 +45,7 @@ function App() {
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.visibilityState === "visible") {
-        rehydrateStore();
+        window.location.reload();
       }
     };
 
@@ -66,12 +66,13 @@ function App() {
       }}
     >
       <div className="App">
-        {activePage === PAGES.TODO && (
+        {(
           <PageSwitcher page={activePage} setPage={setActivePage} />
         )}
         {activePage === PAGES.TODO && <Todo />}
         {activePage === PAGES.TODO && <InfoDropdown />}
         {activePage === PAGES.BREAK && <Break />}
+        {activePage === PAGES.NOTES && <Notes />}
       </div>
     </ConfigProvider>
   );

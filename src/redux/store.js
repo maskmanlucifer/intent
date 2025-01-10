@@ -2,32 +2,24 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import { combineReducers } from "redux";
 import todoReducer from "./todoSlice";
-
-export async function rehydrateStore() {
-  const persistedState = await storage.getItem('persist:root');
-  if (persistedState) {
-    const parsedState = JSON.parse(persistedState);
-    store.dispatch({
-      type: 'TODO_REHYDRATE',
-      payload: {
-        todos: JSON.parse(parsedState.todos),
-      },
-    });
-  }
-}
+import notesReducer from "./notesSlice";
 
 const persistConfig = {
   key: "root",
   storage,
 };
 
-const persistedReducer = persistReducer(persistConfig, todoReducer);
+const rootReducer = combineReducers({
+  todos: todoReducer,
+  notes: notesReducer,
+});
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
-  reducer: {
-    todos: persistedReducer,
-  },
+  reducer: persistedReducer,
 });
 
 export const persistor = persistStore(store);

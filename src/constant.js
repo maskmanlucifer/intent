@@ -7,9 +7,8 @@ export const PAGES = {
 export const PAGE_SWITCHER_OPTIONS = Object.values(PAGES)
   .filter((option) => option !== PAGES.BREAK)
   .map((option) => ({
-    label: option === PAGES.NOTES ? "Notes (Coming Soon)" : option,
+    label: option,
     value: option,
-    disabled: option === PAGES.NOTES,
   }));
 
 export const TODO_LIST_LIMIT = 5;
