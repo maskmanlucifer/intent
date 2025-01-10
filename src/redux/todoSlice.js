@@ -1,11 +1,11 @@
 /* eslint-disable no-undef */
-import { createReducer, createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { arrayMove, getNewSubtask, getNewTask } from "../helper";
 import { createSelector } from "reselect";
 
 const initialState = {
-  todos: [],
-  activeTodo: null,
+  items: [],
+  activeItem: null,
 };
 
 const clearAlarm = (id) => {
@@ -15,10 +15,6 @@ const clearAlarm = (id) => {
     chrome.storage.local.set({ alarms });
   });
 }
-
-createReducer(initialState, builder => {
-  builder.addCase('TODO_REHYDRATE', (state, action) => {})
-})
 
 const todoSlice = createSlice({
   name: "todos",
@@ -30,13 +26,13 @@ const todoSlice = createSlice({
       const updateText = (task) => (task.id === id ? { ...task, text } : task);
 
       if (isSubtask) {
-        state.todos = state.todos.map((todo) =>
+        state.items = state.items.map((todo) =>
           todo.id === parentId
             ? { ...todo, subtasks: todo.subtasks.map(updateText) }
             : todo,
         );
       } else {
-        state.todos = state.todos.map(updateText);
+        state.items = state.items.map(updateText);
       }
     },
     deleteTask: (state, action) => {
@@ -59,26 +55,26 @@ const todoSlice = createSlice({
         );
 
         const parentTodo = state.todos.find((todo) => todo.id === parentId);
-        state.activeTodo =
+        state.activeItem =
           parentTodo.subtasks.length > 0
             ? parentTodo.subtasks.find(
                 (subtask) => subtask.order === Math.max(order - 1, 1),
               ).id
             : parentId;
       } else {
-        const newTodos = state.todos.filter((todo) => todo.id !== id);
+        const newTodos = state.items.filter((todo) => todo.id !== id);
 
         const todosWithOrderChange = newTodos.map((todo) =>
           todo.order > order ? { ...todo, order: todo.order - 1 } : todo,
         );
 
-        state.todos = todosWithOrderChange;
+        state.items = todosWithOrderChange;
 
-        const prevOrderTask = state.todos.find(
+        const prevOrderTask = state.items.find(
           (todo) => todo.order === order - 1,
         );
 
-        state.activeTodo = prevOrderTask ? prevOrderTask.id : null;
+        state.activeItem = prevOrderTask ? prevOrderTask.id : null;
       }
 
       if (chrome.alarms) {
@@ -116,26 +112,26 @@ const todoSlice = createSlice({
         return;
       }
 
-      const task = state.todos.find((todo) => todo.id === id);
+      const task = state.items.find((todo) => todo.id === id);
 
       if (chrome.alarms && !task.isCompleted) {
         chrome.alarms.clear(id.toString());
         clearAlarm(id);
       }
 
-      state.todos = state.todos.map((todo) =>
+      state.items = state.items.map((todo) =>
         todo.id === id ? { ...todo, isCompleted: !todo.isCompleted } : todo,
       );
     },
     changeTaskOrder: (state, action) => {
       const { sourceIndex, destinationIndex } = action.payload;
-      state.todos = arrayMove(state.todos, sourceIndex, destinationIndex);
+      state.items = arrayMove(state.items, sourceIndex, destinationIndex);
     },
     addNewTask: (state, action) => {
       const { order } = action.payload;
       const newTask = getNewTask(order);
-      state.todos = [...state.todos, newTask];
-      state.activeTodo = newTask.id;
+      state.items = [...state.items, newTask];
+      state.activeItem = newTask.id;
     },
     handleEnterKey: (state, action) => {
       const {
@@ -150,9 +146,9 @@ const todoSlice = createSlice({
 
       if (isSubtask) {
         if (isLastTask && text === "") {
-          const parentTodo = state.todos.find((todo) => todo.id === parentId);
+          const parentTodo = state.items.find((todo) => todo.id === parentId);
 
-          state.todos = state.todos.map((todo) =>
+          state.items = state.items.map((todo) =>
             todo.id === parentId
               ? {
                   ...todo,
@@ -165,8 +161,8 @@ const todoSlice = createSlice({
 
           const newTask = getNewTask(parentTodo.order + 1);
 
-          state.todos = [
-            ...state.todos.map((todo) =>
+          state.items = [
+            ...state.items.map((todo) =>
               todo.order > parentTodo.order
                 ? { ...todo, order: todo.order + 1 }
                 : todo,
@@ -174,7 +170,7 @@ const todoSlice = createSlice({
             newTask,
           ];
 
-          state.activeTodo = newTask.id;
+          state.activeItem = newTask.id;
           return;
         }
 
@@ -182,7 +178,7 @@ const todoSlice = createSlice({
 
         const newSubtask = getNewSubtask({ parentId, order: newOrder });
 
-        state.todos = state.todos.map((todo) =>
+        state.items = state.items.map((todo) =>
           todo.id === parentId
             ? {
                 ...todo,
@@ -198,7 +194,7 @@ const todoSlice = createSlice({
             : todo,
         );
 
-        state.activeTodo = newSubtask.id;
+        state.activeItem = newSubtask.id;
         return;
       }
 
@@ -206,18 +202,18 @@ const todoSlice = createSlice({
 
       const newTask = getNewTask(newOrder);
 
-      state.todos = [
-        ...state.todos.map((todo) =>
+      state.items = [
+        ...state.items.map((todo) =>
           todo.order >= newOrder ? { ...todo, order: todo.order + 1 } : todo,
         ),
         newTask,
       ];
 
-      state.activeTodo = newTask.id;
+      state.activeItem = newTask.id;
     },
     clearCompletedTasks: (state) => {
-      const tasksToRemove = state.todos.filter((todo) => todo.isCompleted);
-      state.todos = state.todos.filter((todo) => !todo.isCompleted);
+      const tasksToRemove = state.items.filter((todo) => todo.isCompleted);
+      state.items = state.items.filter((todo) => !todo.isCompleted);
 
       tasksToRemove.forEach((task) => {
         if (chrome.alarms) {
@@ -229,10 +225,10 @@ const todoSlice = createSlice({
     changeTaskTime: (state, action) => {
       const { id, parentId, startTime, endTime } = action.payload;
 
-      const task = state.todos.find((todo) => todo.id === id);
+      const task = state.items.find((todo) => todo.id === id);
 
       if (task) {
-        state.todos = state.todos.map((todo) =>
+        state.items = state.items.map((todo) =>
           todo.id === id
             ? { ...todo, startTime, endTime }
             : todo.id === parentId
@@ -272,7 +268,7 @@ const todoSlice = createSlice({
         });
       }
 
-      state.todos = state.todos.sort((a, b) => {
+      state.items = state.items.sort((a, b) => {
         const aTime = new Date(a.startTime);
         const bTime = new Date(b.startTime);
         const aHours = aTime.getHours();
@@ -286,38 +282,38 @@ const todoSlice = createSlice({
         return aHours - bHours;
       });
 
-      state.todos = state.todos.map((todo, index) => ({
+      state.items = state.items.map((todo, index) => ({
         ...todo,
         order: index + 1,
       }));
 
-      state.activeTodo = id;
+      state.activeItem = id;
     },
     moveCursor: (state, action) => {
       const { orderDelta, isSubtask, parentId, id, order } = action.payload;
 
       if (isSubtask) {
         if (order === 1 && orderDelta === -1) {
-          state.activeTodo = parentId;
+          state.activeItem = parentId;
           return;
         }
 
         if (orderDelta === -1 && order !== 1) {
-          const prevSubtask = state.todos
+          const prevSubtask = state.items
             .find((todo) => todo.id === parentId)
             .subtasks.find((subtask) => subtask.order === order - 1);
-          state.activeTodo = prevSubtask.id;
+          state.activeItem = prevSubtask.id;
           return;
         }
 
-        const parentTodo = state.todos.find((todo) => todo.id === parentId);
+        const parentTodo = state.items.find((todo) => todo.id === parentId);
 
         const subtaskLength = parentTodo.subtasks.length;
 
         if (
           orderDelta === 1 &&
           order === subtaskLength &&
-          parentTodo.order === state.todos.length
+          parentTodo.order === state.items.length
         ) {
           return;
         }
@@ -325,27 +321,27 @@ const todoSlice = createSlice({
         if (
           orderDelta === 1 &&
           order === subtaskLength &&
-          parentTodo.order !== state.todos.length
+          parentTodo.order !== state.items.length
         ) {
-          const nextTask = state.todos.find(
+          const nextTask = state.items.find(
             (todo) => todo.order === parentTodo.order + 1,
           );
-          state.activeTodo = nextTask.id;
+          state.activeItem = nextTask.id;
           return;
         }
 
         if (orderDelta === 1 && order === subtaskLength) {
-          const nextTask = state.todos.find(
+          const nextTask = state.items.find(
             (todo) => todo.order === parentTodo.order + 1,
           );
-          state.activeTodo = nextTask ? nextTask.id : id;
+          state.activeItem = nextTask ? nextTask.id : id;
           return;
         }
 
         const nextSubtask = parentTodo.subtasks.find(
           (subtask) => subtask.order === order + 1,
         );
-        state.activeTodo = nextSubtask.id;
+        state.activeItem = nextSubtask.id;
         return;
       }
 
@@ -354,34 +350,34 @@ const todoSlice = createSlice({
       }
 
       if (orderDelta === -1 && order !== 1) {
-        const prevTask = state.todos.find((todo) => todo.order === order - 1);
+        const prevTask = state.items.find((todo) => todo.order === order - 1);
         const lastSubtask = prevTask.subtasks.find(
           (subtask) => subtask.order === prevTask.subtasks.length,
         );
-        state.activeTodo = lastSubtask ? lastSubtask.id : prevTask.id;
+        state.activeItem = lastSubtask ? lastSubtask.id : prevTask.id;
         return;
       }
 
-      const taskLength = state.todos.length;
+      const taskLength = state.items.length;
 
       if (orderDelta === 1 && order === taskLength) {
-        const firstSubtask = state.todos
+        const firstSubtask = state.items
           .find((todo) => todo.order === 1)
           .subtasks.find((subtask) => subtask.order === 1);
-        state.activeTodo = firstSubtask ? firstSubtask.id : id;
+        state.activeItem = firstSubtask ? firstSubtask.id : id;
       }
 
-      const firstSubtask = state.todos
+      const firstSubtask = state.items
         .find((todo) => todo.order === order)
         .subtasks.find((subtask) => subtask.order === 1);
 
       if (firstSubtask) {
-        state.activeTodo = firstSubtask.id;
+        state.activeItem = firstSubtask.id;
         return;
       }
 
-      const nextTask = state.todos.find((todo) => todo.order === order + 1);
-      state.activeTodo = nextTask ? nextTask.id : id;
+      const nextTask = state.items.find((todo) => todo.order === order + 1);
+      state.activeItem = nextTask ? nextTask.id : id;
     },
     changeTaskToSubtask: (state, action) => {
       const { id, order, isSubtask, text } = action.payload;
@@ -390,9 +386,9 @@ const todoSlice = createSlice({
         return;
       }
 
-      const prevTask = state.todos.find((todo) => todo.order === order - 1);
+      const prevTask = state.items.find((todo) => todo.order === order - 1);
 
-      const currentTask = state.todos.find((todo) => todo.id === id);
+      const currentTask = state.items.find((todo) => todo.id === id);
 
       if (currentTask.subtasks.length > 0) {
         return;
@@ -409,9 +405,9 @@ const todoSlice = createSlice({
         text,
       });
 
-      state.todos = state.todos.filter((todo) => todo.id !== id);
+      state.items = state.items.filter((todo) => todo.id !== id);
 
-      state.todos = state.todos.map((todo) =>
+      state.items = state.items.map((todo) =>
         todo.id === prevTask.id
           ? {
               ...todo,
@@ -420,22 +416,17 @@ const todoSlice = createSlice({
           : todo,
       );
 
-      state.todos = state.todos.map((todo) =>
+      state.items = state.items.map((todo) =>
         todo.order > order ? { ...todo, order: todo.order - 1 } : todo,
       );
 
-      state.activeTodo = newTask.id;
+      state.activeItem = newTask.id;
     },
-  },
-  extraReducers: builder => {
-    builder.addCase('TODO_REHYDRATE', (state, action) => {
-      state.todos = action.payload.todos;
-    })
   }
 });
 
 export const selectTodoList = createSelector(
-  (state) => state.todos.todos,
+  (state) => state.todos.items,
   (todos) =>
     [...todos]
       .sort((a, b) => {
@@ -452,15 +443,15 @@ export const selectTodoList = createSelector(
 
 export const selectNonCompletedTodoListLength = createSelector(
   selectTodoList,
-  (todos) => todos.filter((todo) => !todo.isCompleted).length,
+  (items) => items.filter((todo) => !todo.isCompleted).length,
 );
 
 export const selectCompletedTodoListLength = createSelector(
   selectTodoList,
-  (todos) => todos.filter((todo) => todo.isCompleted).length,
+  (items) => items.filter((todo) => todo.isCompleted).length,
 );
 
-export const selectActiveTodo = (state) => state.todos.activeTodo;
+export const selectActiveTodo = (state) => state.todos.activeItem;
 
 export const {
   updateTaskText,
