@@ -1,31 +1,43 @@
 
 
 .todo-page {
-    margin-left: 25%;
-    margin-top: calc(100% / 16);
+    margin: calc(100% / 16);
+    margin-left: calc(36%);
+    margin-top: calc(100% / 8 + 100% / 16);
 
-    .heading {
-        display: inline-block;
-        font-family: var(--secondary-font);
-        font-size: 40px;
-        font-size: 48px;
-        background-image: linear-gradient(90.42deg, #3898d3 0.58%, #445def 37.22%, #ea2eb5 73.87%, #FF7C51 112.26%);
-        background-size: 100%;
-        background-repeat: repeat;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-        color: #566CEC;
+    &.empty {
+        margin: 0;
     }
 
-    .sub-heading {
-        display: inline-block;
-        margin-left: 8px;
-        color: #98A2B3;
-        font-size: 14px;
+    .heading-container {
+        position: absolute;
+        top: calc(100% / 36);
+        right: calc(100% / 16);
+
+        .heading {
+            display: inline-block;
+            font-family: var(--secondary-font);
+            font-size: 30px;
+            background-image: linear-gradient(90.42deg, #3898d3 0.58%, #445def 37.22%, #ea2eb5 73.87%, #FF7C51 112.26%);
+            background-size: 100%;
+            background-repeat: repeat;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: #566CEC;
+        }
+    
+        .sub-heading {
+            display: inline-block;
+            margin-left: 8px;
+            color: #98A2B3;
+            font-size: 14px;
+        }
     }
 
     .todo-list-wrapper {
         min-height: 200px;
+        margin: calc(100% / 16);
+        margin-top: 100px;
 
         &.empty {
             min-height: 0;
@@ -34,11 +46,14 @@
 
     .empty-state {
         display: flex;
-        margin-top: 40px;
+        margin-top: 200px;
+        width: 100%;
+        justify-content: center;
     }
 
     .competed-task-rm-btn {
         margin-top: 50px;
+        margin-left: 60px;
     }
 }
 

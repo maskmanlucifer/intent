@@ -9,6 +9,10 @@ export const arrayMove = (array, from, to) => {
   return result;
 };
 
+export const createId = () => {
+  return uuidv4();
+};
+
 export const getNewTask = (order = 1) => {
   return {
     id: uuidv4(),
@@ -32,3 +36,13 @@ export const getNewSubtask = ({ parentId, order = 1, text = "" }) => {
     subtasks: [],
   };
 };
+
+export const createNewNote = () => {
+  return {
+    id: uuidv4(),
+    title: "",
+    subtitle: "",
+    data: "{}",
+    createdAt: new Date().toISOString(),
+  };
+}

@@ -46,9 +46,11 @@ const Todo = () => {
   };
 
   return (
-    <div className="todo-page">
-      <h1 className="heading">Today</h1>{" "}
-      <span className="sub-heading"> / {getTodaysDate()}</span>
+    <div className={classNames("todo-page", { empty: todoItems.length === 0 })}>
+      <div className="heading-container">
+        <h1 className="heading">Today</h1>{" "}
+        <span className="sub-heading"> / {getTodaysDate()}</span>
+      </div>
       {contextHolder}
       <div className={classNames("todo-list-wrapper", { empty: todoItems.length === 0 })}>
       {todoItems.map((todo) => (
@@ -60,7 +62,6 @@ const Todo = () => {
           showMessage={showMessage}
         />
       ))}
-      </div>
       {todoItems.length === 0 && (
         <div className="empty-state">
           <Empty
@@ -162,6 +163,7 @@ const Todo = () => {
           </Empty>
         </div>
       )}
+       </div>
       {completedTodoListLength > 0 && (
         <Popconfirm
           title="Delete the completed tasks?"

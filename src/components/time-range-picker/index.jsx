@@ -6,8 +6,15 @@ const dayjs = require("dayjs");
 const { RangePicker } = DatePicker;
 
 const isCurrentRangeEligible = (startTime, endTime) => {
-  const currentTime = dayjs().valueOf();
-  return currentTime >= startTime && currentTime <= endTime;
+  const currentTime = dayjs();
+  const start = dayjs(startTime).set('date', currentTime.date());
+  const end = dayjs(endTime).set('date', currentTime.date());
+
+  if (end.isBefore(start)) {
+    end.add(1, 'day');
+  }
+
+  return currentTime.isAfter(start) && currentTime.isBefore(end);
 };
 
 const TimeRangePicker = ({ startTime, endTime, onRangeChange }) => {
