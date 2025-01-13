@@ -10,7 +10,7 @@ import Break from "./pages/break";
 import Notes from "./pages/notes";
 
 function App() {
-  const [activePage, setActivePage] = useState(PAGES.BREAK);
+  const [activePage, setActivePage] = useState(PAGES.TODO);
 
   useEffect(() => {
     if (chrome.storage) {
