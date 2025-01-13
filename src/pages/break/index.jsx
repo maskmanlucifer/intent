@@ -44,6 +44,7 @@ const Break = () => {
           color: "#9EA5D1",
         }}
       />
+
       <BreakPill
         text="Do nothing just exist"
         inlineStyle={{

@@ -7,7 +7,7 @@ import todoReducer from "./todoSlice";
 import notesReducer from "./notesSlice";
 
 const persistConfig = {
-  key: "root",
+  key: "intent",
   storage,
 };
 

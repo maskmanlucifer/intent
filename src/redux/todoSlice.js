@@ -39,7 +39,7 @@ const todoSlice = createSlice({
       const { id, parentId, isSubtask, order } = action.payload;
 
       if (isSubtask) {
-        state.todos = state.todos.map((todo) =>
+        state.items = state.items.map((todo) =>
           todo.id === parentId
             ? {
                 ...todo,
@@ -54,7 +54,8 @@ const todoSlice = createSlice({
             : todo,
         );
 
-        const parentTodo = state.todos.find((todo) => todo.id === parentId);
+        const parentTodo = state.items.find((todo) => todo.id === parentId);
+
         state.activeItem =
           parentTodo.subtasks.length > 0
             ? parentTodo.subtasks.find(
@@ -85,7 +86,7 @@ const todoSlice = createSlice({
     toggleTaskState: (state, action) => {
       const { id, parentId, isSubtask } = action.payload;
       if (isSubtask) {
-        state.todos = state.todos.map((todo) =>
+        state.items = state.items.map((todo) =>
           todo.id === parentId
             ? {
                 ...todo,
@@ -98,13 +99,13 @@ const todoSlice = createSlice({
             : todo,
         );
 
-        const parentTodo = state.todos.find((todo) => todo.id === parentId);
+        const parentTodo = state.items.find((todo) => todo.id === parentId);
         const allSubtasksCompleted = parentTodo.subtasks.every(
           (subtask) => subtask.isCompleted,
         );
 
         if (allSubtasksCompleted) {
-          state.todos = state.todos.map((todo) =>
+          state.items = state.items.map((todo) =>
             todo.id === parentId ? { ...todo, isCompleted: true } : todo,
           );
         }
