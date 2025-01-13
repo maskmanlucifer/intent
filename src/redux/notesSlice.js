@@ -12,7 +12,7 @@ const notesSlice = createSlice({
             state.items.push(action.payload);
         },
         removeNote: (state, action) => {
-            state.items = state.notes.filter(note => note.id !== action.payload);
+            state.items = state.items.filter(note => note.id !== action.payload);
         },
         updateNote: (state, action) => {
             const index = state.items.findIndex(note => note.id === action.payload.id);
