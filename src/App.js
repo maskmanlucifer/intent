@@ -10,7 +10,7 @@ import Break from "./pages/break";
 import Notes from "./pages/notes";
 
 function App() {
-  const [activePage, setActivePage] = useState(PAGES.TODO);
+  const [activePage, setActivePage] = useState(PAGES.BREAK);
 
   useEffect(() => {
     if (chrome.storage) {
@@ -66,7 +66,7 @@ function App() {
       }}
     >
       <div className="App">
-        {(
+        {activePage !== PAGES.BREAK && (
           <PageSwitcher page={activePage} setPage={setActivePage} />
         )}
         {activePage === PAGES.TODO && <Todo />}

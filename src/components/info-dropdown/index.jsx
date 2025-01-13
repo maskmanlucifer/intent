@@ -11,17 +11,9 @@ const InfoDropdown = () => {
     content: "",
   });
 
-  const openMail = (subject) => {
-    window.open(`mailto:brightpixellabs@gmail.com?subject=${subject}`, "_blank");
+  const openLink = (url) => {
+    window.open(url, "_blank");
   };
-
-  // const handleHowItWorks = () => {
-  //   setModalData({
-  //     visible: true,
-  //     type: "video",
-  //     title: "How Intent works",
-  //   });
-  // };
 
   const items = [
     {
@@ -35,7 +27,7 @@ const InfoDropdown = () => {
             setModalData({
               visible: true,
               type: "shortcut",
-              title: "Keyboard shortcuts",
+              title: "Keyboard navigation",
             })
           }
         >
@@ -54,7 +46,7 @@ const InfoDropdown = () => {
               strokeLinejoin="round"
             />
           </svg>
-          Keyboard shortcuts
+          Keyboard navigations
         </button>
       ),
     },
@@ -65,7 +57,7 @@ const InfoDropdown = () => {
           target="_blank"
           rel="noopener noreferrer"
           className="info-dropdown-items"
-          onClick={() => openMail("Feature request for Intent")}
+          onClick={() => openLink("https://tally.so/r/3lKvJX")}
         >
           <svg
             width="16"
@@ -104,7 +96,7 @@ const InfoDropdown = () => {
           target="_blank"
           rel="noopener noreferrer"
           className="info-dropdown-items"
-          onClick={() => openMail("Bug report for Intent")}
+          onClick={() => openLink("https://tally.so/r/3j5v11")}
         >
           <svg
             width="16"
@@ -210,6 +202,7 @@ const InfoDropdown = () => {
         onOk={() => setModalData({ ...modalData, visible: false })}
         onCancel={() => setModalData({ ...modalData, visible: false })}
         cancelButtonProps={{ style: { display: "none" } }}
+        className="keyboard-shortcuts-modal"
       >
         <KeyboardShortcuts />
       </Modal>

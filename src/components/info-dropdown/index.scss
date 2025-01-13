@@ -17,3 +17,14 @@
     font-size: 14px;
     color: #000000;
 }
+
+.keyboard-shortcuts-modal {
+    &.ant-modal {
+        top: calc(50% - 150px);
+        margin-bottom: 0;
+    }
+
+    .ant-modal-title {
+        font-size: 20px;
+    }
+}
