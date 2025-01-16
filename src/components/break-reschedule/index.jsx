@@ -12,14 +12,13 @@ const BreakReschedule = () => {
 
   const [messageApi, contextHolder] = message.useMessage();
 
-
   const handleBreakPostpone = (time) => {
     chrome.storage.local.set({ breakActive: false });
     chrome.alarms.clear("genericAlarm", () => {
       chrome.alarms.create("genericAlarm", {
         delayInMinutes: time,
       });
-      
+
       chrome.storage.local.get(["alarms"], (data) => {
         const alarms = data.alarms || {};
         alarms["genericAlarm"] = Date.now() + time * 60000;
@@ -44,9 +43,7 @@ const BreakReschedule = () => {
             description={`Your break will be postponed for ${time}min`}
             key={time}
           >
-            <Button size="small">
-              {time}min
-            </Button>
+            <Button size="small">{time}min</Button>
           </Popconfirm>
         ))}
       </div>

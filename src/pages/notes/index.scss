@@ -1,13 +1,17 @@
 .notes {
-    width: 100%;
     position: relative;
+    margin: calc(100% / 32);
+
+    &.empty {
+        margin-left: calc(1200% / 32);
+        margin-right: calc(1200% / 32);
+        margin-top: calc(400% / 32);
+    }
 
     .notes-wrapper {
         display: flex;
         flex-wrap: wrap;
         gap: 20px;
-        margin: calc(100% / 16);
-        padding-bottom: 40px;
 
         .add-note {
             width: 300px;
@@ -42,7 +46,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-top: 100px;
         }
     }
 }

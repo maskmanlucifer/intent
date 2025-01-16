@@ -21,7 +21,7 @@ export const MESSAGE_TYPES = {
 
 export const KEYBOARD_SHORTCUTS = [
   {
-    key: "ENTER",
+    key: "Enter",
     description: "Add a new task",
   },
   {
@@ -33,17 +33,17 @@ export const KEYBOARD_SHORTCUTS = [
     description: "Delete task",
   },
   {
-    key: "↑",
+    key: "▲",
     description: "Navigate task up",
   },
   {
-    key: "↓",
+    key: "▼",
     description: "Navigate task down",
   },
   {
-    key: "⌘ + ENTER",
+    key: "⌘ + Enter",
     description: "Toggle task state",
-  }
+  },
 ];
 
 export const BREAK_TIME_DURATIONS = [5, 10, 20, 30];

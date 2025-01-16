@@ -10,13 +10,14 @@
         span {
             color: #1677ff;
         }
+
         &:hover {
             span {
                 color: #1677ff;
             }
         }
     }
-    
+
     .ant-card-actions {
         height: 40px;
         display: flex;
@@ -29,8 +30,7 @@
         flex-direction: column;
         gap: 8px;
         overflow: hidden;
-        margin-bottom: 24px;
-        margin-top: -12px;
+        margin: auto;
 
         .heading {
             font-size: 32px;
@@ -59,17 +59,53 @@
 
 .note-modal {
     &.ant-modal {
-        min-width: 800px;
+        min-width: calc(100% - 40px);
+        top: 20px;
     }
-    
+
+    .editor-modal-title {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+
+        svg {
+            height: 16px;
+            width: 16px;
+            color: #667085;
+        }
+
+        button {
+            padding: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            background-color: #EEF4FF;
+            border: 1px solid #A4BCFD;
+            border-radius: 4px;
+        }
+    }
+
+    .editor-modal-footer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: auto;
+
+        .state {
+            font-size: 14px;
+            color: #0000004d;
+            font-weight: 400;
+
+        }
+    }
+
     .ant-modal-header {
-        margin-left: 20px;
-        margin-top: 20px;
 
         .ant-modal-title {
             font-size: 24px;
             font-weight: 500;
-            margin-left: 26px;
 
             #title-input {
                 font-size: 24px;

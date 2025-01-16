@@ -10,7 +10,7 @@ import Break from "./pages/break";
 import Notes from "./pages/notes";
 
 function App() {
-  const [activePage, setActivePage] = useState(PAGES.TODO);
+  const [activePage, setActivePage] = useState(PAGES.NOTES);
 
   useEffect(() => {
     if (chrome.storage) {
@@ -39,20 +39,6 @@ function App() {
 
     return () => {
       chrome.storage.onChanged.removeListener(handleStorageChange);
-    };
-  }, []);
-
-  useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === "visible") {
-        window.location.reload();
-      }
-    };
-
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-
-    return () => {
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, []);
 

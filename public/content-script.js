@@ -21,7 +21,6 @@ chrome.storage.onChanged.addListener((changes) => {
   }
 });
 
-
 chrome.storage.local.get(["breakActive"]).then((result) => {
   if (result && result.breakActive) {
     applyDarkTheme();

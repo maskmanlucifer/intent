@@ -4,16 +4,16 @@ import Paragraph from "@editorjs/paragraph";
 import EditorjsList from "@editorjs/list";
 import Header from "@editorjs/header";
 import CodeTool from "@editorjs/code";
-import LinkTool from '@editorjs/link';
-import Delimiter from '@editorjs/delimiter';
-import InlineCode from '@editorjs/inline-code';
+import LinkTool from "@editorjs/link";
+import Delimiter from "@editorjs/delimiter";
+import InlineCode from "@editorjs/inline-code";
 import "./index.scss";
 
 const Editor = ({ isEditing, editorReference, note }) => {
   const editorRef = useRef();
 
   useEffect(() => {
-    if(editorRef.current) {
+    if (editorRef.current) {
       return;
     }
 
@@ -22,14 +22,14 @@ const Editor = ({ isEditing, editorReference, note }) => {
       tools: {
         paragraph: {
           class: Paragraph,
-          tunes: []
+          tunes: [],
         },
         list: {
           class: EditorjsList,
           config: {
             defaultStyle: "unordered",
           },
-          tunes: []
+          tunes: [],
         },
         header: {
           class: Header,
@@ -41,15 +41,13 @@ const Editor = ({ isEditing, editorReference, note }) => {
           tunes: [],
         },
         code: CodeTool,
-        linkTool: LinkTool,
         delimiter: Delimiter,
         inlineCode: InlineCode,
       },
       placeholder: "Let's write an awesome note!",
       readOnly: !isEditing,
       data: JSON.parse(note?.data || "{}"),
-      onReady: () => {
-      }
+      onReady: () => {},
     });
 
     editorRef.current = editor;
@@ -62,7 +60,8 @@ const Editor = ({ isEditing, editorReference, note }) => {
     };
   }, [note, isEditing]);
 
-  return <div id="editorjs"></div>;
+  return <div id="editorjsWrapper"><div id="editorjs"></div></div>
+  
 };
 
 export default Editor;

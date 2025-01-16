@@ -12,14 +12,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 chrome.runtime.onStartup.addListener(() => {
   chrome.storage.local.set({ naman: 1 });
 
-  chrome.storage.local.get(['alarms'], (data) => {
-      const alarms = data.alarms || {};
-      for (const [name, time] of Object.entries(alarms)) {
-          if (Date.now() < time) {
-              chrome.alarms.create(name, { when: time });
-          } else {
-              delete alarms[name];
-          }
+  chrome.storage.local.get(["alarms"], (data) => {
+    const alarms = data.alarms || {};
+    for (const [name, time] of Object.entries(alarms)) {
+      if (Date.now() < time) {
+        chrome.alarms.create(name, { when: time });
+      } else {
+        delete alarms[name];
       }
+    }
   });
 });
