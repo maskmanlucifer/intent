@@ -1,18 +1,12 @@
-
-
 .todo-page {
-    margin: calc(100% / 16);
-    margin-left: calc(36%);
-    margin-top: calc(100% / 8 + 100% / 16);
-
-    &.empty {
-        margin: 0;
-    }
+    margin-left: calc(1200% / 32);
+    margin-right: calc(1200% / 32);
+    margin-top: calc(400% / 32);
 
     .heading-container {
         position: absolute;
-        top: calc(100% / 36);
-        right: calc(100% / 16);
+        top: calc(100% / 32);
+        right: calc(100% / 32);
 
         .heading {
             display: inline-block;
@@ -25,7 +19,7 @@
             -webkit-text-fill-color: transparent;
             color: #566CEC;
         }
-    
+
         .sub-heading {
             display: inline-block;
             margin-left: 8px;
@@ -46,25 +40,11 @@
 
     .empty-state {
         display: flex;
-        margin-top: 200px;
-        width: 100%;
         justify-content: center;
     }
 
     .competed-task-rm-btn {
         margin-top: 50px;
-        margin-left: 60px;
-    }
-}
-
-@media (max-width: 1600px) {
-    .todo-page {
-        margin-top: 15px;
-    }
-}
-
-@media (max-width: 1024px) {
-    .todo-page {
-        margin-top: 10px;
+        margin-left: 30px;
     }
 }

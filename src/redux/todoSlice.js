@@ -14,7 +14,7 @@ const clearAlarm = (id) => {
     delete alarms[id];
     chrome.storage.local.set({ alarms });
   });
-}
+};
 
 const todoSlice = createSlice({
   name: "todos",
@@ -253,7 +253,7 @@ const todoSlice = createSlice({
             midnight.getTime() + aHours * 60 * 60 * 1000 + aMinutes * 60 * 1000,
           );
 
-          if(alarmTime <= new Date()) {
+          if (alarmTime <= new Date()) {
             return;
           }
 
@@ -423,7 +423,7 @@ const todoSlice = createSlice({
 
       state.activeItem = newTask.id;
     },
-  }
+  },
 });
 
 export const selectTodoList = createSelector(

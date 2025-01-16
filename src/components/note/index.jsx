@@ -32,18 +32,20 @@ const Note = ({ handleViewNote, handleEditNote, note }) => {
   return (
     <div className="note-item">
       <Card
-        title={<span className="card-time">
-          Created at {getCreatedTime(note.createdAt)}
-        </span>}
+        title={
+          <span className="card-time">
+            Created at {getCreatedTime(note.createdAt)}
+          </span>
+        }
         extra={
           <Button
-          className="edit-note-btn"
-          type="link"
-          size="small"
-          onClick={onEditNote}
-        >
-          Edit
-        </Button>
+            className="edit-note-btn"
+            type="link"
+            size="small"
+            onClick={onEditNote}
+          >
+            Edit
+          </Button>
         }
         style={{ width: 320 }}
         actions={[

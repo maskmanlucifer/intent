@@ -45,4 +45,4 @@ export const createNewNote = () => {
     data: "{}",
     createdAt: new Date().toISOString(),
   };
-}
+};
