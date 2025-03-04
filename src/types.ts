@@ -29,15 +29,14 @@ export type Subtask = {
 
 export type TSettings = {
   icalUrl?: string;
-  workingHours?: [string, string];
-  breakInterval?: number;
-  sidebarCollapsed?: boolean;
+  workingHours: [string, string];
+  breakInterval: number;
+  sidebarCollapsed: boolean;
 }
 
 export type TSessionData = {
   id: 'sessionData';
   lastCalendarFetchTime?: number;
-  settings?: TSettings;
 }
 
 export type Note = {

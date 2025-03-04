@@ -1,4 +1,3 @@
-import { setItem } from "../db/localStorage";
 import { TCalendarEvent, TSessionData } from "../types";
 import { getItem } from "../db/localStorage";
 import { TSettings } from "../types";
@@ -7,6 +6,19 @@ import { setIsImporting, updateEvents } from "../redux/eventsSlice";
 import { updateEventsData, cleanEventsData, getEventsData } from "../db";
 import { store } from "../redux/store";
 import { createId } from "../helper";
+
+import moment from 'moment-timezone';
+import { setSessionData } from "../redux/sessionSlice";
+
+const getISTTime = (time: string) => {
+  // Preserve the original time without shifting
+  const indiaTimeString = moment
+    .parseZone(time)
+    .tz('Asia/Kolkata', true)
+    .format('YYYY-MM-DDTHH:mm:ssZ');
+
+  return indiaTimeString;
+}
 
 export const getDataFromAPI = async (url: string) => {
   const response = await fetch(
@@ -32,8 +44,8 @@ const cancelAlarms = (ids: string[]) => {
 const getRecurringEvents = (event: any, targetDate: Date) => {
   const { uid, summary, description, start, end, rrule } = event as any;
 
-  const eventStart = new Date(start);
-  const eventEnd = new Date(end);
+  const eventStart = new Date(getISTTime(start));
+  const eventEnd = new Date(getISTTime(end));
 
   if (rrule) {
     try {
@@ -42,11 +54,11 @@ const getRecurringEvents = (event: any, targetDate: Date) => {
 
       // Convert string dates to proper Date objects
       if (typeof ruleOptions.dtstart === "string") {
-        ruleOptions.dtstart = new Date(ruleOptions.dtstart);
+        ruleOptions.dtstart = new Date(getISTTime(ruleOptions.dtstart));
       }
 
       if (typeof ruleOptions.until === "string") {
-        ruleOptions.until = new Date(ruleOptions.until);
+        ruleOptions.until = new Date(getISTTime(ruleOptions.until));
       }
 
       // Create the rule with corrected options
@@ -101,16 +113,18 @@ const getRecurringEvents = (event: any, targetDate: Date) => {
       }
 
       // If we get here, either the date matches an nth weekday rule or it's a regular rule
-      return occurrences.map((occurrence) => ({
+      return occurrences.map((occurrence) => {
+        const start = occurrence.getTime();
+        const timezoneOffset = -330; // Kolkata is UTC+5:30, which is +330 minutes
+        const startUTC = start + timezoneOffset * 60000; // Convert to UTC epoch time
+        return {
         id: createId(),
         uid,
         title: summary,
         description,
-        start: occurrence.getTime(),
-        end: new Date(
-          occurrence.getTime() + (eventEnd.getTime() - eventStart.getTime())
-        ).getTime(),
-      }));
+        start: startUTC,
+        end: startUTC + (eventEnd.getTime() - eventStart.getTime())
+      }});
     } catch (e) {
       console.error("RRule error:", e);
       return [];
@@ -135,8 +149,8 @@ const fetchEvents = async (icalUrl: string): Promise<TCalendarEvent[]> => {
         ) {
           const { uid, summary, description, start, end } = event as any;
 
-          const eventStart = new Date(start);
-          const eventEnd = new Date(end);
+          const eventStart = new Date(getISTTime(start));
+          const eventEnd = new Date(getISTTime(end));
 
           // Check normal scheduled events
           if (
@@ -152,8 +166,8 @@ const fetchEvents = async (icalUrl: string): Promise<TCalendarEvent[]> => {
                 uid,
                 title: summary,
                 description,
-                start: eventStart.getTime(),
-                end: eventEnd.getTime(),
+                start: Date.now() + 5 * 60 * 1000, // Set to the next five minutes
+                end: Date.now() + 10 * 60 * 1000,
               },
             ];
           }
@@ -196,19 +210,24 @@ export const handleImportCalendar = async (forceImport: boolean = false) => {
           const timeUntilEvent = event.start - Date.now();
 
           if (timeUntilEvent > 20 * 60 * 1000) {
-            chrome.alarms.create("event#" + event.id, {
-              delayInMinutes: (timeUntilEvent / 60000) - 10,
+            const delayInMinutes = (timeUntilEvent / 60000) - 10;
+            chrome.alarms.create("calendar-event#" + event.id, {
+              delayInMinutes: delayInMinutes > 0 ? delayInMinutes : 0,
             });
           }
         });
-        setItem("sessionData", {
+        store.dispatch(setSessionData({
           ...sessionData,
           lastCalendarFetchTime: Date.now(),
-        });
+        }));
       });
     }
+
+    const existingEvents = (await getEventsData()) as TCalendarEvent[];
+    store.dispatch(updateEvents(existingEvents));
   } catch (error) {
     console.error("Error fetching or parsing ICS:", error);
+    store.dispatch(updateEvents([]));
   }
 };
 

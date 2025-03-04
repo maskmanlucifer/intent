@@ -1,46 +1,48 @@
 import { getItem } from "../db/localStorage";
 
-export const handleBreakSchedule = (force: boolean = false) => {
+export const handleBreakSchedule = (force?: boolean) => {
   if (chrome.alarms) {
     chrome.alarms.get("genericAlarm", (alarm) => {
       if (!alarm || force) {
-        const sessionData = getItem("sessionData") || {};
+        const settings = getItem("settings") || {};
 
-        const { workingHours = ["09:00", "17:00"], interval = 90 } = sessionData;
-
-        const [startHour, endHour] = workingHours;
-        const startTime = new Date();
-        const endTime = new Date();
-
-        const [startHours, startMinutes] = startHour.split(':').map(Number);
-        const [endHours, endMinutes] = endHour.split(':').map(Number);
-
-        startTime.setHours(startHours, startMinutes, 0, 0);
-        endTime.setHours(endHours, endMinutes, 0, 0);
-
-        let startEpoch = startTime.getTime();
-        const endEpoch = endTime.getTime();
+        const { workingHours = ["09:00", "17:00"], breakInterval = 90 } = settings;
 
         const now = new Date();
+        const [startTimeStr, endTimeStr] = workingHours;
+
+        const [startHours, startMinutes] = startTimeStr.split(':').map(Number);
+        const [endHours, endMinutes] = endTimeStr.split(':').map(Number);
+
+        const startTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), startHours, startMinutes, 0, 0);
+        const endTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), endHours, endMinutes, 0, 0);
+
+        const startEpoch = startTime.getTime();
+        const endEpoch = endTime.getTime();
         const currentEpoch = now.getTime();
 
-        let breakTs;
+        let breakTs: number | undefined;
 
-        while(startEpoch < endEpoch) {
-          const testEpoch = startEpoch + interval * 60 * 1000;
-          if(testEpoch > endEpoch) {
-            break;
-          } else if(testEpoch > currentEpoch) {
-            breakTs = testEpoch;
-            break;
-          } else {
-            startEpoch = testEpoch;
+        if (currentEpoch >= startEpoch && currentEpoch <= endEpoch) {
+          let testEpoch = startEpoch;
+
+          while (testEpoch < endEpoch) {
+            testEpoch += breakInterval * 60 * 1000;
+            
+            if (testEpoch > endEpoch) {
+              break;
+            }
+            
+            if (testEpoch > currentEpoch) {
+              breakTs = testEpoch;
+              break;
+            }
           }
         }
 
         chrome.alarms.clear("genericAlarm");
 
-        if(breakTs) {
+        if (breakTs) {
           chrome.alarms.create("genericAlarm", {
             when: breakTs,
           });

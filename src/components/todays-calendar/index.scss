@@ -60,24 +60,17 @@
 
 
     .event-label-container {
-        padding: 8px;
+        padding: 10px;
         padding-top: 12px;
         display: flex;
         gap: 8px;
         height: calc(100% - 18px);
     }
 
-    .event-label-line {
-        height: 100%;
-        min-width: 4px;
-        border-radius: 4px;
-        background-color: white;
-    }
-
     .event-label-title {
         display: flex;
         flex-direction: column;
-        gap: 4px;
+        gap: 10px;
 
         .event-label-title-text {
             font-size: 14px;
@@ -85,7 +78,7 @@
         }
 
         .event-label-title-time {
-            font-size: 12px;
+            font-size: 13px;
             color: #666;
         }
     }
