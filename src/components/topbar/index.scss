@@ -1,0 +1,74 @@
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e0e0e0;
+    background-color: #f5f5f5;
+
+    .topbar-left {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;   
+        font-family: var(--secondary-font);
+        width: 259px;
+        transition: width 0.2s ease-in-out;
+
+        &.notes {
+            width: 100px;
+            transition: width 0.2s ease-in-out;
+        }
+
+        &.topbar-left-collapsed {
+            width: 79px;
+
+            .topbar-left-title {
+                justify-content: center;
+            }
+        }
+
+        .topbar-left-title {
+            font-size: 28px;
+            font-weight: 600;
+            display: flex;
+            width: 100%;
+            align-items: center;
+            justify-content: space-between;
+            margin-left: 10px;
+            margin-right: 10px;
+
+            svg {
+                width: 20px;
+                height: 20px;
+                cursor: pointer;
+            }
+        }
+    }
+    
+    .topbar-right {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 8px 16px;
+        justify-content: space-between;
+        flex: 1;
+        border-left: 1px solid #e0e0e0;
+
+
+        .settings {
+            cursor: pointer;
+        }
+
+        .check-schedule-button {
+            margin-left: auto;
+        }
+    }
+}
+
+.smily-icon {
+    color: #175CD3;
+
+    path {
+        fill: #175CD3;
+    }
+}
