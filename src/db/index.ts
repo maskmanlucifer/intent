@@ -7,6 +7,7 @@ import dbHelper from "./helper";
 import { fetchTodos } from "../redux/todoSlice";
 import { handleImportCalendar } from "../helpers/events.helper";
 import { handleBreakSchedule } from "../helpers/break.helper";
+import { fetchAndUpdateSession } from "../helpers/session.helper";
 
 const dbName = DB_CONFIG.name;
 const dbVersion = DB_CONFIG.version;
@@ -276,6 +277,7 @@ async function init() {
       id: "1",
       name: "Today",
     });
+    fetchAndUpdateSession();
     store.dispatch(fetchCategories());
     store.dispatch(fetchTodos());
     handleImportCalendar();

@@ -6,27 +6,25 @@ import { ConfigProvider, Drawer, Empty } from "antd";
 import "./db";
 import Todo from "./pages/todo";
 import { useDispatch, useSelector } from "react-redux";
-import { selectActivePage, setActivePage } from "./redux/sessionSlice";
+import { selectActivePage, setActivePage, selectSettings, setSettings } from "./redux/sessionSlice";
 import Topbar from "./components/topbar";
 import TimeBlock from "./components/todays-calendar";
 import { ReactComponent as EmptyNotesIcon } from "./assets/images/empty-notes.svg";
 import Break from "./pages/break";
-import { getItem, setItem } from "./db/localStorage";
-import { TSettings } from "./types";
 
 function App() {
   const dispatch = useDispatch();
-  const settings = getItem("settings") as TSettings || {};
   const activePage = useSelector(selectActivePage);
+  const settings = useSelector(selectSettings);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(settings.sidebarCollapsed || false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const handleSidebarCollapsed = (isCollapsed: boolean) => {
     setSidebarCollapsed(isCollapsed);
-    setItem("settings", {
+    dispatch(setSettings({
       ...settings,
       sidebarCollapsed: isCollapsed,
-    });
+    }));
   }
 
   useEffect(() => {

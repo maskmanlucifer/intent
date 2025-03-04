@@ -3,11 +3,11 @@ import { Button, Checkbox, message, Popconfirm } from "antd";
 import "./index.scss";
 import { BREAK_TIME_DURATIONS } from "../../constant";
 import { InfoCircleOutlined, SmileTwoTone } from "@ant-design/icons";
-import { getItem } from "../../db/localStorage";
-import { TSettings } from "../../types";
+import { useSelector } from "react-redux";
+import { selectSettings } from "../../redux/sessionSlice";
 
 const BreakReschedule = () => {
-  const settings = getItem("settings") as TSettings || {};
+  const settings = useSelector(selectSettings);
   const { breakInterval = 90, workingHours = ["09:00", "17:00"] } = settings;
 
   const handleEndBreak = () => {

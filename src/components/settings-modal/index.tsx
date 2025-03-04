@@ -1,6 +1,4 @@
 "use client"
-
-import type React from "react"
 import { useState } from "react"
 import { Modal, Menu, Typography, TimePicker, Select, Image, Input, Button, Popconfirm, message } from "antd"
 import {
@@ -13,10 +11,10 @@ import { ReactComponent as SubscriptionIcon } from "../../assets/icons/subscript
 import BreakBeforeImg from "../../assets/images/break-before-demo.png"
 import BreakAfterImg from "../../assets/images/break-demo.png"
 import { ReactComponent as CalendarIcon } from "../../assets/icons/calendar.svg"
-import { getItem, setItem } from "../../db/localStorage"
-import { TSettings } from "../../types"
 import { handleRemoveCalendar, handleImportCalendar } from "../../helpers/events.helper"
 import { handleBreakSchedule } from "../../helpers/break.helper"
+import { useDispatch, useSelector } from "react-redux"
+  import { setSettings, selectSettings } from "../../redux/sessionSlice"  
 
 const format = 'HH:mm';
 
@@ -29,30 +27,25 @@ interface SettingsModalProps {
 
 const SettingsModal = ({ visible = true, onClose }: SettingsModalProps) => {
   const [selectedMenu, setSelectedMenu] = useState("general")
-  const settings = getItem('settings') as TSettings || {};;
-  const [icalUrl, setIcalUrl] = useState(settings?.icalUrl || '')
-  const [workingHours, setWorkingHours] = useState(settings?.workingHours || ['09:00', '17:00']);
-  const [breakInterval, setBreakInterval] = useState(settings?.breakInterval || 90);
+  const settings = useSelector(selectSettings);
   const [messageApi, contextHolder] = message.useMessage();
-
+  const dispatch = useDispatch();
 
   const handleWorkingHoursChange = (value: string, index: number) => {
-    const newWorkingHours = [...workingHours];
+    const newWorkingHours = [...settings.workingHours || []];
     newWorkingHours[index] = value;
-    setWorkingHours(newWorkingHours);
-    setItem('settings', {
+    dispatch(setSettings({
       ...settings,
       workingHours: newWorkingHours,
-    });
+    }));
     handleBreakSchedule(true);
   };
 
   const handleBreakIntervalChange = (value: string) => {
-    setBreakInterval(parseInt(value));
-    setItem('settings', {
+    dispatch(setSettings({
       ...settings,
       breakInterval: parseInt(value),
-    });
+    }));
     handleBreakSchedule(true);
   };
 
@@ -113,7 +106,7 @@ const SettingsModal = ({ visible = true, onClose }: SettingsModalProps) => {
                   </Text>
                 <div className="time-picker-container">
                   <TimePicker 
-                    defaultValue={dayjs(workingHours[0], format)} 
+                    defaultValue={dayjs(settings.workingHours?.[0] || '09:00', format)} 
                     format={format} 
                     className="time-picker" 
                     placeholder="Start Time" 
@@ -126,7 +119,7 @@ const SettingsModal = ({ visible = true, onClose }: SettingsModalProps) => {
                     showNow={false}
                   />
                   <TimePicker 
-                    defaultValue={dayjs(workingHours[1], format)} 
+                    defaultValue={dayjs(settings.workingHours?.[1] || '17:00', format)} 
                     format={format} 
                     className="time-picker" 
                     placeholder="End Time" 
@@ -148,7 +141,7 @@ const SettingsModal = ({ visible = true, onClose }: SettingsModalProps) => {
                   Specify the duration between breaks to help manage your work schedule and ensure adequate recharge time.
                   </Text>
                 <Select
-                  defaultValue={breakInterval.toString()}
+                  defaultValue={settings.breakInterval?.toString() || '90'}
                   options={[
                     { value: '60', label: '60 minutes' },
                     { value: '90', label: '90 minutes' },
@@ -207,20 +200,23 @@ const SettingsModal = ({ visible = true, onClose }: SettingsModalProps) => {
                       placeholder="Enter your iCal URL"
                       size="small"
                       style={{ width: '332px', marginTop: '12px' }}
-                      value={icalUrl}
-                      onChange={(e) => setIcalUrl(e.target.value)}
+                      value={settings.icalUrl}
+                      onChange={(e) => dispatch(setSettings({
+                        ...settings,
+                        icalUrl: e.target.value,
+                      }))}
                     />
                     <Button 
                       type="primary" 
                       size="small" 
                       style={{ marginTop: '12px' }} 
-                      disabled={!icalUrl}
+                      disabled={!settings.icalUrl}
                       onClick={() => {
-                        setItem('settings', {
+                        dispatch(setSettings({
                           ...settings,
-                          icalUrl: icalUrl || ''
-                        })
-                        handleImportCalendar(!!(icalUrl));
+                          icalUrl: settings.icalUrl || ''
+                        }))
+                        handleImportCalendar(!!(settings.icalUrl));
                         messageApi.success("Settings saved. Your calendar events will be imported in the background.");
                       }}
                     >
@@ -229,17 +225,16 @@ const SettingsModal = ({ visible = true, onClose }: SettingsModalProps) => {
                   <Popconfirm
                     title="Are you sure you want to remove this calendar?"
                     onConfirm={() => {
-                      setItem('settings', {
+                      dispatch(setSettings({
                         ...settings,
                         icalUrl: ''
-                      })
-                      setIcalUrl('');
+                      }))
                       handleRemoveCalendar();
                     }}
                     okText="Yes"
                     cancelText="No"
                   >
-                    <Button type="default" danger size="small" style={{ marginTop: '12px' }} disabled={!icalUrl}>
+                    <Button type="default" danger size="small" style={{ marginTop: '12px' }} disabled={!settings.icalUrl}>
                       Remove
                     </Button>
                   </Popconfirm>
