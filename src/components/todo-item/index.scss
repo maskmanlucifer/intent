@@ -1,33 +1,18 @@
 .todo-item {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    gap: 6px;
 
-    &.subtask {
-        margin-left: 24px;
+    .checkbox {
+        margin-right: 8px;
     }
-
-    .todo-item-task {
-        display: flex;
-        gap: 8px;
-        align-items: center;
-        position: relative;
-
-        .todo-actions {
-            position: absolute;
-        }
-
-        .todo-text-container {
-            min-width: 200px;
-            width: 100%;
-
-            .todo-text {
-                outline: none;
-                padding: 0px;
-                border: none;
-                font-size: 16px;
-                width: 100%;
-                font-family: var(--primary-font);
-            }
-        }
+    
+    .editable-text {
+        padding: 4px;
+        width: 100%;
+        outline: none;
+        height: 24px;
+        padding-right: 16px;
+        min-width: 200px;
     }
 }

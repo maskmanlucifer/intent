@@ -1,0 +1,127 @@
+.todo-list {
+   width: 700px;
+   margin: auto;
+   margin-top: 16%;
+   position: relative;
+
+   .add-task-button {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      transform: translate(50%, -50%);
+      background-color: #175CD3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+   }
+
+   .ant-collapse-content > .ant-collapse-content-box {
+      padding: 8px;
+   }
+
+
+   .ant-collapse-arrow {
+      cursor: pointer;
+   }
+
+   .ant-collapse-header-text {
+      width: calc(100% - 150px);
+   }
+
+   .ant-collapse-header {
+      &:hover {
+         .todo-actions {
+            display: flex;
+         }
+      }
+
+      &:focus-within {
+         .todo-actions {
+            display: flex;
+         }
+      }
+   }
+
+   .ant-collapse-content-active .ant-collapse-content-box:hover {
+      .add-subtask-button.haveSubtasks {
+         display: flex;
+      } 
+   }
+
+   .subtasks {
+      margin-left: 24px;
+      position: relative;
+   }
+
+   .add-subtask-button.haveSubtasks {
+      margin-top: 8px;
+      display: flex;
+      position: absolute;
+      left: -24px;
+      bottom: 4px;
+      height: 16px;
+      width: 16px;
+
+      span {
+         display: flex;
+
+         svg {
+            height: 12px;
+            width: 12px;
+         }
+      }
+   }
+
+   .todo-actions {
+      display: none;
+      gap: 8px;
+      align-items: center;
+      height: 22px;
+      cursor: pointer;
+
+      span {
+         cursor: pointer;
+
+         svg {
+            color: #175CD3;
+         }
+      }
+
+      .delete-icon {
+         svg {
+            color: #f00;
+         }
+      }
+
+      .focus-icon {
+         height: 18px;
+         width: 18px;
+
+         &.focused {
+            path {
+               stroke: #175CD3;
+               fill: #175CD3;
+            }
+         }
+      }
+
+      svg {
+         cursor: pointer;
+      }
+   }
+}
+
+.folder-move-item {
+      .ant-dropdown-menu-title-content {
+         display: flex;
+         gap: 8px;
+         align-items: center;
+         svg {
+            height: 18px;
+            width: 18px;
+         }
+   }
+}
+.folder-move-item-to .ant-dropdown-menu-title-content {
+   color: #175CD3;
+}

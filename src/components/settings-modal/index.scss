@@ -1,0 +1,121 @@
+.settings-modal .ant-modal-content {
+    padding: 0;
+    overflow: hidden;
+    border-radius: 8px;
+  }
+  
+  .settings-modal .ant-modal-body {
+    padding: 0;
+  }
+  
+  .settings-container {
+    display: flex;
+    min-height: 500px;
+  }
+  
+  .settings-sidebar {
+    width: 200px;
+    border-right: 1px solid #f0f0f0;
+    background-color: white;
+  }
+
+  .settings-menu {
+    li > svg {
+        height: 18px;
+        width: 18px;
+        path {
+            fill: #175CD3;
+        }
+    }
+
+    li.ant-menu-item {
+        height: 32px;
+        border-radius: 2px;
+    }
+
+    li {
+        height: 32px;
+        padding-left: 0px;
+        border-radius: 2px;
+    }
+
+    .ant-menu-vertical .ant-menu-submenu-title.ant-menu-title-content {
+        height: 32px;
+    }
+  }
+  
+  .settings-header {
+    padding: 12px;
+    padding-left: 24px;
+    font-size: 16px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .settings-menu {
+    border-right: none;
+  }
+  
+  .settings-content {
+    flex: 1;
+    padding: 0;
+  }
+  
+  .settings-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .panel-title {
+        border-bottom: 1px solid #f0f0f0;
+        padding: 16px;
+        font-size: 20px;
+        font-weight: 500;
+    }
+
+    .setting-items {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        padding: 16px;
+
+
+        .setting-item {
+            display: flex;
+            flex-direction: column;
+
+            .time-picker-container {
+                display: flex;
+                gap: 12px;
+                margin-top: 12px;
+            }
+
+            .ical-url-container {
+              display: flex;
+              gap: 12px;
+              margin-top: 12px;
+              align-items: center;
+
+              .ant-input {
+                width: 200px;
+              }
+            }
+
+            .break-communication-container {
+              display: flex;
+              gap: 12px;
+              margin-top: 12px;
+
+              img {
+                width: 100%;
+              }
+            }
+        }
+
+    }
+
+  }
+  
+  
