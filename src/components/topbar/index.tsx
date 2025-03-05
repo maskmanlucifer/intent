@@ -6,12 +6,14 @@ import "./index.scss";
 import { SettingOutlined } from "@ant-design/icons";
 import { ReactComponent as CollapseIcon } from "../../assets/icons/collapse.svg";
 import classNames from "classnames";
-import { Button } from "antd";
+import { Button, Popover } from "antd";
 import { ReactComponent as ScheduleIcon } from "../../assets/icons/schedule.svg";
 import { useState } from "react";
 import SettingsModal from "../settings-modal";
 import { PAGES } from "../../constant";
 import { ReactComponent as SmilyIcon } from "../../assets/icons/smily.svg";
+import {ReactComponent as QuestionIcon} from "../../assets/icons/question.svg";
+import HelpUsImprove from "../help-us-improve";
 
 interface TopbarProps {
     isSidebarCollapsed: boolean;
@@ -25,6 +27,7 @@ const Topbar = ({ isSidebarCollapsed, setSidebarCollapsed, setIsDrawerOpen, isDr
     const dispatch = useDispatch();
     const page = useSelector(selectActivePage);
     const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
+    const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
     const setPage = (page: Pages) => {
         dispatch(setActivePage(page));
@@ -42,6 +45,20 @@ const Topbar = ({ isSidebarCollapsed, setSidebarCollapsed, setIsDrawerOpen, isDr
             <div className="topbar-right">
                 <PageSwitcher page={page} setPage={setPage} />
                 <Button type="primary" className="check-schedule-button" size="small" onClick={() => setIsDrawerOpen(!isDrawerOpen)} icon={<ScheduleIcon />}>Today's Schedule</Button>
+                <Popover
+                    content={<HelpUsImprove setPopoverState={setIsPopoverOpen} />}
+                    title={null}
+                    trigger="click"
+                    open={isPopoverOpen}
+                    onOpenChange={(open) => setIsPopoverOpen(open)}
+                    placement="bottomRight"
+                    arrow={false}
+                    >
+                <div className="feedback">
+                    <QuestionIcon />
+                </div>
+                </Popover>
+                
                 <div className="settings" onClick={() => setIsSettingsModalOpen(!isSettingsModalOpen)}>
                     <SettingOutlined />
                 </div>

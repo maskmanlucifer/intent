@@ -54,6 +54,16 @@
         flex: 1;
         border-left: 1px solid #e0e0e0;
 
+        .feedback {
+            display: flex;
+            align-items: center;
+            svg {
+                path {
+                    fill: #175CD3;
+                }
+            }
+        }
+
 
         .settings {
             cursor: pointer;

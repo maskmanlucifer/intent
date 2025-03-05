@@ -1,0 +1,14 @@
+.help-us-improve {
+    min-width: 366px;
+
+    .button-group {
+        display: flex;
+        margin-top: 16px;
+        justify-content: space-between;
+    }
+
+    .error-message {
+        color: red;
+        margin-top: 8px;
+    }
+}
