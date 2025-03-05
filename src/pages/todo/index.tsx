@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Button, Empty, Layout } from "antd";
 import "./index.scss";
 import { ReactComponent as EmptyTodo } from "../../assets/images/empty-todo.svg";
@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectCategories } from "../../redux/categorySlice";
 import { addNewTask, selectTodoList } from "../../redux/todoSlice";
 import CompletedTodoList from "../../components/completed-todo-list";
+import { selectSessionData, setSessionData } from "../../redux/sessionSlice";
 const { Sider } = Layout;
 
 const siderStyle: React.CSSProperties = {
@@ -24,12 +25,16 @@ const siderStyle: React.CSSProperties = {
 };
 
 const Todo = ({ isSidebarCollapsed, setIsSidebarCollapsed }: { isSidebarCollapsed: boolean, setIsSidebarCollapsed: (isSidebarCollapsed: boolean) => void }) => {
-  const [selectedFolder, setSelectedFolder] = useState<string>("1");
   const folders = useSelector(selectCategories);
+  const sessionData = useSelector(selectSessionData);
+  const {selectedFolder} = sessionData;
   const todos = useSelector((state: RootState) => selectTodoList(state, selectedFolder));
 
   const handleFolderChange = (folderId: string) => {
-    setSelectedFolder(folderId);
+    dispatch(setSessionData({
+      ...sessionData,
+      selectedFolder: folderId
+    }))
   }
 
   const dispatch = useDispatch();

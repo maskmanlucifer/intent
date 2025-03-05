@@ -62,8 +62,8 @@ const TodoList = ({ selectedFolder, todos }: { selectedFolder: string, todos: Ta
     )
   };
 
-  const handleAddSubtask = (id: string) => {
-    dispatch(addNewSubtask({ parentId: id }));
+  const handleAddSubtask = (id: string, index: number) => {
+    dispatch(addNewSubtask({ parentId: id, index }));
   }
 
   const finalTodos = focusedTask ? [focusedTask] : todos;
@@ -80,7 +80,7 @@ const TodoList = ({ selectedFolder, todos }: { selectedFolder: string, todos: Ta
               {task.subtasks.map((subtask: Subtask, index: number) => (
                 <TodoItem todoItem={subtask} key={`${subtask.id}-${selectedFolder}`} index={index} />
               ))}
-              <Button type="primary" onClick={() => handleAddSubtask(task.id)} 
+              <Button type="primary" onClick={() => handleAddSubtask(task.id, task.subtasks.length)} 
               className={classNames('add-subtask-button', {
                 haveSubtasks: task.subtasks.length > 0,
               })} icon={<PlusOutlined />} size='small'>{task.subtasks.length > 0 ? '': 'Add new subtask'}</Button>
