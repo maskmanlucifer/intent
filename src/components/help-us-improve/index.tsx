@@ -7,10 +7,15 @@ const { TextArea } = Input;
 const HelpUsImprove = ({setPopoverState}: {setPopoverState: (value: boolean) => void}) => {
     const [feedback, setFeedback] = useState("");
     const [isError, setIsError] = useState(false);
+    const [sendingFeedback, setSendingFeedback] = useState(false);
 
     const [messageApi, contextHolder] = message.useMessage();
 
     const handleFeedbackSubmitClick = () => {
+        if(sendingFeedback) {
+            return;
+        }
+        setSendingFeedback(true);
         fetch(
             "https://intent-server-git-main-lzbs-projects-77777663.vercel.app/addUserFeedback",
             {
@@ -21,11 +26,13 @@ const HelpUsImprove = ({setPopoverState}: {setPopoverState: (value: boolean) => 
               body: JSON.stringify({ feedback: feedback.trim() }),
             }
           ).then(() => {
-            messageApi.success("Feedback send, Thank you for your feedback 😇.");
+            messageApi.success("Feedback send, Thank you for your valuable feedback.");
             setFeedback("");
             setPopoverState(false);
+            setSendingFeedback(false);
           }).catch(() => {
-            messageApi.error("❗️Failed to send feedback. Please try again later.");
+            messageApi.error("Failed to send feedback. Please try again.");
+            setSendingFeedback(false);
           })
     }
 
@@ -33,7 +40,7 @@ const HelpUsImprove = ({setPopoverState}: {setPopoverState: (value: boolean) => 
         <div className="help-us-improve">
             {contextHolder}
             <TextArea
-                placeholder="Help us improve intent app"
+                placeholder="Help us improve intent app."
                 autoSize={{ minRows: 3, maxRows: 6 }}
                 value={feedback}
                 onChange={(e) => {
@@ -54,7 +61,7 @@ const HelpUsImprove = ({setPopoverState}: {setPopoverState: (value: boolean) => 
                 }}>
                     Cancel
                 </Button>
-                <Button type="primary" size='small' onClick={handleFeedbackSubmitClick} disabled={feedback.trim().length === 0}>
+                <Button type="primary" size='small' onClick={handleFeedbackSubmitClick} disabled={feedback.trim().length === 0} loading={sendingFeedback}>
                     Send Feedback
                 </Button>
             </div>
