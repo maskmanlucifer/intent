@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Button, Input, message } from 'antd';
 import './index.scss';
 
@@ -40,8 +40,8 @@ const HelpUsImprove = ({setPopoverState}: {setPopoverState: (value: boolean) => 
             autoSize={{ minRows: 3, maxRows: 6 }}
             value={feedback}
             onChange={(e) => {
-                setFeedback(e.target.value);
-                setIsError(e.target.value.length > 1000);
+            setFeedback(e.target.value);
+            setIsError(e.target.value.length > 1000);
             }}  
             />
             {isError && <div className='error-message'>
@@ -49,10 +49,10 @@ const HelpUsImprove = ({setPopoverState}: {setPopoverState: (value: boolean) => 
             </div>}
             <div className='button-group'>
             <Button type="default" size='small' onClick={() => setPopoverState(false)}>
-                Cancel
+            Cancel
             </Button>
             <Button type="primary" size='small' onClick={handleFeedbackSubmitClick} disabled={!feedback.trim()} loading={sendingFeedback}>
-                Send Feedback
+            Send Feedback
             </Button>
             </div>
         </div>

@@ -1,6 +1,10 @@
 .help-us-improve {
     min-width: 366px;
 
+    textarea::placeholder {
+        color: #b0b0b0;
+    }
+
     .button-group {
         display: flex;
         margin-top: 16px;
