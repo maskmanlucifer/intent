@@ -1,9 +1,22 @@
- // Start Generation Here
 .time-blocks {
     display: flex;
     position: relative;
     height: 100%;
-    overflow: scroll;
+    overflow: auto; // Changed from scroll to auto
+    scrollbar-width: thin; // For Firefox
+    scrollbar-color: #d1d1d1 #f1f1f1; // Scrollbar color
+
+    // Webkit (Chrome, Safari) scrollbar styling
+    &::-webkit-scrollbar {
+        width: 8px;
+    }
+    &::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: #d1d1d1;
+        border-radius: 4px;
+    }
 }
 
 .time-block {
@@ -20,6 +33,11 @@
         align-items: center;
         justify-content: center;
         border-bottom: 1px solid #e0e0e0;
+        
+        .time-label {
+            font-weight: 500;
+            color: #333;
+        }
     }
 
     .box3 { 
@@ -27,7 +45,20 @@
         display: flex;
         flex-direction: column;
         gap: 4px;
-        overflow: scroll;
+        overflow: auto; // Changed from scroll to auto
+        scrollbar-width: thin;
+        scrollbar-color: #d1d1d1 #f1f1f1;
+
+        &::-webkit-scrollbar {
+            width: 6px;
+        }
+        &::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        &::-webkit-scrollbar-thumb {
+            background: #d1d1d1;
+            border-radius: 4px;
+        }
     }
 }
 
@@ -43,12 +74,12 @@
     font-family: var(--secondary-font);
 }
 
-
 .event-label {
     border-radius: 6px;
-    background-color: green;
     margin-left: 8px;
     margin-right: 4px;
+    max-height: 90px;
+    transition: background-color 0.2s ease;
 
     &:first-of-type {
         margin-top: 4px;
@@ -58,6 +89,9 @@
         margin-bottom: 4px;
     }
 
+    &:hover {
+        opacity: 0.9;
+    }
 
     .event-label-container {
         padding: 10px;
@@ -79,7 +113,6 @@
 
         .event-label-title-time {
             font-size: 13px;
-            color: #666;
         }
     }
 }
