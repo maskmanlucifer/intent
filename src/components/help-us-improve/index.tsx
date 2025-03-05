@@ -21,11 +21,11 @@ const HelpUsImprove = ({setPopoverState}: {setPopoverState: (value: boolean) => 
               body: JSON.stringify({ feedback: feedback.trim() }),
             }
           ).then(() => {
-            messageApi.success("Thank you for your feedback!");
+            messageApi.success("Feedback send, Thank you for your feedback 😇.");
             setFeedback("");
             setPopoverState(false);
           }).catch(() => {
-            messageApi.error("Failed to send feedback. Please try again later.");
+            messageApi.error("❗️Failed to send feedback. Please try again later.");
           })
     }
 
