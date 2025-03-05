@@ -50,6 +50,7 @@ const Topbar = ({ isSidebarCollapsed, setSidebarCollapsed, setIsDrawerOpen, isDr
                     title={null}
                     trigger="click"
                     open={isPopoverOpen}
+                    destroyTooltipOnHide={true}
                     onOpenChange={(open) => setIsPopoverOpen(open)}
                     placement="bottomRight"
                     arrow={false}
