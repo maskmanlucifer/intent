@@ -5,14 +5,7 @@ import { setSettings, setSessionData } from "../redux/sessionSlice";
 
 export const fetchAndUpdateSession = () => {
     let settings = getItem('settings') as TSettings || {};
-    const defaultSettings = {
-        icalUrl: '',
-        workingHours: ['09:00', '17:00'],
-        breakInterval: 90,
-        sidebarCollapsed: false,
-    }
-    
-    store.dispatch(setSettings(settings || defaultSettings));
+    store.dispatch(setSettings(settings));
 
     const sessionData = getItem('sessionData') as TSessionData || {};
     store.dispatch(setSessionData(sessionData));
