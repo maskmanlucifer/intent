@@ -26,6 +26,8 @@
         width: calc(100% - 16px);
         border-radius: 8px;
         position: relative;
+        overflow: scroll;
+        margin-bottom: 100px;
 
         .check-schedule-button {
             position: absolute;
