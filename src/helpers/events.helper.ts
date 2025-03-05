@@ -207,10 +207,10 @@ export const handleImportCalendar = async (forceImport: boolean = false) => {
         store.dispatch(updateEvents(filteredEvents));
         store.dispatch(setIsImporting(false));
         filteredEvents.forEach((event) => {
-          const timeUntilEvent = event.start - Date.now();
+        const timeUntilEvent = event.start - Date.now();
 
           if (timeUntilEvent > 20 * 60 * 1000) {
-            const delayInMinutes = (timeUntilEvent / 60000) - 10;
+            const delayInMinutes = Math.ceil(timeUntilEvent / 60000) - (5 * 60 * 1000);
             chrome.alarms.create("calendar-event#" + event.id, {
               delayInMinutes: delayInMinutes > 0 ? delayInMinutes : 0,
             });

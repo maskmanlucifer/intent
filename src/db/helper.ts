@@ -26,7 +26,7 @@ class DBHelper {
 
         const transaction = this.db.transaction(DB_CONFIG.stores.todos.name, 'readwrite');
         const store = transaction.objectStore(DB_CONFIG.stores.todos.name);
-        await Promise.all(tasks.map(task => store.put({ ...task })));
+        await Promise.all(tasks.map(task => store.put(JSON.parse(JSON.stringify(task)))));
     }
 
     async addTodo(todo: Task) {

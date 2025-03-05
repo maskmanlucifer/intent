@@ -6,7 +6,7 @@ import { ConfigProvider, Drawer, Empty } from "antd";
 import "./db";
 import Todo from "./pages/todo";
 import { useDispatch, useSelector } from "react-redux";
-import { selectActivePage, setActivePage, selectSettings, setSettings } from "./redux/sessionSlice";
+import { selectActivePage, setActivePage, selectSessionData, setSessionData } from "./redux/sessionSlice";
 import Topbar from "./components/topbar";
 import TimeBlock from "./components/todays-calendar";
 import { ReactComponent as EmptyNotesIcon } from "./assets/images/empty-notes.svg";
@@ -15,14 +15,12 @@ import Break from "./pages/break";
 function App() {
   const dispatch = useDispatch();
   const activePage = useSelector(selectActivePage);
-  const settings = useSelector(selectSettings);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(settings.sidebarCollapsed || false);
+  const sessionData  = useSelector(selectSessionData);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const handleSidebarCollapsed = (isCollapsed: boolean) => {
-    setSidebarCollapsed(isCollapsed);
-    dispatch(setSettings({
-      ...settings,
+    dispatch(setSessionData({
+      ...sessionData,
       sidebarCollapsed: isCollapsed,
     }));
   }
@@ -73,8 +71,8 @@ function App() {
       }}
     >
       <div className="App">
-        {activePage !== PAGES.BREAK && <Topbar isSidebarCollapsed={sidebarCollapsed} setSidebarCollapsed={handleSidebarCollapsed} setIsDrawerOpen={setIsDrawerOpen} isDrawerOpen={isDrawerOpen} showCollapsedIcon={activePage === PAGES.TODO} />}
-        {activePage === PAGES.TODO && <Todo isSidebarCollapsed={sidebarCollapsed} setIsSidebarCollapsed={handleSidebarCollapsed}/>}
+        {activePage !== PAGES.BREAK && <Topbar isSidebarCollapsed={sessionData.sidebarCollapsed} setSidebarCollapsed={handleSidebarCollapsed} setIsDrawerOpen={setIsDrawerOpen} isDrawerOpen={isDrawerOpen} showCollapsedIcon={activePage === PAGES.TODO} />}
+        {activePage === PAGES.TODO && <Todo isSidebarCollapsed={sessionData.sidebarCollapsed} setIsSidebarCollapsed={handleSidebarCollapsed}/>}
         {activePage === PAGES.NOTES && (
             <div className="notes-container">
                 <Empty description="Noted feature is work in progress, please check back later" image={<EmptyNotesIcon />} />

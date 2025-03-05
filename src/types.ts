@@ -31,12 +31,13 @@ export type TSettings = {
   icalUrl?: string;
   workingHours: [string, string];
   breakInterval: number;
-  sidebarCollapsed: boolean;
 }
 
 export type TSessionData = {
   id: 'sessionData';
   lastCalendarFetchTime?: number;
+  sidebarCollapsed: boolean;
+  selectedFolder: string
 }
 
 export type Note = {

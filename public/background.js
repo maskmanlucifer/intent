@@ -12,16 +12,7 @@ chrome.alarms.onAlarm.addListener(function (alarm) {
 });
 
 chrome.runtime.onStartup.addListener(() => {
-  chrome.storage.local.get(["alarms"], (data) => {
-    const alarms = data.alarms || {};
-    for (const [name, time] of Object.entries(alarms)) {
-      if (Date.now() < Number(time)) {
-        chrome.alarms.create(name, { when: Number(time) });
-      } else {
-        delete alarms[name];
-      }
-    }
-  });
+  // Add some logics here
 });
 
 const openDB = () => {

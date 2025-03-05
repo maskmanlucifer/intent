@@ -16,9 +16,11 @@ const initialState: SessionState = {
         icalUrl: '',
         workingHours: ['09:00', '17:00'],
         breakInterval: 90,
-        sidebarCollapsed: false,
     },
-    sessionData: {},
+    sessionData: {
+        sidebarCollapsed: true,
+        selectedFolder: "1"
+    },
 };
 
 const sessionSlice = createSlice({
