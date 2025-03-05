@@ -54,6 +54,14 @@
         flex: 1;
         border-left: 1px solid #e0e0e0;
 
+        .contextual-info {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            color: #aaaaaa;
+            margin-left: 16px;
+        }
+
         .feedback {
             display: flex;
             align-items: center;
