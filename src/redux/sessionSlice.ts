@@ -31,12 +31,20 @@ const sessionSlice = createSlice({
             state.activePage = action.payload;
         },
         setSettings: (state, action) => {
-            state.settings = action.payload;
-            setItem("settings", action.payload);
+            const finalSettings = {
+                ...state.settings,
+                ...action.payload,
+            };  
+            state.settings = finalSettings;
+            setItem("settings", finalSettings);
         },
         setSessionData: (state, action) => {
-            state.sessionData = action.payload;
-            setItem("sessionData", action.payload);
+            const finalSessionData = {
+                ...state.sessionData,
+                ...action.payload,
+            };
+            state.sessionData = finalSessionData;
+            setItem("sessionData", finalSessionData);
         }
     },
 });

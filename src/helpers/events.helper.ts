@@ -185,10 +185,10 @@ const fetchEvents = async (icalUrl: string): Promise<TCalendarEvent[]> => {
 };
 
 export const handleImportCalendar = async (forceImport: boolean = false) => {
-  const sessionData = getItem("sessionData") as TSessionData;
+  const sessionData = getItem("sessionData") as TSessionData || {};
   const settingsData = getItem("settings") as TSettings;
 
-  const { lastCalendarFetchTime } = sessionData || {};
+  const { lastCalendarFetchTime } = sessionData;
   const { icalUrl } = settingsData || {};
 
   const shouldImport = icalUrl && (forceImport || !lastCalendarFetchTime || (new Date(lastCalendarFetchTime).getDate() < new Date().getDate()));
