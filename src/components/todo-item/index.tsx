@@ -32,7 +32,7 @@ const TodoItem = ({ todoItem, index }: { todoItem: Task | Subtask, index: number
                     dispatch(updateTaskText({ id: todoItem.id, text: e.target.value, parentId: todoItem.parentId, isSubtask: todoItem.isSubtask }));
                     setText(e.target.value);
                 }}
-                placeholder={todoItem.isSubtask ? "Enter subtask details..." : "Enter task details..."}
+                placeholder={todoItem.isSubtask ? "Enter subtask details" : "Enter task details"}
                 onClick={(event) => event.stopPropagation()}
                 onFocus={(event) => event.stopPropagation()}
                 onKeyDown={(event) => {

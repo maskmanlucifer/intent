@@ -14,5 +14,9 @@
         height: 24px;
         padding-right: 16px;
         min-width: 200px;
+
+        &::placeholder {
+            color: #b0b0b0;
+        }
     }
 }
