@@ -6,7 +6,9 @@ chrome.alarms.onAlarm.addListener(function (alarm) {
   if (alarm && alarm.name.startsWith('calendar-event#')) {
     const eventId = alarm.name.split('#')[1];
     getDataFromIDB(eventId).then(event => {
-      chrome.storage.local.set({ event: { id: eventId, title: event.title, start: event.start } });
+      if(event.start > Date.now()) {
+        chrome.storage.local.set({ event: { id: eventId, title: event.title, start: event.start } });
+      }
     });
   }
 });

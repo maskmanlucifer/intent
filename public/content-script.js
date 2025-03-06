@@ -26,7 +26,17 @@ chrome.storage.onChanged.addListener((changes) => {
     }
 
     if (key === "event" && oldValue !== newValue) {
-      showTooltip(newValue);
+      if(newValue && newValue.start > Date.now()) {
+        showTooltip(newValue);
+      } else {
+        const existingTooltip = document.getElementById('event-tooltip-intent');
+        if (existingTooltip) {
+          existingTooltip.remove();
+        }
+        if(newValue) {
+          chrome.storage.local.set({ event: null });
+        }
+      }
     }
   }
 });
@@ -39,7 +49,15 @@ chrome.storage.local.get(["breakActive"]).then((result) => {
 
 chrome.storage.local.get(["event"]).then((result) => {
   if (result && result.event) {
-    showTooltip(result.event);
+    if(result.event.start > Date.now()) {
+      showTooltip(result.event);
+    } else {
+      const existingTooltip = document.getElementById('event-tooltip-intent');
+      if (existingTooltip) {
+        existingTooltip.remove();
+      }
+      chrome.storage.local.set({ event: null });
+    }
   }
 });
 
@@ -59,28 +77,7 @@ const showTooltip = (event) => {
   tooltip.style.color = "#333";
   tooltip.style.border = "1px solid #FF7043";
 
-  if (event === null) {
-    const existingTooltip = document.getElementById('event-tooltip-intent');
-    if (existingTooltip) {
-      existingTooltip.remove();
-    }
-    return;
-  }
-
-  if (event.start < Date.now()) {
-    const existingTooltip = document.getElementById('event-tooltip-intent');
-    if (existingTooltip) {
-      existingTooltip.remove();
-      chrome.storage.local.get(['event']).then((result) => {
-        if (result && result.event && result.event.id === event.id) {
-          chrome.storage.local.set({ event: null });
-        }
-      });
-    }
-    return;
-  }
-
-  const timeToStartEvent = new Date(event.start) - Date.now();
+  const timeToStartEvent = event.start - Date.now();
   const timeToStartEventInMinutes = Math.round(timeToStartEvent / 60000);
 
   // Tooltip content with blinking icon at the start
@@ -100,9 +97,9 @@ const showTooltip = (event) => {
   }, 500);
 
   document.getElementById(`understood-button-${event.id}`).addEventListener("click", () => {
-    chrome.storage.local.set({ event: null }, () => {});
-    tooltip.remove();
-    clearInterval(interval);
-    document.title = 'Your App';
+    chrome.storage.local.set({ event: null }, () => {
+      tooltip.remove();
+      clearInterval(interval);
+    });
   });
 };
