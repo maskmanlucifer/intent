@@ -37,7 +37,7 @@ export const getDataFromAPI = async (url: string) => {
 
 const cancelAlarms = (ids: string[]) => {
   ids.forEach((id) => {
-    chrome.alarms.clear(id, () => {});
+    chrome.alarms.clear(`calendar-event#${id}`, () => {});
   });
 };
 
@@ -229,7 +229,7 @@ export const handleImportCalendar = async (forceImport: boolean = false) => {
         if(!alarm) {
           const timeUntilEvent = event.start - Date.now();
           const delayInMinutes = Math.ceil(timeUntilEvent / 60000)
-          
+
           if(delayInMinutes > 5) {
             chrome.alarms.create("calendar-event#" + event.id, {
               delayInMinutes: delayInMinutes - 5,
