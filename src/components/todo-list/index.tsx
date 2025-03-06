@@ -1,5 +1,5 @@
 import { ArrowDownOutlined, ArrowUpOutlined, PlusOutlined, SwapOutlined } from '@ant-design/icons';
-import { Button, Collapse, Dropdown, Menu, message } from 'antd';
+import { Button, Collapse, Dropdown, Menu, message, Tooltip } from 'antd';
 import "./index.scss";
 import TodoItem from '../todo-item';
 import classNames from 'classnames';
@@ -23,8 +23,13 @@ const TodoList = ({ selectedFolder, todos }: { selectedFolder: string, todos: Ta
 
     return (
       <div className='todo-actions'>
-        {!isFirstTask && <ArrowUpOutlined onClick={() => dispatch(moveTaskUp({ id: task.id, order: task.order }))} />}
-        {!isLastTask && <ArrowDownOutlined onClick={() => dispatch(moveTaskDown({ id: task.id, order: task.order }))} />}
+        {!isFirstTask && <Tooltip arrow={false} title="Move task up">
+          <ArrowUpOutlined onClick={() => dispatch(moveTaskUp({ id: task.id, order: task.order }))} />
+        </Tooltip>}
+        {!isLastTask && <Tooltip arrow={false} title="Move task down">
+          <ArrowDownOutlined onClick={() => dispatch(moveTaskDown({ id: task.id, order: task.order }))} />
+        </Tooltip>}
+        <Tooltip arrow={false} title="Focus task">
         <FocusIcon className={classNames('focus-icon', {
           focused: isFocused,
         })} onClick={() => {
@@ -42,7 +47,9 @@ const TodoList = ({ selectedFolder, todos }: { selectedFolder: string, todos: Ta
             });
           }
         }} />
-        <Dropdown
+        </Tooltip>
+        <Tooltip arrow={false} title="Move item to folder">
+          <Dropdown
           overlay={
             <Menu onClick={({ key }) => dispatch(changeCategoryOfTask({ id: task.id, categoryId: key }))}>
               <Menu.Item key='none' className='folder-move-item-to'>Move item to folder</Menu.Item>
@@ -58,6 +65,7 @@ const TodoList = ({ selectedFolder, todos }: { selectedFolder: string, todos: Ta
         >
           <SwapOutlined />
         </Dropdown>
+        </Tooltip>
       </div>
     )
   };
@@ -89,7 +97,9 @@ const TodoList = ({ selectedFolder, todos }: { selectedFolder: string, todos: Ta
         ))}
       </Collapse>
       {focusedTask === null && todos.length > 0 && (
-        <Button type="primary" onClick={() => dispatch(addNewTask({ categoryId: selectedFolder }))} className='add-task-button' icon={<PlusOutlined />} size='small'/>
+        <Tooltip arrow={false} title="Add new task">
+          <Button type="primary" onClick={() => dispatch(addNewTask({ categoryId: selectedFolder }))} className='add-task-button' icon={<PlusOutlined />} size='small'/>
+        </Tooltip>
       )}
     </div>
   );

@@ -65,6 +65,8 @@
         .feedback {
             display: flex;
             align-items: center;
+            cursor: pointer;
+            
             svg {
                 path {
                     fill: #175CD3;
