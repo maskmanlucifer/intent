@@ -166,8 +166,8 @@ const fetchEvents = async (icalUrl: string): Promise<TCalendarEvent[]> => {
                 uid,
                 title: summary,
                 description,
-                start: Date.now() + 5 * 60 * 1000, // Set to the next five minutes
-                end: Date.now() + 10 * 60 * 1000,
+                start: eventStart.getTime(),
+                end: eventEnd.getTime(),
               },
             ];
           }
@@ -208,11 +208,11 @@ export const handleImportCalendar = async (forceImport: boolean = false) => {
         store.dispatch(setIsImporting(false));
         filteredEvents.forEach((event) => {
         const timeUntilEvent = event.start - Date.now();
+        const delayInMinutes = Math.ceil(timeUntilEvent / 60000)
 
-          if (timeUntilEvent > 20 * 60 * 1000) {
-            const delayInMinutes = Math.ceil(timeUntilEvent / 60000) - (5 * 60 * 1000);
-            chrome.alarms.create("calendar-event#" + event.id, {
-              delayInMinutes: delayInMinutes > 0 ? delayInMinutes : 0,
+        if (delayInMinutes > 5 ) {
+          chrome.alarms.create("calendar-event#" + event.id, {
+              delayInMinutes: delayInMinutes - 5,
             });
           }
         });
@@ -224,6 +224,20 @@ export const handleImportCalendar = async (forceImport: boolean = false) => {
     }
 
     const existingEvents = (await getEventsData()) as TCalendarEvent[];
+    existingEvents.forEach((event) => {
+      chrome.alarms.get("calendar-event#" + event.id, (alarm) => {
+        if(!alarm) {
+          const timeUntilEvent = event.start - Date.now();
+          const delayInMinutes = Math.ceil(timeUntilEvent / 60000)
+          
+          if(delayInMinutes > 5) {
+            chrome.alarms.create("calendar-event#" + event.id, {
+              delayInMinutes: delayInMinutes - 5,
+            });
+          }
+        }
+      });
+    });
     store.dispatch(updateEvents(existingEvents));
   } catch (error) {
     console.error("Error fetching or parsing ICS:", error);
