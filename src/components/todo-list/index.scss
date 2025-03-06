@@ -97,7 +97,9 @@
          height: 18px;
          width: 18px;
 
-         &.focused {
+
+
+         &.focused, &:hover {
             path {
                stroke: #175CD3;
                fill: #175CD3;

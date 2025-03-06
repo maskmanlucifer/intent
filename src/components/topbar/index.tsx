@@ -6,7 +6,7 @@ import "./index.scss";
 import { SettingOutlined } from "@ant-design/icons";
 import { ReactComponent as CollapseIcon } from "../../assets/icons/collapse.svg";
 import classNames from "classnames";
-import { Button, Popover } from "antd";
+import { Button, Popover, Tooltip } from "antd";
 import { ReactComponent as ScheduleIcon } from "../../assets/icons/schedule.svg";
 import { useState } from "react";
 import SettingsModal from "../settings-modal";
@@ -39,7 +39,7 @@ const Topbar = ({ isSidebarCollapsed, setSidebarCollapsed, setIsDrawerOpen, isDr
                 "notes": page === PAGES.NOTES
              })}>
                <div className="topbar-left-title" onClick={() => setSidebarCollapsed(!isSidebarCollapsed)}>
-                   {!isSidebarCollapsed && "INT3NT"} {showCollapsedIcon && <CollapseIcon />} {!showCollapsedIcon && isSidebarCollapsed && <SmilyIcon className="smily-icon" />}
+                   {!isSidebarCollapsed && "INT3NT"} {showCollapsedIcon && <Tooltip arrow={false} autoAdjustOverflow={true} placement="bottom" title={!isSidebarCollapsed ? "Collapse sidebar" : "Expand sidebar"}><CollapseIcon /></Tooltip>} {!showCollapsedIcon && isSidebarCollapsed && <Tooltip arrow={false} autoAdjustOverflow={true} placement="right" title="Expand sidebar"><SmilyIcon className="smily-icon" /></Tooltip>}
                </div>
             </div>
             <div className="topbar-right">
@@ -57,7 +57,9 @@ const Topbar = ({ isSidebarCollapsed, setSidebarCollapsed, setIsDrawerOpen, isDr
                     arrow={false}
                     >
                 <div className="feedback">
-                    <QuestionIcon />
+                    <Tooltip arrow={false} placement="bottom" title="Feedback">
+                        <QuestionIcon />
+                    </Tooltip>
                 </div>
                 </Popover>
                 

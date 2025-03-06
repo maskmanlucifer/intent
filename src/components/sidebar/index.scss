@@ -198,8 +198,10 @@
 }
 
 .ant-tooltip-inner {
-    min-height: 0px;
-    padding: 4px 8px;
+    min-height: 0px!important;
+    padding: 2px 6px!important;
+    background-color: #000!important;
+    background: #000!important;
 }
 
 .ant-popover-inner {
