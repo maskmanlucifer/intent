@@ -36,13 +36,13 @@ const EditCategoryBtn = ({ folder, setSelectedFolder, setIsEditing, messageApi }
       setSelectedFolder(folderId);
       messageApi.open({
         type: "success",
-        content: "Folder added successfully!",
+        content: `Folder ${updatedFolderName} added successfully!`,
       });
     } else {
       dispatch(updateCategory({ id: folder.id, name: updatedFolderName }));
       messageApi.open({
         type: "success",
-        content: "Folder updated successfully!",
+        content: `Folder ${updatedFolderName} updated successfully!`,
       });
     }
     setUpdatedFolderName("");
@@ -88,7 +88,7 @@ const DeleteCategoryBtn = ({ folder, setIsDeleting, messageApi, setSelectedFolde
     setSelectedFolder("1");
     messageApi.open({
       type: "success",
-      content: "Folder deleted successfully!",
+      content: `Folder ${folder?.name} deleted successfully!`,
     });
     setIsDeleting(false);
   }

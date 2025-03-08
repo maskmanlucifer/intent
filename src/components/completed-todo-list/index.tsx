@@ -28,7 +28,7 @@ const CompletedTodoList = () => {
               dispatch(deleteTask({ id: task.id }));
             messageApi.open({
               type: "success",
-              content: "Task deleted successfully!",
+              content: `Task ${task.text} deleted successfully!`,
             });
           }}
         >

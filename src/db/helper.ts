@@ -50,7 +50,6 @@ class DBHelper {
     }
 
     async updateTodo(todo: Task) {
-        console.log('updateTodo', todo);
         if (!this.db) {
             return;
         }
