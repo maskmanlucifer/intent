@@ -39,7 +39,7 @@ const Topbar = ({ isSidebarCollapsed, setSidebarCollapsed, setIsDrawerOpen, isDr
                 "notes": page === PAGES.NOTES
              })}>
                <div className="topbar-left-title" onClick={() => setSidebarCollapsed(!isSidebarCollapsed)}>
-                   {!isSidebarCollapsed && "INT3NT"} {showCollapsedIcon && <Tooltip arrow={false} autoAdjustOverflow={true} placement="bottom" title={!isSidebarCollapsed ? "Collapse sidebar" : "Expand sidebar"}><CollapseIcon /></Tooltip>} {!showCollapsedIcon && isSidebarCollapsed && <Tooltip arrow={false} autoAdjustOverflow={true} placement="right" title="Expand sidebar"><SmilyIcon className="smily-icon" /></Tooltip>}
+                   {!isSidebarCollapsed && "INT3NT"} {showCollapsedIcon && <Tooltip arrow={false} autoAdjustOverflow={true} placement="bottom" title={!isSidebarCollapsed ? "Collapse sidebar" : "Expand sidebar"} mouseEnterDelay={0}><CollapseIcon /></Tooltip>} {!showCollapsedIcon && isSidebarCollapsed && <Tooltip arrow={false} autoAdjustOverflow={true} placement="right" title="Expand sidebar" mouseEnterDelay={0}><SmilyIcon className="smily-icon" /></Tooltip>}
                </div>
             </div>
             <div className="topbar-right">
@@ -57,9 +57,7 @@ const Topbar = ({ isSidebarCollapsed, setSidebarCollapsed, setIsDrawerOpen, isDr
                     arrow={false}
                     >
                 <div className="feedback">
-                    <Tooltip arrow={false} placement="bottom" title="Feedback">
                         <QuestionIcon />
-                    </Tooltip>
                 </div>
                 </Popover>
                 
