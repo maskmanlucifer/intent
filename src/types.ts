@@ -32,6 +32,8 @@ export type TSettings = {
   icalUrl?: string;
   workingHours: [string, string];
   breakInterval: number;
+  showCustomAudioPlayer: boolean;
+  musicMode: 'JAZZ' | 'NATURE' | 'LO_FI';
 }
 
 export type TSessionData = {
@@ -40,6 +42,7 @@ export type TSessionData = {
   sidebarCollapsed: boolean;
   selectedFolder: string;
   activePage: Pages;
+  isMusicPlaying?: string;
 }
 
 export type Note = {

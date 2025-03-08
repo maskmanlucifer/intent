@@ -9,7 +9,7 @@ import { handleImportCalendar } from "../helpers/events.helper";
 import { handleBreakSchedule } from "../helpers/break.helper";
 import { fetchAndUpdateSession } from "../helpers/session.helper";
 import { fetchNotes } from "../redux/notesSlice";
-
+import { handleMusicPlayingState } from "../helpers/music.helper";
 const dbName = DB_CONFIG.name;
 const dbVersion = DB_CONFIG.version;
 
@@ -304,6 +304,7 @@ async function init() {
     store.dispatch(fetchNotes());
     handleImportCalendar();
     handleBreakSchedule();
+    handleMusicPlayingState();
   } catch (error) {
     console.error("Database error:", error);
   }

@@ -53,7 +53,7 @@ const Editor = ({ isReadOnly, editorReference, note }: EditorProps) => {
         delimiter: Delimiter,
         inlineCode: InlineCode,
       },
-      placeholder: "Write down your thoughts, ideas, and insights",
+      placeholder: "Use '/' to choose element blocks",
       readOnly: isReadOnly,
       data: JSON.parse(note.content || "{}"),
       onReady: () => {},
