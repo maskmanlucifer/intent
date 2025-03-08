@@ -1,6 +1,6 @@
 import { openDB } from ".";
 import { DB_CONFIG } from "../constant";
-import { Category, Task } from "../types";
+import { Category, Task, Note } from "../types";
 
 class DBHelper {
     private db: IDBDatabase | null = null;
@@ -27,6 +27,26 @@ class DBHelper {
         const transaction = this.db.transaction(DB_CONFIG.stores.todos.name, 'readwrite');
         const store = transaction.objectStore(DB_CONFIG.stores.todos.name);
         await Promise.all(tasks.map(task => store.put(JSON.parse(JSON.stringify(task)))));
+    }
+
+    async putNote(note: Note) {
+        if (!this.db) {
+            return;
+        }
+
+        const transaction = this.db.transaction(DB_CONFIG.stores.notes.name, 'readwrite');
+        const store = transaction.objectStore(DB_CONFIG.stores.notes.name);
+        await store.put(JSON.parse(JSON.stringify(note)));
+    }
+
+    async deleteNote(id: string) {
+        if (!this.db) {
+            return;
+        }
+
+        const transaction = this.db.transaction(DB_CONFIG.stores.notes.name, 'readwrite');
+        const store = transaction.objectStore(DB_CONFIG.stores.notes.name);
+        await store.delete(id);
     }
 
     async addTodo(todo: Task) {

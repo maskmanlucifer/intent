@@ -38,14 +38,17 @@ export type TSessionData = {
   id: 'sessionData';
   lastCalendarFetchTime?: number;
   sidebarCollapsed: boolean;
-  selectedFolder: string
+  selectedFolder: string;
+  activePage: Pages;
 }
 
 export type Note = {
   id: string;
   title: string;
+  subtitle: string;
   content: string;
   createdAt: number;
+  isNewNote?: boolean;
 };
 
 export type TCalendarEvent = {

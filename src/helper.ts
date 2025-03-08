@@ -46,8 +46,9 @@ export const createNewNote = () => {
     id: uuidv4(),
     title: "",
     subtitle: "",
-    data: "{}",
-    createdAt: new Date().toISOString(),
+    content: "{}",
+    createdAt: new Date().getTime(),
+    isNewNote: true,
   };
 };
 

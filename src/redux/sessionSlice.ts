@@ -1,17 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { PAGES } from "../constant";
 import { RootState } from "./store";
-import { Pages, TSessionData, TSettings } from "../types";
+import { TSessionData, TSettings } from "../types";
 import { setItem } from "../db/localStorage";
+import { PAGES } from "../constant";
 
 type SessionState = {
-    activePage: Pages;
     settings: TSettings;
     sessionData: Omit<TSessionData, 'id'>;
 };
 
 const initialState: SessionState = {
-    activePage: PAGES.TODO,     
     settings: {
         icalUrl: '',
         workingHours: ['09:00', '17:00'],
@@ -19,7 +17,8 @@ const initialState: SessionState = {
     },
     sessionData: {
         sidebarCollapsed: true,
-        selectedFolder: "1"
+        selectedFolder: "1",
+        activePage: PAGES.TODO,
     },
 };
 
@@ -28,7 +27,12 @@ const sessionSlice = createSlice({
     initialState,
     reducers: {
         setActivePage: (state, action) => {
-            state.activePage = action.payload;
+            const sessionData = {
+                ...state.sessionData,
+                activePage: action.payload,
+            };
+            state.sessionData = sessionData;
+            setItem("sessionData", sessionData);
         },
         setSettings: (state, action) => {
             const finalSettings = {
@@ -51,7 +55,7 @@ const sessionSlice = createSlice({
 
 export const { setActivePage, setSettings, setSessionData } = sessionSlice.actions;
 
-export const selectActivePage = (state: RootState) => state.session.activePage;
+export const selectActivePage = (state: RootState) => state.session.sessionData.activePage;
 export const selectSettings = (state: RootState) => state.session.settings;
 export const selectSessionData = (state: RootState) => state.session.sessionData;
 
