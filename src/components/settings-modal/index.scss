@@ -26,6 +26,16 @@
         path {
             fill: #175CD3;
         }
+
+        &.music-icon {
+          path {
+            fill: none;
+          }
+
+          circle {
+            fill: #175CD3;
+          }
+      }
     }
 
     li.ant-menu-item {
@@ -86,6 +96,14 @@
             display: flex;
             flex-direction: column;
 
+            .toggle-container {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              gap: 12px;
+              margin-right: 24px;
+            }
+
             .time-picker-container {
                 display: flex;
                 gap: 12px;
@@ -103,6 +121,19 @@
               }
             }
 
+            .ical-alert {
+              margin-top: 12px;
+              padding: 8px;
+
+              .ant-alert-icon {
+                font-size: 18px;
+              }
+
+              .ant-alert-description {
+                margin-top: -2px;
+              }
+            }
+
             .break-communication-container {
               display: flex;
               gap: 12px;
@@ -111,6 +142,10 @@
               img {
                 width: 100%;
               }
+            }
+
+            .music-choice {
+              margin-top: 12px;
             }
         }
 
