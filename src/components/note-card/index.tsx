@@ -1,4 +1,4 @@
-import { Button, Modal, message } from "antd";
+import { Button, Modal } from "antd";
 import { Note } from "../../types";
 import "./index.scss";
 import { DeleteOutlined } from "@ant-design/icons";
@@ -79,15 +79,15 @@ const NoteCard = ({
         onCancel={() => setDialogVisible(false)}
         footer={
           <div className="modal-footer">
-            <Button type="primary" danger onClick={handleDelete} size="small">
-              Delete
-            </Button>
             <Button
               type="default"
               onClick={() => setDialogVisible(false)}
               size="small"
             >
               Cancel
+            </Button>
+            <Button type="primary" danger onClick={handleDelete} size="small">
+              Delete
             </Button>
           </div>
         }

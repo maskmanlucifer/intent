@@ -6,15 +6,17 @@ import { ConfigProvider, Drawer } from "antd";
 import "./db";
 import Todo from "./pages/todo";
 import { useDispatch, useSelector } from "react-redux";
-import { selectActivePage, setActivePage, selectSessionData, setSessionData } from "./redux/sessionSlice";
+import { selectActivePage, setActivePage, selectSessionData, setSessionData, selectSettings, setIsMusicPlaying, selectTabId } from "./redux/sessionSlice";
 import Topbar from "./components/topbar";
 import TimeBlock from "./components/todays-calendar";
 import Break from "./pages/break";
 import Note from "./pages/note";
+import CustomAudioPlayer from "./components/custom-audio-player";
 
 function App() {
   const dispatch = useDispatch();
   const activePage = useSelector(selectActivePage);
+  const settings = useSelector(selectSettings);
   const sessionData  = useSelector(selectSessionData);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
@@ -78,6 +80,7 @@ function App() {
           <TimeBlock />
         </Drawer>}
         {activePage === PAGES.BREAK && <Break />}
+        {settings.showCustomAudioPlayer && <CustomAudioPlayer />}
       </div>
     </ConfigProvider>
   );

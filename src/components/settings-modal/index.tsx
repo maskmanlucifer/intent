@@ -1,6 +1,6 @@
 "use client"
 import { useState } from "react"
-import { Modal, Menu, Typography, TimePicker, Select, Image, Input, Button, Popconfirm, message } from "antd"
+import { Modal, Menu, Typography, TimePicker, Select, Image, Input, Button, Popconfirm, message, Switch, Radio, Alert } from "antd"
 import {
   SettingOutlined,
 } from "@ant-design/icons"
@@ -8,13 +8,14 @@ import "./index.scss"
 import dayjs from "dayjs"
 import { ReactComponent as GeneralSettingsIcon } from "../../assets/icons/general-settings.svg"
 import { ReactComponent as SubscriptionIcon } from "../../assets/icons/subscription.svg"
+import { ReactComponent as MusicIcon } from "../../assets/icons/music.svg"
 import BreakBeforeImg from "../../assets/images/break-before-demo.png"
 import BreakAfterImg from "../../assets/images/break-demo.png"
 import { ReactComponent as CalendarIcon } from "../../assets/icons/calendar.svg"
 import { handleRemoveCalendar, handleImportCalendar } from "../../helpers/events.helper"
 import { handleBreakSchedule } from "../../helpers/break.helper"
 import { useDispatch, useSelector } from "react-redux"
-  import { setSettings, selectSettings } from "../../redux/sessionSlice"  
+import { setSettings, selectSettings, selectMusicMode, setMusicMode, selectShowMusicWidget, setShowMusicWidget, setIsMusicPlaying, selectTabId } from "../../redux/sessionSlice"  
 
 const format = 'HH:mm';
 
@@ -30,6 +31,9 @@ const SettingsModal = ({ visible = true, onClose }: SettingsModalProps) => {
   const settings = useSelector(selectSettings);
   const [messageApi, contextHolder] = message.useMessage();
   const dispatch = useDispatch();
+  const musicMode = useSelector(selectMusicMode);
+  const showMusicWidget = useSelector(selectShowMusicWidget);
+  const tabId = useSelector(selectTabId);
 
   const handleWorkingHoursChange = (value: string, index: number) => {
     const newWorkingHours = [...settings.workingHours || []];
@@ -39,6 +43,22 @@ const SettingsModal = ({ visible = true, onClose }: SettingsModalProps) => {
       workingHours: newWorkingHours,
     }));
     handleBreakSchedule(true);
+  };
+
+  const handleShowMusicWidgetChange = (value: boolean) => {
+    dispatch(setShowMusicWidget(value));
+    if(value) {
+      messageApi.success("Music widget enabled. You can now listen to music in the app.");
+    } else {
+      messageApi.success("Music widget disabled. You will no longer hear music in the app.");
+      dispatch(setIsMusicPlaying("0"));
+      if(chrome.storage) {
+        chrome.storage.local.set({
+          isMusicPlaying: false,
+          tabId,
+        });
+      }
+    }
   };
 
   const handleBreakIntervalChange = (value: string) => {
@@ -59,6 +79,11 @@ const SettingsModal = ({ visible = true, onClose }: SettingsModalProps) => {
       key: "calendar",
       icon: <CalendarIcon />,
       label: "Calendar",
+    },
+    {
+      key: "music",
+      label: "Music",
+      icon: <MusicIcon className="music-icon" />,
     },
     {
       key: "subscription",
@@ -239,7 +264,43 @@ const SettingsModal = ({ visible = true, onClose }: SettingsModalProps) => {
                     </Button>
                   </Popconfirm>
                   </div>
+                  <Alert
+                    className="ical-alert"
+                    description="Currently, the app only supports iCal urls. If you have a different calendar format, please convert it to iCal format and use the url above."
+                    type="info"
+                    showIcon
+                  />
                 </div>  
+              </div>
+            </div>
+          )}
+          {selectedMenu === "music" && (
+            <div className="settings-panel">
+              <div className="panel-title">Music</div>
+              <div className="setting-items">
+              <div className="setting-item">
+                  <div className="toggle-container"><Text style={{ fontSize: '16px' }}>Enable music widget in app</Text>  <Switch size="small" checked={showMusicWidget} onChange={handleShowMusicWidgetChange} /></div>
+                </div>
+                <div className="setting-item">
+                  <Text strong className="setting-title" style={{ fontSize: '16px' }}>
+                    Music Mode
+                  </Text>
+                  <Text type="secondary" className="setting-description" style={{ fontSize: '14px' }}>
+                    Pick the music that gets you in the zone.
+                  </Text>
+                  <div className="music-choice">
+                    <Radio.Group 
+                      style={{ display: 'flex', gap: '6px', flexDirection: 'column' }} 
+                      value={musicMode} 
+                      onChange={(e) => dispatch(setMusicMode(e.target.value))}
+                      options={[
+                        { label: 'JAZZ', value: 'JAZZ' },
+                        { label: 'NATURE', value: 'NATURE' },
+                        { label: 'LO_FI', value: 'LO_FI' },
+                      ]}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           )}
