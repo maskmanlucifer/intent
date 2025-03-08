@@ -5,7 +5,7 @@ import { Category } from "../types";
 import dbHelper from "../db/helper";
 
 const initialState = {
-  items: [] as Category[]
+  items: [] as Category[],
 };
 
 export const fetchCategories = createAsyncThunk(
@@ -27,37 +27,50 @@ const categorySlice = createSlice({
       state.items.push(action.payload);
       dbHelper.addCategory(action.payload);
     },
-    updateCategory: (state, action: PayloadAction<Category>) => {
-      const { id, name } = action.payload;
+    updateCategory: (
+      state,
+      action: PayloadAction<Partial<Category> & { id: string }>
+    ) => {
+      const { id, ...rest } = action.payload;
+      let updatedCategory;
 
-      state.items = state.items.map(category =>
-        category.id === id ? { ...category, name } : category
-      );
+      state.items = state.items.map((category) => {
+        if (category.id === id) {
+          updatedCategory = { ...category, ...rest };
+          return updatedCategory;
+        }
+        return category;
+      });
 
-      dbHelper.updateCategory(action.payload);
+      if (updatedCategory) {
+        dbHelper.updateCategory(updatedCategory);
+      }
     },
     deleteCategory: (state, action: PayloadAction<string>) => {
-      state.items = state.items.filter(category => category.id !== action.payload);
+      state.items = state.items.filter(
+        (category) => category.id !== action.payload
+      );
       dbHelper.deleteCategory(action.payload);
-    }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchCategories.fulfilled, (state, action) => {
       state.items = action.payload as Category[];
     });
-  }
+  },
 });
 
 export const selectCategories = createSelector(
   (state: { categories: { items: Category[] } }) => state.categories.items,
-  items => items
+  (items) => items
 );
 
 export const selectCategoryById = createSelector(
-  [state => state.categories.items, (_, id) => id],
+  [(state) => state.categories.items, (_, id) => id],
   (items, id) => items.find((item: Category) => item.id === id)
 );
 
-export const { addCategory, updateCategory, deleteCategory, addCategories } = categorySlice.actions;
+export const { addCategory, updateCategory, deleteCategory, addCategories } =
+  categorySlice.actions;
 
 export default categorySlice.reducer;

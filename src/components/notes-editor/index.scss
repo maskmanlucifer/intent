@@ -1,0 +1,121 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+
+#editorjsWrapper {
+    width: 100%;
+    margin: auto;
+    margin-left: -30px;
+}
+
+#editorjs {
+    width: 700px;
+    height: 500px;
+    overflow: scroll;
+    font-family: var(--tertiary-font);
+    padding: 20px;
+    margin: auto;
+
+    .inline-code {
+        background-color: #f5f5f5;
+        padding: 4px 8px;
+        border-radius: 4px;
+    }
+
+    .cdx-search-field.ce-popover__search {
+        display: none;
+    }
+
+    .ce-popover__container {
+        margin-left: 15px;
+    }
+
+    .ce-code__textarea {
+        min-height: 500px;
+    }
+
+    .cdx-list-unordered {
+
+    .cdx-list__item::before {
+        content: "";
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        background-color: black;
+        border-radius: 50%;
+    }
+}
+
+    .cdx-list-unordered.cdx-list__item-children {
+        padding-left: 10px;
+        padding-top: 0;
+    }
+
+    .cdx-list-ordered.cdx-list__item-children {
+        padding-left: 15px;
+    }
+
+    .cdx-list__item-children {
+        gap: 0px;
+    }
+
+    .ce-code__textarea {
+        font-size: 14px;
+        font-family: "JetBrains Mono", serif;
+    }
+
+    .ce-toolbar__plus {
+        display: none;
+    }
+
+    .cdx-list__checkbox {
+        padding-top: 0;
+        svg {
+            height: 16px;
+            width: 16px;
+        }
+    }
+
+    .ce-header {
+        font-size: 20px;
+        font-weight: 500;
+    }
+
+    .cdx-list-ordered.cdx-list__item-children {
+        padding-left: 10px;
+        padding-top: 0;
+    }
+
+    .cdx-list-checklist.cdx-list__item-children {
+        padding-left: 10px;
+        padding-top: 0;
+    }
+
+    .cdx-list__item {
+        align-items: center;
+    }
+
+    .ce-paragraph {
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
+    .cdx-list__item-content {
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
+    .cdx-list {
+        gap: 4px;
+    }
+
+    [data-item-name="convert-to"] {
+        display: none;
+    }
+
+    .ce-popover-item-separator {
+        display: none;
+    }
+
+    .ce-block--selected .ce-block__content {
+        background-color: transparent;
+    }
+}
