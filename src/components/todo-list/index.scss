@@ -4,6 +4,12 @@
    margin-top: 16%;
    position: relative;
 
+   .completed-tasks-toggle {
+      margin-bottom: 16px;
+      margin-left: 100%;
+      transform: translate(-100%, 0);
+   }
+
    .add-task-button {
       position: absolute;
       top: 100%;
@@ -13,6 +19,14 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: display 0.3s ease-in-out;
+
+      &.empty-folder {
+         left: 0;
+         right: unset;
+         transform: translate(0, -50%);
+         top: 14px;
+      }
    }
 
    .ant-collapse-content > .ant-collapse-content-box {

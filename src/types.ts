@@ -3,6 +3,7 @@ import { PAGES } from "./constant";
 export type Category = {
   id: string;
   name: string;
+  showCompletedTasks?: boolean;
 };
 
 export type Task = {
