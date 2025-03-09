@@ -215,10 +215,10 @@ const SettingsModal = ({ visible = true, onClose }: SettingsModalProps) => {
               <div className="setting-items">
                 <div className="setting-item">
                   <Text strong className="setting-title" style={{ fontSize: '16px' }}>
-                    Import your iCal calendar
+                    Import your calendar
                   </Text>
                   <Text type="secondary" className="setting-description" style={{ fontSize: '14px' }}>
-                    Use your ical url to import your calendar.
+                    Use your iCal URL or ICS file URL to import your calendar.
                   </Text>
                   <div className="ical-url-container">
                     <Input
@@ -266,7 +266,7 @@ const SettingsModal = ({ visible = true, onClose }: SettingsModalProps) => {
                   </div>
                   <Alert
                     className="ical-alert"
-                    description="Currently, the app only supports iCal urls. If you have a different calendar format, please convert it to iCal format and use the url above."
+                    description="The app currently supports calendar imports exclusively through iCal URLs and ICS file URLs. Please convert any other calendar formats to iCal format and use the URL above."
                     type="info"
                     showIcon
                   />

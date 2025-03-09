@@ -1,17 +1,19 @@
 /* eslint-disable no-undef */
 import { Button, Checkbox, message, Popconfirm } from "antd";
 import "./index.scss";
-import { BREAK_TIME_DURATIONS } from "../../constant";
+import { BREAK_TIME_DURATIONS, PAGES } from "../../constant";
 import { InfoCircleOutlined, SmileTwoTone } from "@ant-design/icons";
-import { useSelector } from "react-redux";
-import { selectSettings } from "../../redux/sessionSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { selectSettings, setActivePage } from "../../redux/sessionSlice";
 
 const BreakReschedule = () => {
   const settings = useSelector(selectSettings);
+  const dispatch = useDispatch();
   const { breakInterval = 90, workingHours = ["09:00", "17:00"] } = settings;
 
   const handleEndBreak = () => {
     chrome.storage.local.set({ breakActive: false });
+    dispatch(setActivePage(PAGES.TODO));
     chrome.alarms.clear("genericAlarm", () => {
       
       const now = new Date();
@@ -94,7 +96,6 @@ const BreakReschedule = () => {
             <div className="end-break-feedbacks">
               <Checkbox>Took a walk</Checkbox>
               <Checkbox>Drank some water</Checkbox>
-              <Checkbox>Did nothing just existed</Checkbox>
               <Checkbox>Listen to music</Checkbox>
               <Checkbox>Took a snack break</Checkbox>
               <Checkbox>Did some stretching</Checkbox>

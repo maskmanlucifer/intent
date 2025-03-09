@@ -24,7 +24,7 @@ const Editor = ({ isReadOnly, editorReference, note }: EditorProps) => {
     }
 
     if(previousReadOnly.current !== isReadOnly) {
-      editorRef.current?.destroy();
+      editorRef.current?.destroy?.();
     }
 
     const editor = new EditorJS({
@@ -53,7 +53,7 @@ const Editor = ({ isReadOnly, editorReference, note }: EditorProps) => {
         delimiter: Delimiter,
         inlineCode: InlineCode,
       },
-      placeholder: "Use '/' to choose element blocks",
+      placeholder: "Start writing or use '/' to choose element blocks",
       readOnly: isReadOnly,
       data: JSON.parse(note.content || "{}"),
       onReady: () => {},
@@ -67,7 +67,7 @@ const Editor = ({ isReadOnly, editorReference, note }: EditorProps) => {
         editorRef.current.destroy();
       }
     };
-  }, [note, isReadOnly]);
+  }, [note, isReadOnly, previousReadOnly.current]);
 
   return <div id="editorjsWrapper"><div id="editorjs"></div></div>
   
