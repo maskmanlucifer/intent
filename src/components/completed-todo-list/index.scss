@@ -36,6 +36,10 @@
             font-weight: 600;
         }
     }
+
+    .ant-collapse-header-text {
+      width: calc(100% - 60px);
+    }
   }
 
   .todo-actions {
