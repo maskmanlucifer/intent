@@ -134,11 +134,13 @@ const TodoList = ({
     : !currentFolder?.showCompletedTasks
       ? todos.filter((todo) => !todo.isCompleted)
       : todos;
+  
+  const doWeHaveCompletedTasks = todos.some((todo) => todo.isCompleted);
 
   return (
     <div className="todo-list">
       {contextHolder}
-      {focusedTask === null && (
+      {focusedTask === null && doWeHaveCompletedTasks && (
         <Button
           className="completed-tasks-toggle"
           onClick={handleToggleCompletedTasks}
