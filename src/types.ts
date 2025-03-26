@@ -13,7 +13,6 @@ export type Task = {
   subtasks: Subtask[];
   isSubtask: boolean;
   parentId: string | null;
-  order: number;
   categoryId: string;
 };
 
@@ -22,7 +21,6 @@ export type Subtask = {
   text: string;
   isCompleted: boolean;
   parentId: string;
-  order: number;
   isSubtask: boolean;
   subtasks: Subtask[];
   categoryId: string;

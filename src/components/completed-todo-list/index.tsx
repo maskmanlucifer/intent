@@ -90,7 +90,7 @@ const CompletedTodoList = () => {
               <div className="completed-todo-items-group-header">
                 {folderIdToName[folder]}
               </div>
-              <Collapse expandIconPosition={"end"}>
+              <Collapse expandIconPosition={"start"}>
                 {todos.map((task, index) => (
                   <Collapse.Panel
                     header={<TodoItem todoItem={task} index={index} />}

@@ -69,7 +69,7 @@
             
             svg {
                 path {
-                    fill: #175CD3;
+                    fill: var(--primary-color);
                 }
             }
         }
@@ -91,9 +91,9 @@
 }
 
 .smily-icon {
-    color: #175CD3;
+    color: var(--primary-color);
 
     path {
-        fill: #175CD3;
+        fill: var(--primary-color);
     }
 }

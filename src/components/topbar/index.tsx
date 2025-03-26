@@ -44,7 +44,6 @@ const Topbar = ({ isSidebarCollapsed, setSidebarCollapsed, setIsDrawerOpen, isDr
             </div>
             <div className="topbar-right">
                 <PageSwitcher page={page} setPage={setPage} />
-                <div className="contextual-info">Your data is stored locally and not on any server.</div>
                 <Button type="primary" className="check-schedule-button" size="small" onClick={() => setIsDrawerOpen(!isDrawerOpen)} icon={<ScheduleIcon />}>Today's Schedule</Button>
                 <Popover
                     content={<HelpUsImprove setPopoverState={setIsPopoverOpen} />}

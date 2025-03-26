@@ -15,14 +15,13 @@ export const createId = (): string => {
   return uuidv4();
 };
 
-export const getNewTask = (order = 1, categoryId: string): Task => {
+export const getNewTask = (categoryId: string): Task => {
   return {
     id: uuidv4(),
     text: "",
     isCompleted: false,
     subtasks: [],
     parentId: null,
-    order,
     isSubtask: false,
     categoryId,
   };
@@ -34,7 +33,6 @@ export const getNewSubtask = ({ parentId, text = "" }: { parentId: string, text?
     text,
     isCompleted: false,
     parentId,
-    order: 1,
     subtasks: [],
     isSubtask: true,
     categoryId: "",

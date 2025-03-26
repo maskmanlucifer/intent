@@ -135,22 +135,13 @@ const todoSlice = createSlice({
       }
     },
     addNewTask: (state, action) => {
-      const { categoryId, order } = action.payload;
-      const newOrder = order ? (order + 1) : state.items.length + 1;
-      const newTask = getNewTask(newOrder, categoryId);
-
-      // Reassign orders for existing tasks
-      state.items = state.items.map((todo) => {
-        if (todo.order >= newOrder) {
-          return { ...todo, order: todo.order + 1 };
-        }
-        return todo;
-      });
+      const { categoryId } = action.payload;
+      const newTask = getNewTask(categoryId);
 
       state.items = [...state.items, newTask];
       state.activeItem = newTask.id;
 
-      dbHelper.upsertTasks(state.items);
+      dbHelper.addTodo(newTask);
     },
     addNewSubtask: (state, action) => {
       const { parentId, index = -1 } = action.payload;
@@ -182,50 +173,6 @@ const todoSlice = createSlice({
       state.items = state.items.filter((todo) => !todo.isCompleted);
       dbHelper.deleteAllCompletedTasks(completedTasks.map((todo) => todo.id));
     },
-    moveTaskUp: (state, action) => {
-      const { id, order } = action.payload;
-
-      if (order === 1) return;
-
-      const currentTask = state.items.find((todo) => todo.id === id);
-      const prevTask = state.items.find((todo) => todo.order === order - 1);
-
-      state.items = state.items.map((todo) => {
-        if (todo.id === currentTask?.id) {
-          return { ...todo, order: order - 1 };
-        }
-        if (todo.id === prevTask?.id) {
-          return { ...todo, order: order };
-        }
-        return todo;
-      });
-
-      dbHelper.upsertTasks(state.items);
-
-      state.activeItem = id;
-    },
-    moveTaskDown: (state, action) => {
-      const { id, order } = action.payload;
-
-      if (order === state.items.length) return;
-
-      const currentTask = state.items.find((todo) => todo.id === id); 
-      const nextTask = state.items.find((todo) => todo.order === order + 1);
-
-      state.items = state.items.map((todo) => {
-        if (todo.id === currentTask?.id) {
-          return { ...todo, order: order + 1 };
-        }
-        if (todo.id === nextTask?.id) {
-          return { ...todo, order: order };
-        }
-        return todo;
-      });
-
-      dbHelper.upsertTasks(state.items);
-
-      state.activeItem = id;
-    },  
     changeCategoryOfTask: (state, action) => {
       const { id, categoryId } = action.payload;
 
@@ -260,13 +207,10 @@ export const selectTodoList = createSelector(
   (state: { todos: { items: Task[] } }) => state.todos.items,
   (state: { todos: { items: Task[] } }, categoryId: string) => categoryId,
   (todos, categoryId) =>
-    [...todos]
-      .filter(todo => !categoryId || todo.categoryId === categoryId)
-      .sort((a, b) => a.order - b.order)
-      .map((todo) => ({
-        ...todo,
-        subtasks: [...todo.subtasks].sort((a, b) => a.order - b.order),
-      })),
+    todos.filter(todo => !categoryId || todo.categoryId === categoryId).map(todo => ({
+      ...todo,
+      subtasks: [...todo.subtasks],
+    })),
 );
 
 export const selectCompletedTodoListLength = createSelector(
@@ -287,9 +231,7 @@ export const {
   addNewTask,
   addNewSubtask,
   clearCompletedTasks,
-  moveTaskUp,
   deleteTask,
-  moveTaskDown,
   deleteSubtask,
   changeCategoryOfTask
 } = todoSlice.actions;

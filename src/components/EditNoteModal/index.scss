@@ -12,7 +12,9 @@
         margin: auto;
         font-weight: 500;
 
-        &:focus, &:active, &:focus-within {
+        &:focus,
+        &:active,
+        &:focus-within {
             border-color: transparent;
             outline-color: transparent;
         }
@@ -53,7 +55,7 @@
     border-bottom: 1px solid #E0E0E0;
     background: #f5f5f5;
     border-radius: 8px 8px 0 0;
-    color: #175CD3;
+    color: var(--primary-color);
 
     div {
         font-size: 16px;
@@ -66,9 +68,9 @@
     .document-icon {
         width: 20px;
         height: 20px;
-        
+
         path {
-            fill: #175CD3;
+            fill: var(--primary-color);
         }
     }
 
@@ -88,9 +90,9 @@
         .close-icon {
             width: 20px;
             height: 20px;
-    
+
             path {
-                fill: #175CD3;
+                fill: var(--primary-color);
             }
         }
     }
