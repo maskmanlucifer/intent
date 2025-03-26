@@ -1,6 +1,4 @@
 import {
-  ArrowDownOutlined,
-  ArrowUpOutlined,
   PlusOutlined,
   SwapOutlined,
 } from "@ant-design/icons";
@@ -18,8 +16,6 @@ import classNames from "classnames";
 import { Subtask, Task } from "../../types";
 import {
   addNewSubtask,
-  moveTaskDown,
-  moveTaskUp,
   addNewTask,
   changeCategoryOfTask,
 } from "../../redux/todoSlice";
@@ -42,31 +38,11 @@ const TodoList = ({
   const [focusedTask, setFocusedTask] = useState<Task | null>(null);
 
   const genExtra = (task: Task) => {
-    const isFirstTask = task.order === 1;
-    const isLastTask = task.order === todos.length;
     const isFocused = focusedTask?.id === task.id;
     const filteredFolders = folders.filter((folder) => folder.id !== task.categoryId);
 
     return (
       <div className="todo-actions">
-        {!isFirstTask && (
-          <Tooltip arrow={false} title="Move task up" mouseEnterDelay={0}>
-            <ArrowUpOutlined
-              onClick={() =>
-                dispatch(moveTaskUp({ id: task.id, order: task.order }))
-              }
-            />
-          </Tooltip>
-        )}
-        {!isLastTask && (
-          <Tooltip arrow={false} title="Move task down" mouseEnterDelay={0}>
-            <ArrowDownOutlined
-              onClick={() =>
-                dispatch(moveTaskDown({ id: task.id, order: task.order }))
-              }
-            />
-          </Tooltip>
-        )}
         <Tooltip arrow={false} title="Focus on task" mouseEnterDelay={0}>
           <FocusIcon
             className={classNames("focus-icon", {
@@ -153,7 +129,7 @@ const TodoList = ({
         </Button>
       )}{" "}
       {finalTodos.length > 0 && (
-        <Collapse expandIconPosition={"end"}>
+        <Collapse expandIconPosition={"start"}>
           {finalTodos.map((task, index) => (
             <Collapse.Panel
               header={<TodoItem todoItem={task} index={index} />}

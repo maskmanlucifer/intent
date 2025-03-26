@@ -6,7 +6,7 @@ import { ConfigProvider, Drawer } from "antd";
 import "./db";
 import Todo from "./pages/todo";
 import { useDispatch, useSelector } from "react-redux";
-import { selectActivePage, setActivePage, selectSessionData, setSessionData, selectSettings, setIsMusicPlaying, selectTabId } from "./redux/sessionSlice";
+import { selectActivePage, setActivePage, selectSessionData, setSessionData, selectSettings } from "./redux/sessionSlice";
 import Topbar from "./components/topbar";
 import TimeBlock from "./components/todays-calendar";
 import Break from "./pages/break";
@@ -69,6 +69,7 @@ function App() {
         token:  {
           controlHeight: 32,
           fontFamily: "Inter",
+          colorPrimary: '#155dfc',
         },
       }}
     >

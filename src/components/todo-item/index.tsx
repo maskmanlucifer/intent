@@ -43,7 +43,7 @@ const TodoItem = ({ todoItem, index }: { todoItem: Task | Subtask, index: number
                         if(todoItem.isSubtask) { 
                             dispatch(addNewSubtask({ parentId: todoItem.parentId, index }));
                         } else {
-                            dispatch(addNewTask({ categoryId: todoItem.categoryId, order: todoItem.order }));
+                            dispatch(addNewTask({ categoryId: todoItem.categoryId }));
                         }   
                     }
 

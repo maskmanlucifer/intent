@@ -5,6 +5,7 @@ import { DeleteOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { removeNote } from "../../redux/notesSlice";
+import {ReactComponent as NoteIcon} from "../../assets/icons/note.svg";
 
 const gradientColorCombos = [
   ["#ffccbc", "#ff8a65", "#ff5252"],
@@ -63,12 +64,9 @@ const NoteCard = ({
           setDialogVisible(true);
         }}
       />
-      <div
-        className="square"
-        style={{
-          background: `linear-gradient(135deg, ${gradientColorCombos[index % gradientColorCombos.length][0]}, ${gradientColorCombos[index % gradientColorCombos.length][1]}, ${gradientColorCombos[index % gradientColorCombos.length][2]})`,
-        }}
-      ></div>
+      <div className="square">
+        <NoteIcon />
+      </div>
       <span className="title">{note.title}</span>
       <span className="subtitle">{note.subtitle}</span>
       <Modal

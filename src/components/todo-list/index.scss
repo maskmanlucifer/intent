@@ -1,7 +1,8 @@
 .todo-list {
    width: 700px;
    margin: auto;
-   margin-top: 16%;
+   margin-top: 8%;
+   margin-bottom: 100px;
    position: relative;
 
    .completed-tasks-toggle {
@@ -15,7 +16,7 @@
       top: 100%;
       right: 0;
       transform: translate(50%, -50%);
-      background-color: #175CD3;
+      background-color: var(--primary-color);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -97,13 +98,13 @@
          cursor: pointer;
 
          svg {
-            color: #175CD3;
+            color: var(--primary-color);
          }
       }
 
       .delete-icon {
          svg {
-            color: #f00;
+            color: var(--red-500);
          }
       }
 
@@ -115,8 +116,8 @@
 
          &.focused, &:hover {
             path {
-               stroke: #175CD3;
-               fill: #175CD3;
+               stroke: var(--green-500);
+               fill: var(--green-500);
             }
          }
       }
@@ -139,5 +140,5 @@
    }
 }
 .folder-move-item-to .ant-dropdown-menu-title-content {
-   color: #175CD3;
+   color: var(--primary-color);
 }

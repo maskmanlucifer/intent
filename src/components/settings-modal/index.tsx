@@ -126,9 +126,9 @@ const SettingsModal = ({ visible = true, onClose }: SettingsModalProps) => {
                   <Text strong className="setting-title" style={{ fontSize: '16px' }}>
                     Working Hours
                   </Text>
-                  <Text type="secondary" className="setting-description" style={{ fontSize: '14px' }}>
-                    Set your working hours
-                  </Text>
+                    <Text type="secondary" className="setting-description" style={{ fontSize: '14px' }}>
+                    Set your working hours (Reminders will be scheduled within these hours).
+                    </Text>
                 <div className="time-picker-container">
                   <TimePicker 
                     defaultValue={dayjs(settings.workingHours?.[0] || '09:00', format)} 
@@ -179,18 +179,6 @@ const SettingsModal = ({ visible = true, onClose }: SettingsModalProps) => {
                   }}
                 />
               </div>
-              <div className="setting-item">
-                  <Text strong className="setting-title" style={{ fontSize: '16px' }}>
-                    How break is communicated
-                  </Text>
-                  <Text type="secondary" className="setting-description" style={{ fontSize: '14px' }}>
-                    Your screen will turn gray during break time.
-                  </Text>
-                <div className="break-communication-container">
-                  <Image src={BreakBeforeImg} alt="Break Communication" className="break-communication-image"/>
-                  <Image src={BreakAfterImg} alt="Break Communication" className="break-communication-image"/>
-                </div>
-              </div>
               </div>
             </div>
           )}
@@ -224,7 +212,7 @@ const SettingsModal = ({ visible = true, onClose }: SettingsModalProps) => {
                     <Input
                       placeholder="Enter your iCal URL"
                       size="small"
-                      style={{ width: '332px', marginTop: '12px' }}
+                      style={{ width: '240px', marginTop: '12px' }}
                       value={settings.icalUrl}
                       onChange={(e) => dispatch(setSettings({
                         ...settings,
@@ -266,9 +254,8 @@ const SettingsModal = ({ visible = true, onClose }: SettingsModalProps) => {
                   </div>
                   <Alert
                     className="ical-alert"
-                    description="The app currently supports calendar imports exclusively through iCal URLs and ICS file URLs. Please convert any other calendar formats to iCal format and use the URL above."
+                    description="The app currently supports calendar imports exclusively through iCal URLs and ICS file URLs."
                     type="info"
-                    showIcon
                   />
                 </div>  
               </div>
@@ -294,9 +281,9 @@ const SettingsModal = ({ visible = true, onClose }: SettingsModalProps) => {
                       value={musicMode} 
                       onChange={(e) => dispatch(setMusicMode(e.target.value))}
                       options={[
-                        { label: 'JAZZ', value: 'JAZZ' },
-                        { label: 'NATURE', value: 'NATURE' },
-                        { label: 'LO_FI', value: 'LO_FI' },
+                        { label: 'Jazz', value: 'JAZZ' },
+                        { label: 'Nature', value: 'NATURE' },
+                        { label: 'Lo-fi', value: 'LO_FI' },
                       ]}
                     />
                   </div>

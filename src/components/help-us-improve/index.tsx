@@ -36,7 +36,7 @@ const HelpUsImprove = ({setPopoverState}: {setPopoverState: (value: boolean) => 
         <div className="help-us-improve">
             {contextHolder}
             <TextArea
-            placeholder="Help us improve intent app (Include your email for a response)."
+            placeholder="Help us improve intent app + Include your email for a response"
             autoSize={{ minRows: 3, maxRows: 6 }}
             value={feedback}
             onChange={(e) => {

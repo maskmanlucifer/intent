@@ -1,66 +1,65 @@
 .completed-todo-list {
-  padding: 16px;
+   padding: 16px;
 
-  .no-completed-todos {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: calc(100vh - 100px);
-    width: 100%;
-  }
+   .no-completed-todos {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: calc(100vh - 100px);
+      width: 100%;
+   }
 
-  .completed-todo-items-groups {
-    display: flex;
-    flex-direction: column;
-    gap: 36px;
-    width: 700px;
-    margin: auto;
-    margin-top: 80px;
+   .completed-todo-items-groups {
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+      width: 700px;
+      margin: auto;
+      margin-top: 80px;
 
-    .delete-all-button {
-        margin-bottom: 16px;
-        width: fit-content;
-        margin-left: auto;
-    }
+      .delete-all-button {
+         margin-bottom: 16px;
+         width: fit-content;
+         margin-left: auto;
+      }
 
-    .completed-todo-items-group {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-        margin: auto;
-        width: 100%;
+      .completed-todo-items-group {
+         display: flex;
+         flex-direction: column;
+         gap: 16px;
+         margin: auto;
+         width: 100%;
 
 
-        .completed-todo-items-group-header {
+         .completed-todo-items-group-header {
             font-size: 24px;
             font-weight: 600;
-        }
-    }
+         }
+      }
 
-    .ant-collapse-header-text {
-      width: calc(100% - 60px);
-    }
-  }
+      .ant-collapse-header-text {
+         width: calc(100% - 60px);
+      }
+   }
 
-  .todo-actions {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    height: 22px;
+   .todo-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      height: 22px;
 
-    span {
-       cursor: pointer;
+      span {
+         cursor: pointer;
 
-       svg {
-          color: #175CD3;
-       }
-    }
+         svg {
+            color: var(--primary-color);
+         }
+      }
 
-    .delete-icon {
-       svg {
-          color: #f00;
-       }
-    }
- }
+      .delete-icon {
+         svg {
+            color: var(--red-500);
+         }
+      }
+   }
 }
-
