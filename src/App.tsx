@@ -14,8 +14,7 @@ import Note from "./pages/note";
 import CustomAudioPlayer from "./components/custom-audio-player";
 
 function App() {
-  // const activePage = useSelector(selectActivePage);
-  const activePage: any = PAGES.BREAK;
+  const activePage = useSelector(selectActivePage);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const settings = useSelector(selectSettings);
   const isSidebarCollapsed = useSelector(selectIsSidebarCollapsed)
