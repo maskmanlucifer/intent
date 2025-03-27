@@ -49,6 +49,7 @@ export type Note = {
   content: string;
   createdAt: number;
   isNewNote?: boolean;
+  updatedAt: number;
 };
 
 export type TCalendarEvent = {

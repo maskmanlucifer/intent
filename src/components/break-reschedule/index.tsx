@@ -13,7 +13,7 @@ const BreakReschedule = () => {
   const handleEndBreak = () => {
     syncSettings({
       activePage: PAGES.TODO,
-    })
+    });
 
     chrome.alarms.clear("genericAlarm", () => {
       
@@ -42,7 +42,9 @@ const BreakReschedule = () => {
   const [messageApi, contextHolder] = message.useMessage();
 
   const handleBreakPostpone = (time: number) => {
-    chrome.storage.local.set({ breakActive: false });
+    syncSettings({
+      activePage: PAGES.TODO,
+    })
 
     chrome.alarms.clear("genericAlarm", () => {
       chrome.alarms.create("genericAlarm", {

@@ -1,15 +1,5 @@
-import {
-  PlusOutlined,
-  SwapOutlined,
-} from "@ant-design/icons";
-import {
-  Button,
-  Collapse,
-  Dropdown,
-  Menu,
-  message,
-  Tooltip,
-} from "antd";
+import { PlusOutlined, SwapOutlined } from "@ant-design/icons";
+import { Button, Collapse, Dropdown, Menu, message, Tooltip } from "antd";
 import "./index.scss";
 import TodoItem from "../todo-item";
 import classNames from "classnames";
@@ -39,7 +29,9 @@ const TodoList = ({
 
   const genExtra = (task: Task) => {
     const isFocused = focusedTask?.id === task.id;
-    const filteredFolders = folders.filter((folder) => folder.id !== task.categoryId);
+    const filteredFolders = folders.filter(
+      (folder) => folder.id !== task.categoryId
+    );
 
     return (
       <div className="todo-actions">
@@ -65,32 +57,41 @@ const TodoList = ({
             }}
           />
         </Tooltip>
-        {filteredFolders.length > 0 && <Tooltip arrow={false} title="Move item to folder" mouseEnterDelay={0}>
-          <Dropdown
-            overlay={
-              <Menu
-                onClick={({ key }) =>
-                  dispatch(
-                    changeCategoryOfTask({ id: task.id, categoryId: key })
-                  )
-                }
-              >
-                <Menu.Item key="none" className="folder-move-item-to">
-                  Move item to folder
-                </Menu.Item>
-                {filteredFolders.map((folder) => (
+        {filteredFolders.length > 0 && (
+          <Tooltip
+            arrow={false}
+            title="Move item to folder"
+            mouseEnterDelay={0}
+          >
+            <Dropdown
+              overlay={
+                <Menu
+                  onClick={({ key }) => {
+                    if (key === "none") {
+                      return;
+                    }
+                    dispatch(
+                      changeCategoryOfTask({ id: task.id, categoryId: key })
+                    );
+                  }}
+                >
+                  <Menu.Item key="none" className="folder-move-item-to">
+                    Move item to folder
+                  </Menu.Item>
+                  {filteredFolders.map((folder) => (
                     <Menu.Item key={folder.id} className="folder-move-item">
                       <FolderIcon />
                       {folder.name}
                     </Menu.Item>
                   ))}
-              </Menu>
-            }
-            trigger={["click"]}
-          >
-            <SwapOutlined />
-          </Dropdown>
-        </Tooltip>}
+                </Menu>
+              }
+              trigger={["click"]}
+            >
+              <SwapOutlined />
+            </Dropdown>
+          </Tooltip>
+        )}
       </div>
     );
   };
@@ -100,7 +101,12 @@ const TodoList = ({
   };
 
   const handleToggleCompletedTasks = () => {
-    dispatch(updateCategory({ id: selectedFolder, showCompletedTasks: !currentFolder?.showCompletedTasks }))
+    dispatch(
+      updateCategory({
+        id: selectedFolder,
+        showCompletedTasks: !currentFolder?.showCompletedTasks,
+      })
+    );
   };
 
   const currentFolder = folders.find((folder) => folder.id === selectedFolder);
@@ -110,11 +116,37 @@ const TodoList = ({
     : !currentFolder?.showCompletedTasks
       ? todos.filter((todo) => !todo.isCompleted)
       : todos;
-  
+
+  const sortedTodos = [
+    ...finalTodos
+      .map((todo) => ({
+        ...todo,
+        subtasks: [
+          ...todo.subtasks.filter((subtask) => !subtask.isCompleted),
+          ...todo.subtasks.filter((subtask) => subtask.isCompleted),
+        ],
+      }))
+      .filter((todo) => !todo.isCompleted),
+    ...finalTodos
+      .map((todo) => ({
+        ...todo,
+        subtasks: [
+          ...todo.subtasks.filter((subtask) => !subtask.isCompleted),
+          ...todo.subtasks.filter((subtask) => subtask.isCompleted),
+        ],
+      }))
+      .filter((todo) => todo.isCompleted),
+  ];
+
   const doWeHaveCompletedTasks = todos.some((todo) => todo.isCompleted);
 
   return (
     <div className="todo-list">
+      {focusedTask !== null && (
+        <div className="focus-mode">
+          Focus mode is enabled
+        </div>
+        )}
       {contextHolder}
       {focusedTask === null && doWeHaveCompletedTasks && (
         <Button
@@ -128,9 +160,9 @@ const TodoList = ({
             : "Hide completed tasks"}
         </Button>
       )}{" "}
-      {finalTodos.length > 0 && (
+      {sortedTodos.length > 0 && (
         <Collapse expandIconPosition={"start"}>
-          {finalTodos.map((task, index) => (
+          {sortedTodos.map((task, index) => (
             <Collapse.Panel
               header={<TodoItem todoItem={task} index={index} />}
               key={`${task.id}-${selectedFolder}`}
