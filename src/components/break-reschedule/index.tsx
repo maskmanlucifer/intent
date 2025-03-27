@@ -3,17 +3,18 @@ import { Button, Checkbox, message, Popconfirm } from "antd";
 import "./index.scss";
 import { BREAK_TIME_DURATIONS, PAGES } from "../../constant";
 import { InfoCircleOutlined, SmileTwoTone } from "@ant-design/icons";
-import { useSelector, useDispatch } from "react-redux";
-import { selectSettings, setActivePage } from "../../redux/sessionSlice";
+import { useSelector } from "react-redux";
+import { selectSettings, syncSettings } from "../../redux/sessionSlice";
 
 const BreakReschedule = () => {
   const settings = useSelector(selectSettings);
-  const dispatch = useDispatch();
   const { breakInterval = 90, workingHours = ["09:00", "17:00"] } = settings;
 
   const handleEndBreak = () => {
-    chrome.storage.local.set({ breakActive: false });
-    dispatch(setActivePage(PAGES.TODO));
+    syncSettings({
+      activePage: PAGES.TODO,
+    })
+
     chrome.alarms.clear("genericAlarm", () => {
       
       const now = new Date();
@@ -59,7 +60,7 @@ const BreakReschedule = () => {
         Postpone break for
         {BREAK_TIME_DURATIONS.map((time) => (
           <Popconfirm
-            icon={<InfoCircleOutlined style={{ color: "#1677ff" }} />}
+            icon={<InfoCircleOutlined style={{ color: "#155dfc" }} />}
             title="Postpone break"
             okText="Postpone"
             onConfirm={() => handleBreakPostpone(time)}

@@ -108,14 +108,9 @@ export const SONGS = {
       index: 0,
     },
     {
-      title: "2nd",
-      src: "https://dn720300.ca.archive.org/0/items/nature-sounds_202104/%5BMP3FY%5D%20Relaxing%20River%20Sounds%20-%20Gentle%20River%2C%20Nature%20Sounds%2C%20Singing%20Birds%20Ambience.mp3",
-      index: 1,
-    },
-    {
       title: "3rd",
       src: "https://dn720300.ca.archive.org/0/items/nature-sounds_202104/%5BMP3FY%5D%20Morning%20on%20the%20River%20and%20the%20gentle%20singing%20of%20spring%20birds.mp3",
-      index: 2,
+      index: 1,
     },
   ],
   LO_FI: [

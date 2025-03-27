@@ -1,6 +1,6 @@
 "use client"
 import { useState } from "react"
-import { Modal, Menu, Typography, TimePicker, Select, Image, Input, Button, Popconfirm, message, Switch, Radio, Alert } from "antd"
+import { Modal, Menu, Typography, TimePicker, Select, Input, Button, Popconfirm, message, Switch, Radio, Alert } from "antd"
 import {
   SettingOutlined,
 } from "@ant-design/icons"
@@ -9,13 +9,11 @@ import dayjs from "dayjs"
 import { ReactComponent as GeneralSettingsIcon } from "../../assets/icons/general-settings.svg"
 import { ReactComponent as SubscriptionIcon } from "../../assets/icons/subscription.svg"
 import { ReactComponent as MusicIcon } from "../../assets/icons/music.svg"
-import BreakBeforeImg from "../../assets/images/break-before-demo.png"
-import BreakAfterImg from "../../assets/images/break-demo.png"
 import { ReactComponent as CalendarIcon } from "../../assets/icons/calendar.svg"
 import { handleRemoveCalendar, handleImportCalendar } from "../../helpers/events.helper"
 import { handleBreakSchedule } from "../../helpers/break.helper"
-import { useDispatch, useSelector } from "react-redux"
-import { setSettings, selectSettings, selectMusicMode, setMusicMode, selectShowMusicWidget, setShowMusicWidget, setIsMusicPlaying, selectTabId } from "../../redux/sessionSlice"  
+import { useSelector } from "react-redux"
+import { selectSettings, selectMusicMode, selectShowMusicWidget, syncSettings } from "../../redux/sessionSlice"  
 
 const format = 'HH:mm';
 
@@ -30,42 +28,35 @@ const SettingsModal = ({ visible = true, onClose }: SettingsModalProps) => {
   const [selectedMenu, setSelectedMenu] = useState("general")
   const settings = useSelector(selectSettings);
   const [messageApi, contextHolder] = message.useMessage();
-  const dispatch = useDispatch();
   const musicMode = useSelector(selectMusicMode);
   const showMusicWidget = useSelector(selectShowMusicWidget);
-  const tabId = useSelector(selectTabId);
 
   const handleWorkingHoursChange = (value: string, index: number) => {
     const newWorkingHours = [...settings.workingHours || []];
     newWorkingHours[index] = value;
-    dispatch(setSettings({
-      ...settings,
-      workingHours: newWorkingHours,
-    }));
+    syncSettings({
+      workingHours: newWorkingHours
+    })
     handleBreakSchedule(true);
   };
 
   const handleShowMusicWidgetChange = (value: boolean) => {
-    dispatch(setShowMusicWidget(value));
+    const {isMusicPlaying} = settings;
+    syncSettings({
+      showCustomAudioPlayer: value,
+    })
     if(value) {
       messageApi.success("Music widget enabled. You can now listen to music in the app.");
     } else {
       messageApi.success("Music widget disabled. You will no longer hear music in the app.");
-      dispatch(setIsMusicPlaying("0"));
-      if(chrome.storage) {
-        chrome.storage.local.set({
-          isMusicPlaying: false,
-          tabId,
-        });
-      }
+      if(isMusicPlaying && chrome.runtime) chrome.runtime.sendMessage({ action: "PAUSE_MUSIC"}) 
     }
   };
 
   const handleBreakIntervalChange = (value: string) => {
-    dispatch(setSettings({
-      ...settings,
-      breakInterval: parseInt(value),
-    }));
+    syncSettings({
+      breakInterval: parseInt(value)
+    })
     handleBreakSchedule(true);
   };
 
@@ -214,10 +205,9 @@ const SettingsModal = ({ visible = true, onClose }: SettingsModalProps) => {
                       size="small"
                       style={{ width: '240px', marginTop: '12px' }}
                       value={settings.icalUrl}
-                      onChange={(e) => dispatch(setSettings({
-                        ...settings,
-                        icalUrl: e.target.value,
-                      }))}
+                      onChange={(e) => syncSettings({
+                        icalUrl: e.target.value
+                      })}
                     />
                     <Button 
                       type="primary" 
@@ -225,10 +215,9 @@ const SettingsModal = ({ visible = true, onClose }: SettingsModalProps) => {
                       style={{ marginTop: '12px' }} 
                       disabled={!settings.icalUrl}
                       onClick={() => {
-                        dispatch(setSettings({
-                          ...settings,
+                        syncSettings({
                           icalUrl: settings.icalUrl || ''
-                        }))
+                        })
                         handleImportCalendar(!!(settings.icalUrl));
                         messageApi.success("Settings saved. Your calendar events will be imported in the background.");
                       }}
@@ -238,10 +227,9 @@ const SettingsModal = ({ visible = true, onClose }: SettingsModalProps) => {
                   <Popconfirm
                     title="Are you sure you want to remove this calendar?"
                     onConfirm={() => {
-                      dispatch(setSettings({
-                        ...settings,
+                      syncSettings({
                         icalUrl: ''
-                      }))
+                      })
                       handleRemoveCalendar();
                     }}
                     okText="Yes"
@@ -279,7 +267,7 @@ const SettingsModal = ({ visible = true, onClose }: SettingsModalProps) => {
                     <Radio.Group 
                       style={{ display: 'flex', gap: '6px', flexDirection: 'column' }} 
                       value={musicMode} 
-                      onChange={(e) => dispatch(setMusicMode(e.target.value))}
+                      onChange={(e) => syncSettings({ musicMode: e.target.value })}
                       options={[
                         { label: 'Jazz', value: 'JAZZ' },
                         { label: 'Nature', value: 'NATURE' },

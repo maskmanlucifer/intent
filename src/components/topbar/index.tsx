@@ -1,6 +1,6 @@
 import PageSwitcher from "../page-switcher";
-import { selectActivePage, setActivePage } from "../../redux/sessionSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { selectActivePage, syncSettings } from "../../redux/sessionSlice";
+import { useSelector } from "react-redux";
 import { Pages } from "../../types";
 import "./index.scss";
 import { SettingOutlined } from "@ant-design/icons";
@@ -24,13 +24,14 @@ interface TopbarProps {
 }
 
 const Topbar = ({ isSidebarCollapsed, setSidebarCollapsed, setIsDrawerOpen, isDrawerOpen, showCollapsedIcon }: TopbarProps) => {
-    const dispatch = useDispatch();
     const page = useSelector(selectActivePage);
     const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
     const setPage = (page: Pages) => {
-        dispatch(setActivePage(page));
+        syncSettings({
+            activePage: page
+        })
     }
 
     return (

@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import { DB_CONFIG } from "../constant";
-import { Category, TCalendarEvent, TSessionData } from "../types";
+import { Category, TCalendarEvent } from "../types";
 import { store } from "../redux/store";
 import { fetchCategories } from "../redux/categorySlice";
 import dbHelper from "./helper";
@@ -9,7 +9,7 @@ import { handleImportCalendar } from "../helpers/events.helper";
 import { handleBreakSchedule } from "../helpers/break.helper";
 import { fetchAndUpdateSession } from "../helpers/session.helper";
 import { fetchNotes } from "../redux/notesSlice";
-import { handleMusicPlayingState } from "../helpers/music.helper";
+
 const dbName = DB_CONFIG.name;
 const dbVersion = DB_CONFIG.version;
 
@@ -173,22 +173,6 @@ export const gerSessionData = () => {
   });
 };
 
-export const updateSessionData = (sessionData: TSessionData) => {
-  return new Promise((resolve, reject) => {
-    if (!db) {
-      throw new Error("Database not initialized");
-    }
-
-    const transaction = db.transaction(
-      [DB_CONFIG.stores.sessionData.name],
-      "readwrite"
-    );
-
-    const store = transaction.objectStore(DB_CONFIG.stores.sessionData.name);
-    store.put(sessionData);
-  });
-};
-
 export const getEventsData = () => {
   return new Promise((resolve, reject) => {
     if (!db) {
@@ -214,9 +198,6 @@ export const getEventsData = () => {
   });
 };
     
-
-
-
 export const updateEventsData = (eventsData: TCalendarEvent[]) => {
   return new Promise((resolve, reject) => {
     if (!db) {
@@ -304,7 +285,6 @@ async function init() {
     store.dispatch(fetchNotes());
     handleImportCalendar();
     handleBreakSchedule();
-    handleMusicPlayingState();
   } catch (error) {
     console.error("Database error:", error);
   }

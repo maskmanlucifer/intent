@@ -1,12 +1,10 @@
-import { getItem } from "../db/localStorage";
-
 export const handleBreakSchedule = (force?: boolean) => {
   if (chrome.alarms) {
-    chrome.alarms.get("genericAlarm", (alarm) => {
+    chrome.alarms.get("genericAlarm", async (alarm) => {
       if (!alarm || force) {
-        const settings = getItem("settings") || {};
+        const userSettings = await chrome.storage.local.get("intentSettings") || {};
 
-        const { workingHours = ["09:00", "17:00"], breakInterval = 90 } = settings;
+        const { workingHours = ["09:00", "17:00"], breakInterval = 90 } = userSettings;
 
         const now = new Date();
         const [startTimeStr, endTimeStr] = workingHours;

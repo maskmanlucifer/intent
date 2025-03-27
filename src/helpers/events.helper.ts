@@ -1,14 +1,11 @@
-import { TCalendarEvent, TSessionData } from "../types";
-import { getItem } from "../db/localStorage";
-import { TSettings } from "../types";
+import { TCalendarEvent } from "../types";
 import { RRule } from "rrule";
 import { setIsImporting, updateEvents } from "../redux/eventsSlice";
 import { updateEventsData, cleanEventsData, getEventsData } from "../db";
 import { store } from "../redux/store";
 import { createId } from "../helper";
 import moment from 'moment-timezone';
-
-import { setSessionData } from "../redux/sessionSlice";
+import { syncSettings } from "../redux/sessionSlice";
 
 const getISTTime = (time: string) => {
   // Preserve the original time without shifting
@@ -185,11 +182,13 @@ const fetchEvents = async (icalUrl: string): Promise<TCalendarEvent[]> => {
 };
 
 export const handleImportCalendar = async (forceImport: boolean = false) => {
-  const sessionData = getItem("sessionData") as TSessionData || {};
-  const settingsData = getItem("settings") as TSettings;
+  if(!chrome || !chrome.storage) {
+    return 
+  }
+  
+  const userSettings = await chrome.storage.local.get("intentSettings") || {};
 
-  const { lastCalendarFetchTime } = sessionData;
-  const { icalUrl } = settingsData || {};
+  const { lastCalendarFetchTime, icalUrl } = userSettings;
 
   const shouldImport = icalUrl && (forceImport || !lastCalendarFetchTime || (new Date(lastCalendarFetchTime).getDate() < new Date().getDate()));
 
@@ -216,10 +215,10 @@ export const handleImportCalendar = async (forceImport: boolean = false) => {
             });
           }
         });
-        store.dispatch(setSessionData({
-          ...sessionData,
+
+        syncSettings({
           lastCalendarFetchTime: Date.now(),
-        }));
+        });
       });
     }
 

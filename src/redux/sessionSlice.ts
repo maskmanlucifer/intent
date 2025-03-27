@@ -1,95 +1,68 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { RootState } from "./store";
-import { TSessionData, TSettings } from "../types";
-import { setItem } from "../db/localStorage";
+import { RootState, store } from "./store";
+import { TUserSettingsData } from "../types";
 import { PAGES } from "../constant";
 import { getTabId } from "../utils";
-type SessionState = {
-    settings: TSettings;
-    sessionData: Omit<TSessionData, 'id'>;
-    tabId: string;
-};
 
-const initialState: SessionState = {
-    settings: {
-        icalUrl: '',
-        workingHours: ['09:00', '17:00'],
-        breakInterval: 90,
-        showCustomAudioPlayer: false,
-        musicMode: 'NATURE',
-    },
-    sessionData: {
-        sidebarCollapsed: true,
-        selectedFolder: "1",
-        activePage: PAGES.TODO,
-        isMusicPlaying: "0",
-    },
+export const syncSettings = (newSettings: Partial<TUserSettingsData>) => {
+    const existingSettings = store.getState().session;
+
+    const finalSettings = {
+        ...existingSettings,
+        ...newSettings,
+        lastUpdatedAt: Date.now(),
+    };
+
+    store.dispatch(updateSettings(finalSettings));
+
+    if(chrome.storage) {
+        chrome.storage.local.set({ intentSettings: finalSettings });
+    }
+}
+if(chrome.storage) {
+    chrome.storage.onChanged.addListener((changes) => {
+        if(changes.intentSettings && changes.intentSettings.newValue && changes.intentSettings.newValue.lastUpdatedAt !== store.getState().session.lastUpdatedAt) {
+            store.dispatch(updateSettings(changes.intentSettings.newValue));
+        }
+    });
+}
+
+const initialState: TUserSettingsData = {
+    icalUrl: '',
+    workingHours: ['09:00', '17:00'],
+    breakInterval: 90,
+    showCustomAudioPlayer: false,
+    musicMode: 'NATURE',
+    sidebarCollapsed: true,
+    selectedFolder: "1",
+    activePage: PAGES.TODO,
+    isMusicPlaying: false,
     tabId: getTabId(),
+    lastUpdatedAt: Date.now(),
+    songIndex: 0,
 };
 
 const sessionSlice = createSlice({
     name: "session",
     initialState,
     reducers: {
-        setActivePage: (state, action) => {
-            const sessionData = {
-                ...state.sessionData,
-                activePage: action.payload,
-            };
-            state.sessionData = sessionData;
-            setItem("sessionData", sessionData);
-        },
-        setSettings: (state, action) => {
-            const finalSettings = {
-                ...state.settings,
+        updateSettings: (state, action) => {
+            return {
+                ...state,
                 ...action.payload,
-            };  
-            state.settings = finalSettings;
-            setItem("settings", finalSettings);
+            }
         },
-        setSessionData: (state, action) => {
-            const finalSessionData = {
-                ...state.sessionData,
-                ...action.payload,
-            };
-            state.sessionData = finalSessionData;
-            setItem("sessionData", finalSessionData);
-        },
-        setIsMusicPlaying: (state, action) => {
-            const finalSessionData = {
-                ...state.sessionData,
-                isMusicPlaying: action.payload,
-            };
-            state.sessionData = finalSessionData;
-        },
-        setMusicMode: (state, action) => {
-            const finalSettings = {
-                ...state.settings,
-                musicMode: action.payload,
-            };
-            state.settings = finalSettings;
-            setItem("settings", finalSettings);
-        },
-        setShowMusicWidget: (state, action) => {
-            const finalSettings = {
-                ...state.settings,
-                showCustomAudioPlayer: action.payload,
-            };
-            state.settings = finalSettings;
-            setItem("settings", finalSettings);
-        }
     },
 });
 
-export const { setActivePage, setSettings, setSessionData, setIsMusicPlaying, setMusicMode, setShowMusicWidget } = sessionSlice.actions;
+export const { updateSettings } = sessionSlice.actions;
 
-export const selectActivePage = (state: RootState) => state.session.sessionData.activePage;
-export const selectSettings = (state: RootState) => state.session.settings;
-export const selectSessionData = (state: RootState) => state.session.sessionData;
-export const selectIsMusicPlaying = (state: RootState) => state.session.sessionData.isMusicPlaying;
-export const selectMusicMode = (state: RootState) => state.session.settings.musicMode;
-export const selectShowMusicWidget = (state: RootState) => state.session.settings.showCustomAudioPlayer;
+export const selectActivePage = (state: RootState) => state.session.activePage;
+export const selectIsMusicPlaying = (state: RootState) => state.session.isMusicPlaying;
+export const selectMusicMode = (state: RootState) => state.session.musicMode;
+export const selectShowMusicWidget = (state: RootState) => state.session.showCustomAudioPlayer;
 export const selectTabId = (state: RootState) => state.session.tabId;
-export const selectIsPlayingFromSameTab = (state: RootState) => state.session.sessionData.isMusicPlaying === state.session.tabId;
+export const selectSettings = (state: RootState) => state.session;
+export const selectIsSidebarCollapsed = (state: RootState) => state.session.sidebarCollapsed;
 
 export default sessionSlice.reducer;
