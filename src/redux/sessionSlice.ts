@@ -57,7 +57,7 @@ const sessionSlice = createSlice({
 
 export const { updateSettings } = sessionSlice.actions;
 
-export const selectActivePage = (state: RootState) => state.session.activePage;
+export const selectActivePage = (state: RootState) => PAGES.BREAK || state.session.activePage;
 export const selectIsMusicPlaying = (state: RootState) => state.session.isMusicPlaying;
 export const selectMusicMode = (state: RootState) => state.session.musicMode;
 export const selectShowMusicWidget = (state: RootState) => state.session.showCustomAudioPlayer;

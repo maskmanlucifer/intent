@@ -1,5 +1,11 @@
 import React from "react";
 import "./index.scss";
+import {ReactComponent as WalkIcon} from "../../assets/icons/walk.svg";
+import {ReactComponent as RestIcon} from "../../assets/icons/nothing.svg";
+import {ReactComponent as MusicIcon} from "../../assets/icons/play-music.svg";
+import {ReactComponent as SnackIcon} from "../../assets/icons/snack.svg";
+import {ReactComponent as WaterIcon} from "../../assets/icons/water.svg";
+
 
 interface BreakPillProps {
   text: string;
@@ -16,7 +22,7 @@ const BreakPill = ({
 }: BreakPillProps) => {
   return (
     <div className="break-pill" style={inlineStyle}>
-      <svg
+      <div className="header"><svg
         width="20"
         height="20"
         viewBox="0 0 20 20"
@@ -28,7 +34,12 @@ const BreakPill = ({
           fill="currentColor"
         />
       </svg>
-      <span>{text}</span>
+      <span>{text}</span></div>
+      {text === "Do nothing" && <RestIcon />}
+      {text === "Take a walk" && <WalkIcon />}
+      {text === "Drink some water" && <WaterIcon />}
+      {text === "Play some music" && <MusicIcon />}
+      {text === "Have a snack" && <SnackIcon />}
     </div>
   );
 };

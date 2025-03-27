@@ -101,7 +101,6 @@ const BreakReschedule = () => {
               <Checkbox>Drank some water</Checkbox>
               <Checkbox>Listen to music</Checkbox>
               <Checkbox>Took a snack break</Checkbox>
-              <Checkbox>Did some stretching</Checkbox>
             </div>
           }
           icon={<SmileTwoTone />}
