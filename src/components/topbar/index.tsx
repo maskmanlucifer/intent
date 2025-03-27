@@ -10,7 +10,6 @@ import { Button, Popover, Tooltip } from "antd";
 import { ReactComponent as ScheduleIcon } from "../../assets/icons/schedule.svg";
 import { useState } from "react";
 import SettingsModal from "../settings-modal";
-import { PAGES } from "../../constant";
 import { ReactComponent as SmilyIcon } from "../../assets/icons/smily.svg";
 import {ReactComponent as QuestionIcon} from "../../assets/icons/question.svg";
 import HelpUsImprove from "../help-us-improve";
