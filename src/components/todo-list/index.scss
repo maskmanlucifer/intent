@@ -5,10 +5,21 @@
    margin-bottom: 100px;
    position: relative;
 
+   .focus-mode {
+      font-size: 36px;
+      margin-bottom: 24px;
+      font-family: var(--secondary-font);
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      font-weight: 500;
+   }
+
    .completed-tasks-toggle {
       margin-bottom: 16px;
       margin-left: 100%;
       transform: translate(-100%, 0);
+      background-color: rgba(0, 0, 0, 0.04);
    }
 
    .add-task-button {

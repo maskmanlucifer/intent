@@ -63,6 +63,7 @@ const Note = () => {
         title: headerText,
         subtitle: subtitle,
         content: JSON.stringify(content),
+        updatedAt: Date.now(),
       };
 
       if (editNoteModalData.note?.isNewNote) {

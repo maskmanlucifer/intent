@@ -47,6 +47,7 @@ export const createNewNote = () => {
     content: "{}",
     createdAt: new Date().getTime(),
     isNewNote: true,
+    updatedAt: new Date().getTime(),
   };
 };
 
