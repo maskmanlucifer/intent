@@ -7,7 +7,7 @@ import {
 import "./index.scss"
 import dayjs from "dayjs"
 import { ReactComponent as GeneralSettingsIcon } from "../../assets/icons/general-settings.svg"
-import { ReactComponent as SubscriptionIcon } from "../../assets/icons/subscription.svg"
+// import { ReactComponent as SubscriptionIcon } from "../../assets/icons/subscription.svg"
 import { ReactComponent as MusicIcon } from "../../assets/icons/music.svg"
 import { ReactComponent as CalendarIcon } from "../../assets/icons/calendar.svg"
 import { handleRemoveCalendar, handleImportCalendar } from "../../helpers/events.helper"
@@ -76,11 +76,11 @@ const SettingsModal = ({ visible = true, onClose }: SettingsModalProps) => {
       label: "Music",
       icon: <MusicIcon className="music-icon" />,
     },
-    {
-      key: "subscription",
-      icon: <SubscriptionIcon />,
-      label: "Subscription",
-    },
+    // {
+    //   key: "subscription",
+    //   icon: <SubscriptionIcon />,
+    //   label: "Subscription",
+    // },
   ]
 
   return (
