@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { PAGES } from "./constant";
 import "./App.scss";
 import { ConfigProvider, Drawer } from "antd";
@@ -14,7 +14,7 @@ import Note from "./pages/note";
 import CustomAudioPlayer from "./components/custom-audio-player";
 
 function App() {
-  const activePage: any = useSelector(selectActivePage);
+  const activePage = useSelector(selectActivePage);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const settings = useSelector(selectSettings);
   const isSidebarCollapsed = useSelector(selectIsSidebarCollapsed)
