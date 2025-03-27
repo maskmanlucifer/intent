@@ -37,7 +37,6 @@ const Topbar = ({ isSidebarCollapsed, setSidebarCollapsed, setIsDrawerOpen, isDr
     return (
         <div className="topbar">
             <div className={classNames("topbar-left",  { "topbar-left-collapsed": isSidebarCollapsed, 
-                "notes": page === PAGES.NOTES
              })}>
                <div className="topbar-left-title" onClick={() => setSidebarCollapsed(!isSidebarCollapsed)}>
                    {!isSidebarCollapsed && "INT3NT"} {showCollapsedIcon && <Tooltip arrow={false} autoAdjustOverflow={true} placement="bottom" title={!isSidebarCollapsed ? "Collapse sidebar" : "Expand sidebar"} mouseEnterDelay={0}><CollapseIcon /></Tooltip>} {!showCollapsedIcon && isSidebarCollapsed && <Tooltip arrow={false} autoAdjustOverflow={true} placement="right" title="Expand sidebar" mouseEnterDelay={0}><SmilyIcon className="smily-icon" /></Tooltip>}

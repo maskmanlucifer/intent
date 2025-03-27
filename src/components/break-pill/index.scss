@@ -1,21 +1,35 @@
 .break-pill {
     position: absolute;
     font-size: 14px;
-    padding: 4px 12px;
+    padding: 12px;
     display: flex;
-    gap: 6px;
-    align-items: center;
+    gap: 8px;
+    flex-direction: column;
     border-radius: 12px;
     border: 1px solid transparent;
     font-family: var(--primary-font);
+    background: var(--blue-50);
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1), 0px 1px 3px rgba(0, 0, 0, 0.06);
 
+    .header {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        font-size: 16px;
+
+        span {
+            color: #475467;
+        }
     
-    span {
-        color: #475467;
+        svg {
+            height: 10px;
+            width: 10px;
+        }
+
     }
 
     svg {
-        height: 10px;
-        width: 10px;
+        height: 200px;
+        width: 200px;
     }
 }

@@ -6,9 +6,9 @@ const Break = () => {
   return (
     <div className="break-page">
       <div className="break-header">
-        <h1>Take</h1>
-        <h1>a</h1>
-        <h1 className="heading-with-dot">
+        <div>Take</div>
+        <div>a</div>
+        <div className="heading-with-dot">
           break{" "}
           <svg
             width="20"
@@ -22,56 +22,46 @@ const Break = () => {
               fill="#027A48"
             />
           </svg>
-        </h1>
+        </div>
       </div>
       <BreakPill
         text="Take a walk"
           inlineStyle={{
-          top: "20%",
-          left: "50%",
-          background: "#FFF6ED",
-          borderColor: "#FEB273",
+          top: "24%",
+          left: "8%",
           color: "#FEC84B",
         }}
       />
       <BreakPill
         text="Drink some water"
         inlineStyle={{
-          top: "35%",
-          left: "65%",
-          background: "#F8F9FC",
-          borderColor: "#9EA5D1",
+          top: "50%",
+          left: "26%",
           color: "#9EA5D1",
         }}
       />
 
       <BreakPill
-        text="Do nothing just exist"
+        text="Do nothing"
         inlineStyle={{
-          top: "40%",
-          left: "40%",
-          background: "#F4F3FF",
-          borderColor: "#BDB4FE",
+          top: "20%",
+          left: "44%",
           color: "#BDB4FE",
         }}
       />
       <BreakPill
-        text="Listen to music"
+        text="Play some music"
         inlineStyle={{
-          top: "47.5%",
-          left: "60%",
-          background: "#FFF1F3",
-          borderColor: "#FEA3B4",
+          top: "50%",
+          left: "63%",
           color: "#FEA3B4",
         }}
       />
       <BreakPill
-        text="Take a snack break"
+        text="Have a snack"
         inlineStyle={{
-          top: "60%",
-          left: "43%",
-          background: "#FFF6ED",
-          borderColor: "#FEB273",
+          top: "30%",
+          left: "83%",
           color: "#FEC84B",
         }}
       />
