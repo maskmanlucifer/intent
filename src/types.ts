@@ -26,21 +26,20 @@ export type Subtask = {
   categoryId: string;
 };
 
-export type TSettings = {
+export type TUserSettingsData = {
   icalUrl?: string;
-  workingHours: [string, string];
+  workingHours: string[];
   breakInterval: number;
   showCustomAudioPlayer: boolean;
   musicMode: 'JAZZ' | 'NATURE' | 'LO_FI';
-}
-
-export type TSessionData = {
-  id: 'sessionData';
   lastCalendarFetchTime?: number;
   sidebarCollapsed: boolean;
   selectedFolder: string;
   activePage: Pages;
-  isMusicPlaying?: string;
+  isMusicPlaying: boolean;
+  tabId: string;
+  lastUpdatedAt: number;
+  songIndex: number;
 }
 
 export type Note = {

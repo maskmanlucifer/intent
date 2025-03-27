@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectCategories } from "../../redux/categorySlice";
 import { addNewTask, selectTodoList } from "../../redux/todoSlice";
 import CompletedTodoList from "../../components/completed-todo-list";
-import { selectSessionData, setSessionData } from "../../redux/sessionSlice";
+import { selectSettings, syncSettings } from "../../redux/sessionSlice";
 const { Sider } = Layout;
 
 const siderStyle: React.CSSProperties = {
@@ -26,15 +26,14 @@ const siderStyle: React.CSSProperties = {
 
 const Todo = ({ isSidebarCollapsed, setIsSidebarCollapsed }: { isSidebarCollapsed: boolean, setIsSidebarCollapsed: (isSidebarCollapsed: boolean) => void }) => {
   const folders = useSelector(selectCategories);
-  const sessionData = useSelector(selectSessionData);
-  const {selectedFolder} = sessionData;
+  const settings = useSelector(selectSettings);
+  const {selectedFolder} = settings;
   const todos = useSelector((state: RootState) => selectTodoList(state, selectedFolder));
 
   const handleFolderChange = (folderId: string) => {
-    dispatch(setSessionData({
-      ...sessionData,
+    syncSettings({
       selectedFolder: folderId
-    }))
+    })
   }
 
   const dispatch = useDispatch();

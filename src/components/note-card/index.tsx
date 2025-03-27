@@ -7,21 +7,6 @@ import { useDispatch } from "react-redux";
 import { removeNote } from "../../redux/notesSlice";
 import {ReactComponent as NoteIcon} from "../../assets/icons/note.svg";
 
-const gradientColorCombos = [
-  ["#ffccbc", "#ff8a65", "#ff5252"],
-  ["#ffe0b2", "#ffeb3b", "#ffcc80"],
-  ["#ffab91", "#ff7043", "#ff8a65"],
-  ["#ffccbc", "#ffab91", "#ff7043"],
-  ["#ff7043", "#ffccbc", "#ffb74d"],
-  ["#ffab91", "#ffe0b2", "#ffecb3"],
-  ["#ffccbc", "#ff8a65", "#ffab91"],
-  ["#ffccbc", "#ff5252", "#ff7043"],
-  ["#ff7043", "#ffcc80", "#ffeb3b"],
-  ["#ffccbc", "#ffab91", "#ff8a65"],
-  ["#ff8a65", "#ffccbc", "#ffe4e1"],
-  ["#ffccbc", "#ff7043", "#ffb74d"],
-];
-
 const NoteCard = ({
   note,
   index,

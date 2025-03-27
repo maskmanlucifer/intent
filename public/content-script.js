@@ -17,8 +17,8 @@ const removeDarkTheme = () => {
 
 chrome.storage.onChanged.addListener((changes) => {
   for (let [key, { oldValue, newValue }] of Object.entries(changes)) {
-    if (key === "breakActive" && oldValue !== newValue) {
-      if (newValue) {
+    if (key === "intentSettings" && oldValue.activePage !== newValue.activePage) {
+      if (newValue.activePage === "Break") {
         applyDarkTheme();
       } else {
         removeDarkTheme();
@@ -41,8 +41,8 @@ chrome.storage.onChanged.addListener((changes) => {
   }
 });
 
-chrome.storage.local.get(["breakActive"]).then((result) => {
-  if (result && result.breakActive) {
+chrome.storage.local.get(["intentSettings"]).then((result) => {
+  if (result && result.intentSettings && result.intentSettings.activePage === "Break") {
     applyDarkTheme();
   }
 });
@@ -77,13 +77,16 @@ const showTooltip = (event) => {
   tooltip.style.color = "#333";
   tooltip.style.border = "1px solid #FF7043";
 
-  const timeToStartEvent = event.start - Date.now();
-  const timeToStartEventInMinutes = Math.round(timeToStartEvent / 60000);
+  const eventStartTime = new Date(event.start);
+  const hours = eventStartTime.getHours() % 12 || 12;
+  const minutes = eventStartTime.getMinutes().toString().padStart(2, "0");
+  const ampm = eventStartTime.getHours() >= 12 ? "PM" : "AM";
+  const timeToStart = `${hours}:${minutes} ${ampm}`;
 
   // Tooltip content with blinking icon at the start
   tooltip.innerHTML = `
     <div style="display: flex; align-items: center; justify-content: space-between; font-size: 14px; gap: 10px;">
-      <span id="blinking-icon">🔔</span> <strong>${event.title}</strong> starts in <strong>${timeToStartEventInMinutes} minutes</strong>
+      <span id="blinking-icon">🔔</span> <strong>${event.title}</strong> starts at <strong>${timeToStart}</strong>
       <button id="understood-button-${event.id}" style="padding: 4px 8px; background: #FF7043; color: #fff; border: none; border-radius: 6px; cursor: pointer;">Understood</button>
     </div>
   `;
