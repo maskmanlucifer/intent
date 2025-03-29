@@ -1,14 +1,21 @@
 /* eslint-disable no-undef */
-const applyDarkTheme = () => {
+const applyDarkTheme = (intentSettings) => {
   const body = document.querySelector("body");
-  if (body) {
-    body.style.filter = "grayscale(100%)";
-    body.style.transition = "filter 1s ease-in-out";
+  if (body && intentSettings.enableVisualBreakReminder) {
+    const style = document.createElement("style");
+    style.id = "dark-theme-style";
+    style.innerHTML = `
+      body *:not(#break-tooltip-intent, #break-tooltip-intent *, #event-tooltip-intent, #event-tooltip-intent *) {
+      filter: grayscale(100%);
+      transition: filter 1s ease-in-out;
+      }
+    `;
+    document.head.appendChild(style);
   }
 
   const existingTooltip = document.getElementById("break-tooltip-intent");
 
-  if (!existingTooltip) {
+  if (!existingTooltip && intentSettings.sendBreakReminder) {
     showBreakTooltip();
   }
 };
@@ -16,8 +23,10 @@ const applyDarkTheme = () => {
 const removeDarkTheme = () => {
   const body = document.querySelector("body");
   if (body) {
-    body.style.filter = "grayscale(0%)";
-    body.style.transition = "filter 1s ease-in-out";
+    const existingStyle = document.getElementById("dark-theme-style");
+    if (existingStyle) {
+      existingStyle.remove();
+    }
   }
 
   const existingTooltip = document.getElementById("break-tooltip-intent");
@@ -39,11 +48,7 @@ const handleBreakPostpone = (minutes) => {
     }
   });
 
-  chrome.alarms.clear("genericAlarm", () => {
-    chrome.alarms.create("genericAlarm", {
-      delayInMinutes: minutes,
-    });
-  });
+  chrome.runtime.sendMessage({ action: "setAlarm", delayInMinutes: minutes });
 };
 
 const handleEndBreak = () => {
@@ -67,7 +72,7 @@ chrome.storage.onChanged.addListener((changes) => {
       oldValue.activePage !== newValue.activePage
     ) {
       if (newValue.activePage === "Break") {
-        applyDarkTheme();
+        applyDarkTheme(newValue);
       } else {
         removeDarkTheme();
       }
@@ -95,7 +100,7 @@ chrome.storage.local.get(["intentSettings"]).then((result) => {
     result.intentSettings &&
     result.intentSettings.activePage === "Break"
   ) {
-    applyDarkTheme();
+    applyDarkTheme(result.intentSettings);
   }
 });
 
@@ -162,7 +167,7 @@ const showTooltip = (event) => {
     });
 };
 
-export const showBreakTooltip = () => {
+const showBreakTooltip = () => {
   const tooltip = document.createElement("div");
   tooltip.style.position = "fixed";
   tooltip.id = "break-tooltip-intent";

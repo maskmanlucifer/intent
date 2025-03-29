@@ -127,6 +127,7 @@
         padding: 8px;
         background-color: var(--blue-100);
         border: 1px solid var(--blue-200);
+        border-radius: 2px;
 
         .ant-alert-icon {
           font-size: 18px;
@@ -154,4 +155,9 @@
 
   }
 
+}
+
+.setting-description {
+  max-width: 90%;
+  line-height: normal;
 }

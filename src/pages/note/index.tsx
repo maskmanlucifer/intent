@@ -15,6 +15,7 @@ import ModalTitle from "../../components/EditNoteModal/modal-title";
 
 const Note = () => {
   const notes = useSelector(selectNotes);
+  const sortedNotes = [...notes].sort((a, b) => b.updatedAt - a.updatedAt);
   const [editNoteModalData, setEditNoteModalData] = useState<{
     isOpen: boolean;
     note: NoteType | null;
@@ -99,7 +100,7 @@ const Note = () => {
       {contextHolder}
       <Layout>
         <div className="note-items">
-          {notes.length > 0 && (
+          {sortedNotes.length > 0 && (
             <div className="note-header">
               <span>NOTES</span>
               <Tooltip
@@ -114,11 +115,13 @@ const Note = () => {
                   type="primary"
                   onClick={handleAddNote}
                   icon={<PlusOutlined />}
-                />
+                >
+                  Add new note
+                </Button>
               </Tooltip>
             </div>
           )}
-          {notes.length === 0 && (
+          {sortedNotes.length === 0 && (
             <div className="empty-note">
               <Empty
                 image={<EmptyNote />}
@@ -132,8 +135,8 @@ const Note = () => {
               </Empty>
             </div>
           )}
-          {notes.length > 0 && (
-            <NotesList notes={notes} onCardClick={handleCardClick} onNoteDeleted={onNoteDeleted} />
+          {sortedNotes.length > 0 && (
+            <NotesList notes={sortedNotes} onCardClick={handleCardClick} onNoteDeleted={onNoteDeleted} />
           )}
         </div>
       </Layout>

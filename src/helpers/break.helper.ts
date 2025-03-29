@@ -4,7 +4,7 @@ export const handleBreakSchedule = (force?: boolean) => {
       if (!alarm || force) {
         const userSettings = await chrome.storage.local.get("intentSettings") || {};
 
-        const { workingHours = ["09:00", "17:00"], breakInterval = 90 } = userSettings;
+        const { workingHours = ["09:00", "17:00"], breakInterval = 90 } = userSettings.intentSettings || {};
 
         const now = new Date();
         const [startTimeStr, endTimeStr] = workingHours;
