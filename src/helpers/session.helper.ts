@@ -1,11 +1,10 @@
-import { updateSettings } from "../redux/sessionSlice";
-import { store } from "../redux/store";
+import { syncSettings } from "../redux/sessionSlice";
 
 export const fetchAndUpdateSession = () => {
     if(chrome.storage) {
         chrome.storage.local.get('intentSettings', (data) => {
             const sessionData = data.intentSettings || {};
-            store.dispatch(updateSettings(sessionData));
+            syncSettings(sessionData);
         });
     }
 }   

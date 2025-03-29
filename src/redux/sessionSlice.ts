@@ -40,6 +40,9 @@ const initialState: TUserSettingsData = {
     tabId: getTabId(),
     lastUpdatedAt: Date.now(),
     songIndex: 0,
+    enableVisualBreakReminder: true,
+    sendBreakReminder: true,
+    sendEventReminder: true,
 };
 
 const sessionSlice = createSlice({
@@ -64,5 +67,8 @@ export const selectShowMusicWidget = (state: RootState) => state.session.showCus
 export const selectTabId = (state: RootState) => state.session.tabId;
 export const selectSettings = (state: RootState) => state.session;
 export const selectIsSidebarCollapsed = (state: RootState) => state.session.sidebarCollapsed;
+export const selectSendEventReminder = (state: RootState) => state.session.sendEventReminder;
+export const selectSendBreakReminder = (state: RootState) => state.session.sendBreakReminder;
+export const selectEnableVisualBreakReminder = (state: RootState) => state.session.enableVisualBreakReminder;
 
 export default sessionSlice.reducer;

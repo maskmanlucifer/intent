@@ -20,13 +20,17 @@ chrome.alarms.onAlarm.addListener(function (alarm) {
             intentSettings: { ...data.intentSettings, activePage: "Break", lastUpdatedAt: Date.now() },
           });
       }
-  });
+    });
   }
   if (alarm && alarm.name.startsWith('calendar-event#')) {
     const eventId = alarm.name.split('#')[1];
-    getDataFromIDB(eventId).then(event => {
-      if(event.start > Date.now()) {
-        chrome.storage.local.set({ event: { id: eventId, title: event.title, start: event.start } });
+    chrome.storage.local.get("intentSettings", (data) => {
+      if (data.intentSettings && data.intentSettings.sendEventReminder) {
+        getDataFromIDB(eventId).then(event => {
+          if(event.start > Date.now()) {
+            chrome.storage.local.set({ event: { id: eventId, title: event.title, start: event.start } });
+          }
+        });
       }
     });
   }
@@ -42,6 +46,15 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
               intentSettings: { ...data.intentSettings, isMusicPlaying: true, lastUpdatedAt: Date.now() },
             });
         }
+    });
+  }
+
+  if(request.action === "setAlarm") {
+    const { delayInMinutes } = request;
+    chrome.alarms.clear("genericAlarm", () => {
+      chrome.alarms.create("genericAlarm", {
+        delayInMinutes,
+      });
     });
   }
 

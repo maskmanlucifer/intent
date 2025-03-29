@@ -188,7 +188,7 @@ export const handleImportCalendar = async (forceImport: boolean = false) => {
   
   const userSettings = await chrome.storage.local.get("intentSettings") || {};
 
-  const { lastCalendarFetchTime, icalUrl } = userSettings;
+  const { lastCalendarFetchTime, icalUrl } = userSettings.intentSettings || {};
 
   const shouldImport = icalUrl && (forceImport || !lastCalendarFetchTime || (new Date(lastCalendarFetchTime).getDate() < new Date().getDate()));
 

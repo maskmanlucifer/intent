@@ -40,6 +40,9 @@ export type TUserSettingsData = {
   tabId: string;
   lastUpdatedAt: number;
   songIndex: number;
+  sendEventReminder: boolean;
+  sendBreakReminder: boolean;
+  enableVisualBreakReminder: boolean;
 }
 
 export type Note = {
