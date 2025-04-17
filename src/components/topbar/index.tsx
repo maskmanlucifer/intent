@@ -12,6 +12,8 @@ import { useState } from "react";
 import SettingsModal from "../settings-modal";
 import { ReactComponent as SmilyIcon } from "../../assets/icons/smily.svg";
 import { ReactComponent as QuestionIcon } from "../../assets/icons/question.svg";
+import { ReactComponent as DatabaseIcon } from "../../assets/icons/database.svg";
+
 import HelpUsImprove from "../help-us-improve";
 
 interface TopbarProps {
@@ -80,14 +82,21 @@ const Topbar = ({
       </div>
       <div className="topbar-right">
         <PageSwitcher page={page} setPage={setPage} />
-        <Button
-          type="link"
-          className="data-storage-button"
-          size="small"
-          onClick={() => setIsDataStorageModalOpen(true)}
+        <Tooltip
+          arrow={false}
+          autoAdjustOverflow={true}
+          placement="bottom"
+          title={"How We Store Your Data"}
+          mouseEnterDelay={0}
         >
-          How We Store Your Data
-        </Button>
+          <Button
+            type="link"
+            className="data-storage-button"
+            size="small"
+            onClick={() => setIsDataStorageModalOpen(true)}
+            icon={<DatabaseIcon />}
+          ></Button>{" "}
+        </Tooltip>
         <Button
           type="primary"
           className="check-schedule-button"
@@ -141,14 +150,15 @@ const Topbar = ({
             All your data, including tasks, notes, and settings, is stored
             locally in your browser. We do not sync or upload any of your data
             to a server. The only exception is when you choose to import events
-            from an ICS calendar URL, where we need to parse and fetch event details.
+            from an ICS calendar URL, where we need to parse and fetch event
+            details.
           </p>
 
           <span className="subheading">When Might Data Be Lost?</span>
           <div className="data-lost-list">
             <span>
-              1. If you <strong>clear your browser storage</strong> or reset your
-              browser
+              1. If you <strong>clear your browser storage</strong> or reset
+              your browser
             </span>
             <span>
               2. If you <strong>uninstall the extension</strong>
@@ -158,13 +168,14 @@ const Topbar = ({
               due to low disk space
             </span>
             <span>
-              4. If you switch to a different browser or device, as data does not
-              sync across devices
+              4. If you switch to a different browser or device, as data does
+              not sync across devices
             </span>
           </div>
 
           <p>
-          In the future, we may offer an optional way to sync your data across devices. If this interests you, we’d love your feedback!
+            In the future, we may offer an optional way to sync your data across
+            devices. If this interests you, we’d love your feedback!
           </p>
         </div>
       </Modal>

@@ -4,18 +4,17 @@ import { setIsImporting, updateEvents } from "../redux/eventsSlice";
 import { updateEventsData, cleanEventsData, getEventsData } from "../db";
 import { store } from "../redux/store";
 import { createId } from "../helper";
-import moment from 'moment-timezone';
+import moment from "moment-timezone";
 import { syncSettings } from "../redux/sessionSlice";
 
-const getISTTime = (time: string) => {
-  // Preserve the original time without shifting
-  const indiaTimeString = moment
+// Convert time string to the specified timezone
+const getTimeInTimezone = (time: string, timezone: string) => {
+  // Convert the time to the specified timezone
+  return moment
     .parseZone(time)
-    .tz('Asia/Kolkata', true)
-    .format('YYYY-MM-DDTHH:mm:ssZ');
-
-  return indiaTimeString;
-}
+    .tz(timezone)
+    .format("YYYY-MM-DDTHH:mm:ssZ");
+};
 
 export const getDataFromAPI = async (url: string) => {
   const response = await fetch(
@@ -38,34 +37,42 @@ const cancelAlarms = (ids: string[]) => {
   });
 };
 
-const getRecurringEvents = (event: any, targetDate: Date) => {
+// Process recurring events with proper timezone handling
+const getRecurringEvents = (event: any, targetDate: Date, timezone: string) => {
   const { uid, summary, description, start, end, rrule } = event as any;
 
-  const eventStart = new Date(getISTTime(start));
-  const eventEnd = new Date(getISTTime(end));
+  // Convert times using the timezone from settings
+  const eventStart = new Date(getTimeInTimezone(start, timezone));
+  const eventEnd = new Date(getTimeInTimezone(end, timezone));
+  const eventDuration = eventEnd.getTime() - eventStart.getTime();
 
   if (rrule) {
     try {
       // Clone the options to avoid modifying the original
       const ruleOptions = { ...rrule.options };
 
-      // Convert string dates to proper Date objects
+      // Convert string dates to proper Date objects with timezone
       if (typeof ruleOptions.dtstart === "string") {
-        ruleOptions.dtstart = new Date(getISTTime(ruleOptions.dtstart));
+        ruleOptions.dtstart = new Date(
+          getTimeInTimezone(ruleOptions.dtstart, timezone)
+        );
       }
 
       if (typeof ruleOptions.until === "string") {
-        ruleOptions.until = new Date(getISTTime(ruleOptions.until));
+        ruleOptions.until = new Date(
+          getTimeInTimezone(ruleOptions.until, timezone)
+        );
       }
 
       // Create the rule with corrected options
       const rule = new RRule(ruleOptions);
 
-      // Create new Date objects for day boundaries
-      const dayStart = new Date(targetDate);
+      // Create new Date objects for day boundaries in the target timezone
+      const targetDateInTimezone = moment.tz(targetDate, timezone).toDate();
+      const dayStart = new Date(targetDateInTimezone);
       dayStart.setHours(0, 0, 0, 0);
 
-      const dayEnd = new Date(targetDate);
+      const dayEnd = new Date(targetDateInTimezone);
       dayEnd.setHours(23, 59, 59, 999);
 
       // Get occurrences for the target date
@@ -81,20 +88,16 @@ const getRecurringEvents = (event: any, targetDate: Date) => {
         });
 
         // Check if target date matches any of the nth weekday rules
-        const targetWeekday = targetDate.getDay(); // 0=Sunday, 1=Monday, etc. in JS
+        const targetMoment = moment.tz(targetDate, timezone);
         // Convert from JS weekday to RRule weekday (JS: 0=Sunday, RRule: 0=Monday)
-        const targetRRuleWeekday = targetWeekday === 0 ? 6 : targetWeekday - 1;
+        const targetRRuleWeekday = targetMoment.day() === 0 ? 6 : targetMoment.day() - 1;
 
-        // Get which occurrence of this weekday it is in the month
-        const firstDayOfMonth = new Date(
-          targetDate.getFullYear(),
-          targetDate.getMonth(),
-          1
-        );
-        const daysToAdd = (7 + targetWeekday - firstDayOfMonth.getDay()) % 7;
+        // Calculate which occurrence of this weekday it is in the month
+        const firstDayOfMonth = targetMoment.clone().startOf('month');
+        const daysToAdd = (7 + targetMoment.day() - firstDayOfMonth.day()) % 7;
         const firstOccurrenceOfWeekday = daysToAdd + 1;
         const targetNth = Math.ceil(
-          (targetDate.getDate() - firstOccurrenceOfWeekday + 1) / 7
+          (targetMoment.date() - firstOccurrenceOfWeekday + 1) / 7
         );
 
         // Check if any rule matches our target date's weekday and nth occurrence
@@ -109,19 +112,31 @@ const getRecurringEvents = (event: any, targetDate: Date) => {
         }
       }
 
-      // If we get here, either the date matches an nth weekday rule or it's a regular rule
+      // Map occurrences to calendar events with proper timezone handling
       return occurrences.map((occurrence) => {
-        const start = occurrence.getTime();
-        const timezoneOffset = -330; // Kolkata is UTC+5:30, which is +330 minutes
-        const startUTC = start + timezoneOffset * 60000; // Convert to UTC epoch time
+        // Create a moment object in the target timezone
+        const occurrenceMoment = moment.tz(occurrence, timezone);
+        
+        // Get the time components from the original event start
+        const originalStartMoment = moment.tz(eventStart, timezone);
+        
+        // Set the time components on the occurrence date
+        occurrenceMoment.hour(originalStartMoment.hour());
+        occurrenceMoment.minute(originalStartMoment.minute());
+        occurrenceMoment.second(originalStartMoment.second());
+        
+        // Get the timestamp
+        const startTime = occurrenceMoment.valueOf();
+        
         return {
-        id: createId(),
-        uid,
-        title: summary,
-        description,
-        start: startUTC,
-        end: startUTC + (eventEnd.getTime() - eventStart.getTime())
-      }});
+          id: createId(),
+          uid,
+          title: summary,
+          description,
+          start: startTime,
+          end: startTime + eventDuration,
+        };
+      });
     } catch (e) {
       console.error("RRule error:", e);
       return [];
@@ -131,10 +146,12 @@ const getRecurringEvents = (event: any, targetDate: Date) => {
   return [];
 };
 
-const fetchEvents = async (icalUrl: string): Promise<TCalendarEvent[]> => {
+const fetchEvents = async (
+  icalUrl: string,
+  timezone: string
+): Promise<TCalendarEvent[]> => {
   try {
     const data = await getDataFromAPI(icalUrl);
-
     const targetDate = new Date();
 
     const filteredEvents: TCalendarEvent[] = Object.values(data as any).flatMap(
@@ -146,30 +163,36 @@ const fetchEvents = async (icalUrl: string): Promise<TCalendarEvent[]> => {
         ) {
           const { uid, summary, description, start, end } = event as any;
 
-          const eventStart = new Date(getISTTime(start));
-          const eventEnd = new Date(getISTTime(end));
+          // Convert times using the timezone from settings
+          const eventStart = new Date(getTimeInTimezone(start, timezone));
+          const eventEnd = new Date(getTimeInTimezone(end, timezone));
 
-          // Check normal scheduled events
+          // Check if this is a normal (non-recurring) event for today
           if (
             eventStart instanceof Date &&
             !isNaN(eventStart.getTime()) &&
             eventEnd instanceof Date &&
-            !isNaN(eventEnd.getTime()) &&
-            eventStart.toDateString() === targetDate.toDateString()
+            !isNaN(eventEnd.getTime())
           ) {
-            return [
-              {
-                id: createId(),
-                uid,
-                title: summary,
-                description,
-                start: eventStart.getTime(),
-                end: eventEnd.getTime(),
-              },
-            ];
+            // Compare dates in the specified timezone
+            const eventDateStr = moment.tz(eventStart, timezone).format('YYYY-MM-DD');
+            const targetDateStr = moment.tz(targetDate, timezone).format('YYYY-MM-DD');
+            
+            if (eventDateStr === targetDateStr) {
+              return [
+                {
+                  id: createId(),
+                  uid,
+                  title: summary,
+                  description,
+                  start: eventStart.getTime(),
+                  end: eventEnd.getTime(),
+                },
+              ];
+            }
           }
 
-          return getRecurringEvents(event, targetDate);
+          return getRecurringEvents(event, targetDate, timezone);
         }
         return [];
       }
@@ -177,25 +200,32 @@ const fetchEvents = async (icalUrl: string): Promise<TCalendarEvent[]> => {
 
     return filteredEvents;
   } catch (error) {
+    console.error("Error in fetchEvents:", error);
     return [];
   }
 };
 
 export const handleImportCalendar = async (forceImport: boolean = false) => {
-  if(!chrome || !chrome.storage) {
-    return 
+  if (!chrome || !chrome.storage) {
+    return;
   }
-  
-  const userSettings = await chrome.storage.local.get("intentSettings") || {};
 
-  const { lastCalendarFetchTime, icalUrl } = userSettings.intentSettings || {};
+  const userSettings = (await chrome.storage.local.get("intentSettings")) || {};
 
-  const shouldImport = icalUrl && (forceImport || !lastCalendarFetchTime || (new Date(lastCalendarFetchTime).getDate() < new Date().getDate()));
+  const { lastCalendarFetchTime, icalUrl, timezone } =
+    userSettings.intentSettings || {};
+  const userTimezone = timezone || moment.tz.guess();
+
+  const shouldImport =
+    icalUrl &&
+    (forceImport ||
+      !lastCalendarFetchTime ||
+      new Date(lastCalendarFetchTime).getDate() < new Date().getDate());
 
   try {
     if (shouldImport) {
       store.dispatch(setIsImporting(true));
-      const filteredEvents = await fetchEvents(icalUrl);
+      const filteredEvents = await fetchEvents(icalUrl, userTimezone);
 
       const existingEvents = (await getEventsData()) as TCalendarEvent[];
       const eventIdsToCancel = existingEvents.map((event) => event.id);
@@ -205,12 +235,14 @@ export const handleImportCalendar = async (forceImport: boolean = false) => {
       updateEventsData(filteredEvents).then(() => {
         store.dispatch(updateEvents(filteredEvents));
         store.dispatch(setIsImporting(false));
+        
+        // Set alarms for upcoming events
         filteredEvents.forEach((event) => {
-        const timeUntilEvent = event.start - Date.now();
-        const delayInMinutes = Math.ceil(timeUntilEvent / 60000)
+          const timeUntilEvent = event.start - Date.now();
+          const delayInMinutes = Math.max(Math.ceil(timeUntilEvent / 60000), 0);
 
-        if (delayInMinutes > 5 ) {
-          chrome.alarms.create("calendar-event#" + event.id, {
+          if (delayInMinutes > 5) {
+            chrome.alarms.create(`calendar-event#${event.id}`, {
               delayInMinutes: delayInMinutes - 5,
             });
           }
@@ -220,24 +252,27 @@ export const handleImportCalendar = async (forceImport: boolean = false) => {
           lastCalendarFetchTime: Date.now(),
         });
       });
-    }
+    } else {
+      // If not importing, make sure we have alarms for existing events
+      const existingEvents = (await getEventsData()) as TCalendarEvent[];
+      
+      existingEvents.forEach((event) => {
+        chrome.alarms.get(`calendar-event#${event.id}`, (alarm) => {
+          if (!alarm) {
+            const timeUntilEvent = event.start - Date.now();
+            const delayInMinutes = Math.max(Math.ceil(timeUntilEvent / 60000), 0);
 
-    const existingEvents = (await getEventsData()) as TCalendarEvent[];
-    existingEvents.forEach((event) => {
-      chrome.alarms.get("calendar-event#" + event.id, (alarm) => {
-        if(!alarm) {
-          const timeUntilEvent = event.start - Date.now();
-          const delayInMinutes = Math.ceil(timeUntilEvent / 60000)
-
-          if(delayInMinutes > 5) {
-            chrome.alarms.create("calendar-event#" + event.id, {
-              delayInMinutes: delayInMinutes - 5,
-            });
+            if (delayInMinutes > 5) {
+              chrome.alarms.create(`calendar-event#${event.id}`, {
+                delayInMinutes: delayInMinutes - 5,
+              });
+            }
           }
-        }
+        });
       });
-    });
-    store.dispatch(updateEvents(existingEvents));
+      
+      store.dispatch(updateEvents(existingEvents));
+    }
   } catch (error) {
     console.error("Error fetching or parsing ICS:", error);
     store.dispatch(updateEvents([]));
