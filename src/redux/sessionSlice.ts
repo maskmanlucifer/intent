@@ -43,6 +43,7 @@ const initialState: TUserSettingsData = {
     enableVisualBreakReminder: true,
     sendBreakReminder: true,
     sendEventReminder: true,
+    timezone: null,
 };
 
 const sessionSlice = createSlice({
@@ -70,5 +71,6 @@ export const selectIsSidebarCollapsed = (state: RootState) => state.session.side
 export const selectSendEventReminder = (state: RootState) => state.session.sendEventReminder;
 export const selectSendBreakReminder = (state: RootState) => state.session.sendBreakReminder;
 export const selectEnableVisualBreakReminder = (state: RootState) => state.session.enableVisualBreakReminder;
+export const selectTimezone = (state: RootState) => state.session.timezone;
 
 export default sessionSlice.reducer;

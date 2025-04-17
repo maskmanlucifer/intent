@@ -33,6 +33,7 @@ import {
   selectShowMusicWidget,
   syncSettings,
 } from "../../redux/sessionSlice";
+import TimeZonePicker from "../time-zone-picker";
 
 const format = "HH:mm";
 
@@ -90,11 +91,22 @@ const SettingsModal = ({ visible = true, onClose, tab = 'general' }: SettingsMod
       sendEventReminder: value,
     });
   };
+
+  const handleTimeZoneChange = (value: string) => {
+    syncSettings({
+      timezone: value,
+    });
+    if(settings.icalUrl) {
+      handleImportCalendar(!!settings.icalUrl);
+    }
+  };
+
   const handleBreakReminderChange = (value: boolean) => {
     syncSettings({
       sendBreakReminder: value,
     });
   };
+
   const handleVisualBreakReminderChange = (value: boolean) => {
     syncSettings({
       enableVisualBreakReminder: value,
@@ -329,6 +341,30 @@ const SettingsModal = ({ visible = true, onClose, tab = 'general' }: SettingsMod
                       Enable this to receive reminders for upcoming calendar
                       events while browsing your current page.
                     </Text>
+                </div>
+                <div className="setting-item">
+                  <div className="toggle-container">
+                    <Text style={{ fontSize: "16px" }} strong>
+                      {" "}
+                      Set Time Zone
+                    </Text>{" "}
+                    <Switch
+                      size="small"
+                      checked={settings.sendEventReminder}
+                      onChange={handleEventReminderChange}
+                    />
+                  </div>
+                  <Text
+                      type="secondary"
+                      className="setting-description"
+                      style={{ fontSize: "14px" }}
+                    >
+                      Set your time zone to get accurate event timings.
+                    </Text>
+
+                    <div className="time-zone-picker-container">
+                      <TimeZonePicker value={settings.timezone} onChange={handleTimeZoneChange} />
+                    </div>
                 </div>
                 <div className="setting-item">
                   <Text

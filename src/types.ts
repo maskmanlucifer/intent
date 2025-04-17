@@ -43,6 +43,7 @@ export type TUserSettingsData = {
   sendEventReminder: boolean;
   sendBreakReminder: boolean;
   enableVisualBreakReminder: boolean;
+  timezone: string | null;
 }
 
 export type Note = {

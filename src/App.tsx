@@ -35,6 +35,12 @@ function App() {
           fontFamily: "Inter",
           colorPrimary: '#155dfc',
         },
+        components: {
+          Select: {
+            optionPadding: '0px 12px 0px 12px',
+            optionHeight: 24,
+          },
+        }
       }}
     >
       <div className="App">
