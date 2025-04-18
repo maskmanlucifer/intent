@@ -54,7 +54,7 @@ const CustomAudioPlayer = () => {
       <StepBackwardOutlined onClick={handlePlayPrev} />
 
       {isMusicPlaying ? (
-        <PauseCircleTwoTone onClick={togglePlayPause} />
+        <PauseCircleTwoTone onClick={togglePlayPause} className="pause-circle" />
       ) : (
         <PlayCircleTwoTone onClick={togglePlayPause} />
       )}
