@@ -434,7 +434,7 @@ const SettingsModal = ({ visible = true, onClose, tab = 'general' }: SettingsMod
                   </div>
                   <Alert
                     className="ical-alert"
-                    description="The app currently allows calendar imports only via iCal and ICS file URLs, with support limited to the IST time zone."
+                    description="The app currently allows calendar imports only via iCal and ICS file URLs."
                     type="info"
                   />
                 </div>
