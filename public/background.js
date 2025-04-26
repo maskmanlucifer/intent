@@ -36,7 +36,7 @@ chrome.action.onClicked.addListener((tab) => {
       type: 'webpage'
     };
 
-    if(url.includes("medium.com")) {
+    if(tab.url.includes("medium.com")) {
       linkData.imageUrl = "https://ik.imagekit.io/dnz8iqrsyc/1_jcY-BmXNNrWTJCOchzqJrQ.webp";
       putLinkDataToIDB(linkData);
       return;
