@@ -36,12 +36,18 @@ chrome.action.onClicked.addListener((tab) => {
       type: 'webpage'
     };
 
+    if(url.includes("medium.com")) {
+      linkData.imageUrl = "https://ik.imagekit.io/dnz8iqrsyc/1_jcY-BmXNNrWTJCOchzqJrQ.webp";
+      putLinkDataToIDB(linkData);
+      return;
+    }
+
     putLinkDataToIDB(linkData);
 
     fetch(`https://og-fetcher.onrender.com/preview/?url=${encodeURIComponent(tab.url)}`, {
       method: "GET",
       headers: {
-        "Content-Type": "application/json", // ✅ not necessary for GET but harmless
+        "Content-Type": "application/json",
       },
     })
       .then((response) => {
@@ -133,6 +139,12 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
   });
 
   if(linkData.type !== 'webpage') {
+    return;
+  }
+
+  if(url.includes("medium.com")) {
+    linkData.imageUrl = "https://ik.imagekit.io/dnz8iqrsyc/1_jcY-BmXNNrWTJCOchzqJrQ.webp";
+    putLinkDataToIDB(linkData);
     return;
   }
 

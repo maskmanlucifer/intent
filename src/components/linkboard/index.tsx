@@ -53,7 +53,7 @@ const Linkboard = () => {
               className="link-item"
               onClick={() => window.open(link.url, "_blank")}
             >
-              {<img src={link.imageUrl || 'https://ik.imagekit.io/dnz8iqrsyc/placeholder.png'} alt="link" />}
+              {<img src={link.imageUrl || 'https://ik.imagekit.io/dnz8iqrsyc/Group%2040.png'} alt="link" />}
               <div className="link-details">
                 {link.title && <h2>{link.title}</h2>}
                 {link.url && <span>{link.url}</span>}
