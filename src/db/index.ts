@@ -9,6 +9,7 @@ import { handleImportCalendar } from "../helpers/events.helper";
 import { handleBreakSchedule } from "../helpers/break.helper";
 import { fetchAndUpdateSession } from "../helpers/session.helper";
 import { fetchNotes } from "../redux/notesSlice";
+import { fetchLinks } from "../redux/linkboardSlice";
 
 const dbName = DB_CONFIG.name;
 const dbVersion = DB_CONFIG.version;
@@ -45,6 +46,12 @@ export function initDatabase() {
 
       if (!db.objectStoreNames.contains(DB_CONFIG.stores.sessionData.name)) {
         db.createObjectStore(DB_CONFIG.stores.sessionData.name, {
+          keyPath: "id",
+        });
+      }
+
+      if (!db.objectStoreNames.contains(DB_CONFIG.stores.linkboard.name)) {
+        db.createObjectStore(DB_CONFIG.stores.linkboard.name, {
           keyPath: "id",
         });
       }
@@ -146,6 +153,31 @@ export const getNotes = () => {
       resolve(target.result);
     };
   }); 
+}
+
+export const getLinks = () => {
+  return new Promise((resolve, reject) => {
+    if (!db) {
+      throw new Error("Database not initialized");
+    }
+
+    const transaction = db.transaction(
+      [DB_CONFIG.stores.linkboard.name],
+      "readonly"
+    );
+    const store = transaction.objectStore(DB_CONFIG.stores.linkboard.name);
+    const request = store.getAll();
+
+    request.onsuccess = function (event) {
+      const target = event.target as IDBRequest;
+      resolve(target.result);
+    };
+
+    request.onerror = function (event) {
+      const target = event.target as IDBRequest;
+      reject(target.error);
+    };
+  });
 }
 
 export const gerSessionData = () => {
@@ -283,6 +315,7 @@ async function init() {
     store.dispatch(fetchCategories());
     store.dispatch(fetchTodos());
     store.dispatch(fetchNotes());
+    store.dispatch(fetchLinks());
     handleImportCalendar();
     handleBreakSchedule();
   } catch (error) {

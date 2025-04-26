@@ -1,6 +1,6 @@
 import { openDB } from ".";
 import { DB_CONFIG } from "../constant";
-import { Category, Task, Note } from "../types";
+import { Category, Task, Note, TLink } from "../types";
 
 class DBHelper {
     private db: IDBDatabase | null = null;
@@ -39,6 +39,16 @@ class DBHelper {
         await store.put(JSON.parse(JSON.stringify(note)));
     }
 
+    async putLink(link: TLink) {
+        if (!this.db) {
+            return;
+        }
+
+        const transaction = this.db.transaction(DB_CONFIG.stores.linkboard.name, 'readwrite');
+        const store = transaction.objectStore(DB_CONFIG.stores.linkboard.name);
+        await store.put(JSON.parse(JSON.stringify(link)));
+    }
+
     async deleteNote(id: string) {
         if (!this.db) {
             return;
@@ -46,6 +56,16 @@ class DBHelper {
 
         const transaction = this.db.transaction(DB_CONFIG.stores.notes.name, 'readwrite');
         const store = transaction.objectStore(DB_CONFIG.stores.notes.name);
+        await store.delete(id);
+    }
+
+    async deleteLink(id: string) {
+        if (!this.db) {
+            return;
+        }
+
+        const transaction = this.db.transaction(DB_CONFIG.stores.linkboard.name, 'readwrite');
+        const store = transaction.objectStore(DB_CONFIG.stores.linkboard.name);
         await store.delete(id);
     }
 

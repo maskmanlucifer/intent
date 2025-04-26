@@ -4,8 +4,9 @@ import { ReactComponent as FolderIcon } from "../../assets/icons/folder.svg";
 import { ReactComponent as TodayFolderIcon } from "../../assets/icons/today-folder.svg";
 import { ReactComponent as CompletedIcon } from "../../assets/icons/completed.svg";
 import { ReactComponent as AddSquareIcon } from "../../assets/icons/add-square.svg";
+
 import classNames from "classnames";
-import { Button, Dropdown, message, Modal } from "antd";
+import { Button, Dropdown, message, Modal, Tooltip } from "antd";
 import {
   DeleteOutlined,
   EditOutlined,
@@ -120,6 +121,7 @@ const Sidebar = ({
   const [isDeleting, setIsDeleting] = useState<Boolean | string>(false);
   const [messageApi, contextHolder] = message.useMessage();
   const dispatch = useDispatch();
+
 
   const onDelete = () => {
     if (!isDeleting || typeof isDeleting === "boolean") {
@@ -292,6 +294,7 @@ const Sidebar = ({
           </p>
         </Modal>
       </div>
+     
     </div>
   );
 };

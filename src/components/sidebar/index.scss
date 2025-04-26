@@ -253,3 +253,25 @@
 .ant-dropdown-menu-item span.anticon.anticon-delete {
     font-size: 14px;
 }
+
+.data-storage-tooltip {
+    display: flex;
+    margin-top: auto;
+    width: 100%;
+    align-items: center;
+    padding-left: 20px;
+}
+
+.data-storage-button {
+    margin-top: auto;
+
+    svg {
+        height: 20px;
+        width: 20px;
+        color: var(--primary-color);
+
+        path {
+            fill: var(--primary-color);
+        }
+    }
+}

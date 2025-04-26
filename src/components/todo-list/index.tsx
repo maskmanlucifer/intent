@@ -1,5 +1,5 @@
-import { PlusOutlined, SwapOutlined } from "@ant-design/icons";
-import { Button, Collapse, Dropdown, Menu, message, Tooltip } from "antd";
+import { DeleteOutlined, PlusOutlined, SwapOutlined } from "@ant-design/icons";
+import { Button, Collapse, Dropdown, Menu, message, Popconfirm, Tooltip } from "antd";
 import "./index.scss";
 import TodoItem from "../todo-item";
 import classNames from "classnames";
@@ -8,13 +8,15 @@ import {
   addNewSubtask,
   addNewTask,
   changeCategoryOfTask,
+  deleteTask,
 } from "../../redux/todoSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { ReactComponent as FocusIcon } from "../../assets/icons/focus.svg";
 import { ReactComponent as FolderIcon } from "../../assets/icons/folder.svg";
 import { RootState } from "../../redux/store";
-import { useState } from "react";
 import { updateCategory } from "../../redux/categorySlice";
+import { selectFocusedTaskId, syncSettings } from "../../redux/sessionSlice";
+
 const TodoList = ({
   selectedFolder,
   todos,
@@ -25,10 +27,20 @@ const TodoList = ({
   const dispatch = useDispatch();
   const [messageApi, contextHolder] = message.useMessage();
   const folders = useSelector((state: RootState) => state.categories.items);
-  const [focusedTask, setFocusedTask] = useState<Task | null>(null);
+  const focusedTaskId = useSelector(selectFocusedTaskId);
+
+  const doesFocusedTaskExist = todos.some(
+    (todo) => todo.id === focusedTaskId
+  );
+
+  if (focusedTaskId && !doesFocusedTaskExist) {
+    syncSettings({
+      focusedTaskId: null
+    })
+  }
 
   const genExtra = (task: Task) => {
-    const isFocused = focusedTask?.id === task.id;
+    const isFocused = focusedTaskId === task.id;
     const filteredFolders = folders.filter(
       (folder) => folder.id !== task.categoryId
     );
@@ -42,13 +54,17 @@ const TodoList = ({
             })}
             onClick={() => {
               if (isFocused) {
-                setFocusedTask(null);
+                syncSettings({
+                  focusedTaskId: null
+                })
                 messageApi.open({
                   type: "success",
                   content: `Task ${task.text} unfocused!`,
                 });
               } else {
-                setFocusedTask(task);
+                syncSettings({
+                  focusedTaskId: task.id
+                });
                 messageApi.open({
                   type: "success",
                   content: `Task ${task.text} focused!`,
@@ -92,6 +108,22 @@ const TodoList = ({
             </Dropdown>
           </Tooltip>
         )}
+        <Popconfirm
+          title="Are you sure you want to delete this task?"
+          okText="Yes, delete"
+            onConfirm={() => {
+            dispatch(deleteTask({ id: task.id }));
+            syncSettings({
+              focusedTaskId: null
+            });
+            messageApi.open({
+              type: "success",
+              content: `Task ${task.text} deleted successfully!`,
+            });
+          }}
+        >
+          <DeleteOutlined className='delete-icon' />
+        </Popconfirm>
       </div>
     );
   };
@@ -111,8 +143,8 @@ const TodoList = ({
 
   const currentFolder = folders.find((folder) => folder.id === selectedFolder);
 
-  const finalTodos = focusedTask
-    ? [focusedTask]
+  const finalTodos = focusedTaskId
+    ? todos.filter((todo) => todo.id === focusedTaskId)
     : !currentFolder?.showCompletedTasks
       ? todos.filter((todo) => !todo.isCompleted)
       : todos;
@@ -142,13 +174,13 @@ const TodoList = ({
 
   return (
     <div className="todo-list">
-      {focusedTask !== null && (
+      {focusedTaskId !== null && (
         <div className="focus-mode">
           Focus mode is enabled
         </div>
         )}
       {contextHolder}
-      {focusedTask === null && doWeHaveCompletedTasks && (
+      {focusedTaskId === null && doWeHaveCompletedTasks && (
         <Button
           className="completed-tasks-toggle"
           onClick={handleToggleCompletedTasks}
@@ -195,7 +227,7 @@ const TodoList = ({
           ))}
         </Collapse>
       )}
-      {focusedTask === null && todos.length > 0 && (
+      {focusedTaskId === null && todos.length > 0 && (
         <Tooltip arrow={false} title="Add new task" mouseEnterDelay={0}>
           <Button
             type="primary"

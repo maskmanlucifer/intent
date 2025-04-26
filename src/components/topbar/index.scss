@@ -4,6 +4,7 @@
     align-items: center;
     border-bottom: 1px solid #e0e0e0;
     background-color: #f5f5f5;
+    position: relative;
 
     .topbar-left {
         display: flex;
@@ -90,23 +91,18 @@
     }
 }
 
-.data-storage-button {
-    svg {
-        height: 20px;
-        width: 20px;
-        color: var(--primary-color);
-
-        path {
-            fill: var(--primary-color);
-        }
-    }
-}
-
 .smily-icon {
     color: var(--primary-color);
 
     path {
         fill: var(--primary-color);
+    }
+}
+
+.link-board-button {
+    svg {
+        width: 16px;
+        height: 16px;
     }
 }
 
@@ -116,7 +112,7 @@
 }
 
 .info-modal-content {
-    font-size: 16px;
+    font-size: 15px;
     padding: 20px;
     padding-top: 0px;
     padding-bottom: 0px;
