@@ -10,9 +10,28 @@ export const TIME_IN_MS = {
   DAY: 1000 * 60 * 60 * 24,
 }
 
+export const LINKBOARD_FILTER_OPTIONS = [
+  {
+    label: "All",
+    value: "all",
+  },
+  {
+    label: "Webpage",
+    value: "webpage",
+  },
+  {
+    label: "Image",
+    value: "image",
+  },
+  {
+    label: "Video",
+    value: "video",
+  },
+];
+
 export const DB_CONFIG = {
   name: "intent",
-  version: 1,
+  version: 2,
   stores: {
     todos: {
       name: "todos",
@@ -36,6 +55,10 @@ export const DB_CONFIG = {
     },
     settings: {
       name: "settings",
+      keyPath: "id",
+    },
+    linkboard: {
+      name: "linkboard",
       keyPath: "id",
     }
   },

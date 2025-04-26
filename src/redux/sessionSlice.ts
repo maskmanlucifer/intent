@@ -27,6 +27,17 @@ if(chrome.storage) {
     });
 }
 
+if(chrome.storage) {
+    chrome.storage.local.get('intentSettings', (data) => {
+        if (data.intentSettings) {
+            store.dispatch(updateSettings({
+                ...(store.getState().session),
+                sidebarCollapsed: data.intentSettings.sidebarCollapsed,
+            }));
+        }
+    });
+}
+
 const initialState: TUserSettingsData = {
     icalUrl: '',
     workingHours: ['09:00', '17:00'],
@@ -44,6 +55,7 @@ const initialState: TUserSettingsData = {
     sendBreakReminder: true,
     sendEventReminder: true,
     timezone: null,
+    focusedTaskId: null,
 };
 
 const sessionSlice = createSlice({
@@ -72,5 +84,6 @@ export const selectSendEventReminder = (state: RootState) => state.session.sendE
 export const selectSendBreakReminder = (state: RootState) => state.session.sendBreakReminder;
 export const selectEnableVisualBreakReminder = (state: RootState) => state.session.enableVisualBreakReminder;
 export const selectTimezone = (state: RootState) => state.session.timezone;
+export const selectFocusedTaskId = (state: RootState) => state.session.focusedTaskId;
 
 export default sessionSlice.reducer;

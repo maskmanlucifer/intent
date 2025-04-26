@@ -106,7 +106,8 @@ const TimeBlock = () => {
                       <div className='event-label-title'>
                         <span className='event-label-title-text'>{event.title}</span>
                         <span className='event-label-title-time'>
-                          {new Date(event.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }).toUpperCase()} - 
+                          {new Date(event.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }).toUpperCase()}
+                          {' - '} 
                           {new Date(event.end).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }).toUpperCase()} ({timeDuration}m)
                         </span>
                       </div>

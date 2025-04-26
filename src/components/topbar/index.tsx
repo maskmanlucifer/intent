@@ -22,6 +22,8 @@ interface TopbarProps {
   setIsDrawerOpen: (open: boolean) => void;
   isDrawerOpen: boolean;
   showCollapsedIcon: boolean;
+  setIsWhatsNewModalOpen: (open: boolean) => void;
+  setIsLinkBoardOpen: () => void;
 }
 
 const Topbar = ({
@@ -30,6 +32,8 @@ const Topbar = ({
   setIsDrawerOpen,
   isDrawerOpen,
   showCollapsedIcon,
+  setIsLinkBoardOpen,
+  setIsWhatsNewModalOpen
 }: TopbarProps) => {
   const page = useSelector(selectActivePage);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
@@ -88,6 +92,7 @@ const Topbar = ({
           placement="bottom"
           title={"How We Store Your Data"}
           mouseEnterDelay={0}
+          className="data-storage-tooltip"
         >
           <Button
             type="link"
@@ -95,8 +100,18 @@ const Topbar = ({
             size="small"
             onClick={() => setIsDataStorageModalOpen(true)}
             icon={<DatabaseIcon />}
-          ></Button>{" "}
+          >
+            {""}            
+          </Button>
         </Tooltip>
+        <Button 
+          type="primary"
+          className="features-button"
+          size="small"
+          onClick={() => setIsWhatsNewModalOpen(true)}
+        >
+          Whats new?
+        </Button>
         <Button
           type="primary"
           className="check-schedule-button"
@@ -104,7 +119,7 @@ const Topbar = ({
           onClick={() => setIsDrawerOpen(!isDrawerOpen)}
           icon={<ScheduleIcon />}
         >
-          Today's Schedule
+          Calendar
         </Button>
         <Popover
           content={<HelpUsImprove setPopoverState={setIsPopoverOpen} />}
@@ -127,6 +142,14 @@ const Topbar = ({
         >
           <SettingOutlined />
         </div>
+        <Button
+          type="primary"
+          className="link-board-button"
+          size="small"
+          onClick={() => setIsLinkBoardOpen()}
+        >
+          Linkboard
+        </Button>
       </div>
       <SettingsModal
         visible={isSettingsModalOpen}
@@ -143,6 +166,7 @@ const Topbar = ({
         centered={true}
         width={800}
         okText="Got it"
+        footer={[<Button key="ok" type="primary" onClick={() => setIsDataStorageModalOpen(false)}>Got it</Button>]}
         onOk={() => setIsDataStorageModalOpen(false)}
       >
         <div className="info-modal-content">

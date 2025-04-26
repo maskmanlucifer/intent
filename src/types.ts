@@ -44,6 +44,7 @@ export type TUserSettingsData = {
   sendBreakReminder: boolean;
   enableVisualBreakReminder: boolean;
   timezone: string | null;
+  focusedTaskId: string | null;
 }
 
 export type Note = {
@@ -64,5 +65,14 @@ export type TCalendarEvent = {
   end: number;
   description: string;
 }
+
+export type TLink = {
+  id: string;
+  url: string;
+  title?: string;
+  imageUrl?: string;
+  type: "webpage" | "image" | "video";
+  createdAt: number;
+};
 
 export type Pages = (typeof PAGES)[keyof typeof PAGES];
