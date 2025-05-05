@@ -104,14 +104,14 @@ const Topbar = ({
             {""}            
           </Button>
         </Tooltip>
-        <Button 
+        {/* <Button 
           type="primary"
           className="features-button"
           size="small"
           onClick={() => setIsWhatsNewModalOpen(true)}
         >
           Whats new?
-        </Button>
+        </Button> */}
         <Button
           type="primary"
           className="check-schedule-button"

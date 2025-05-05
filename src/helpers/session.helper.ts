@@ -7,4 +7,4 @@ export const fetchAndUpdateSession = () => {
             syncSettings(sessionData);
         });
     }
-}   
+};  

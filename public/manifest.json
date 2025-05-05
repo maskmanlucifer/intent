@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Intent",
-  "version": "1.9",
-  "description": "A slow productivity app.",
+  "version": "2.0",
+  "description": "Your All-in-One Productivity Hub",
   "permissions": ["storage", "alarms", "offscreen", "tabs", "contextMenus"],
   "background": {
     "service_worker": "background.js"

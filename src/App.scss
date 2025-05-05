@@ -84,7 +84,7 @@ body {
     z-index: 3;
     padding: 36px;
     padding-top: 20px;
-    background-color: #FDDCAB;
+    background-color: #feeacb;
 
     .iframe-header {
         display: flex;
@@ -107,5 +107,11 @@ body {
         border-radius: 2px;
         color: rgba(0, 0, 0, 0.45);
         background-color: rgba(0, 0, 0, 0.06);
+    }
+}
+
+.linkboard-drawer {
+    .ant-drawer-header-title {
+        flex-direction: row-reverse;
     }
 }
