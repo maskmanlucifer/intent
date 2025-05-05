@@ -82,7 +82,7 @@ function App() {
             width={400}
             maskClosable={true}
             mask={true}
-            title={<div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', fontFamily: 'var(--secondary-font)', fontSize: '20px' }}> <Button icon={<MehOutlined />} type="link" onClick={() => {setIsWhatsNewModalOpen(true);
+            title={<div style={{ display: 'flex', flexDirection: 'row-reverse', justifyContent: 'flex-end', alignItems: 'center', fontFamily: 'var(--secondary-font)', fontSize: '20px' }}> <Button icon={<MehOutlined />} type="link" onClick={() => {setIsWhatsNewModalOpen(true);
               setIsLinkBoardOpen(false)
             }}>Watch demo</Button>
              LINKBOARD </div>}

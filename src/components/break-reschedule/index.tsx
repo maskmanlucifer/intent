@@ -1,8 +1,8 @@
 /* eslint-disable no-undef */
-import { Button, Checkbox, message, Popconfirm } from "antd";
+import { Button, message, Popconfirm } from "antd";
 import "./index.scss";
 import { BREAK_TIME_DURATIONS, PAGES } from "../../constant";
-import { InfoCircleOutlined, SmileTwoTone } from "@ant-design/icons";
+import { InfoCircleOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { selectSettings, syncSettings } from "../../redux/sessionSlice";
 
@@ -90,25 +90,9 @@ const BreakReschedule = () => {
         />
       </svg>
       <div className="end-break">
-        <Popconfirm
-          title="How Did You Spend Your Break?"
-          okText="End Break"
-          cancelText="Stay on Break"
-          onConfirm={handleEndBreak}
-          description={
-            <div className="end-break-feedbacks">
-              <Checkbox>Took a walk</Checkbox>
-              <Checkbox>Drank some water</Checkbox>
-              <Checkbox>Listen to music</Checkbox>
-              <Checkbox>Took a snack break</Checkbox>
-            </div>
-          }
-          icon={<SmileTwoTone />}
-        >
-          <Button danger type="link" size="small">
+          <Button danger type="link" size="small" onClick={handleEndBreak}>
             End Break
           </Button>
-        </Popconfirm>
       </div>
     </div>
   );

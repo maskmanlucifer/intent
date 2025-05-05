@@ -101,7 +101,7 @@ export const putCategory = (category: Category) => {
   if (!db) {
     throw new Error("Database not initialized");
   }
-  
+
   const transaction = db.transaction(
     [DB_CONFIG.stores.categories.name],
     "readwrite"
@@ -109,7 +109,7 @@ export const putCategory = (category: Category) => {
 
   const store = transaction.objectStore(DB_CONFIG.stores.categories.name);
   store.put(category);
-}
+};
 
 export const getCategories = () => {
   return new Promise((resolve, reject) => {
@@ -152,8 +152,8 @@ export const getNotes = () => {
       const target = event.target as IDBRequest;
       resolve(target.result);
     };
-  }); 
-}
+  });
+};
 
 export const getLinks = () => {
   return new Promise((resolve, reject) => {
@@ -178,7 +178,7 @@ export const getLinks = () => {
       reject(target.error);
     };
   });
-}
+};
 
 export const gerSessionData = () => {
   return new Promise((resolve, reject) => {
@@ -211,7 +211,7 @@ export const getEventsData = () => {
       throw new Error("Database not initialized");
     }
 
-    const transaction = db.transaction( 
+    const transaction = db.transaction(
       [DB_CONFIG.stores.calendarEvents.name],
       "readonly"
     );
@@ -229,7 +229,7 @@ export const getEventsData = () => {
     };
   });
 };
-    
+
 export const updateEventsData = (eventsData: TCalendarEvent[]) => {
   return new Promise((resolve, reject) => {
     if (!db) {
@@ -240,18 +240,18 @@ export const updateEventsData = (eventsData: TCalendarEvent[]) => {
       [DB_CONFIG.stores.calendarEvents.name],
       "readwrite"
     );
-    
+
     const store = transaction.objectStore(DB_CONFIG.stores.calendarEvents.name);
-    
+
     const clearRequest = store.clear();
     clearRequest.onsuccess = () => {
-        eventsData.forEach(event => store.put(event));
-        resolve(eventsData);
+      eventsData.forEach((event) => store.put(event));
+      resolve(eventsData);
     };
 
     clearRequest.onerror = (event) => {
-        const target = event.target as IDBRequest;
-        reject(target.error);
+      const target = event.target as IDBRequest;
+      reject(target.error);
     };
   });
 };
@@ -277,7 +277,7 @@ export const cleanEventsData = () => {
       reject(target.error);
     };
   });
-}
+};
 
 export const getTodos = () => {
   return new Promise((resolve, reject) => {
@@ -324,3 +324,59 @@ async function init() {
 }
 
 init();
+
+const TEN_DAYS_MS = 10 * 24 * 60 * 60 * 1000;
+
+const runFeedbackCollection = async () => {
+  try {
+    const { lastFeatureFeedback } = await chrome.storage.local.get("lastFeatureFeedback");
+    const now = Date.now();
+
+    if (lastFeatureFeedback && now - lastFeatureFeedback < TEN_DAYS_MS) {
+      return; // Too soon, exit
+    }
+
+    const todos = await getTodos();
+    const notes = await getNotes();
+    const links = await getLinks();
+    const intentSettings: any = await new Promise((resolve) =>
+      chrome.storage.local.get("intentSettings", (data) => resolve(data.intentSettings || {}))
+    );
+
+    const isTodoUsed = Array.isArray(todos) && todos.length > 0;
+    const isNoteUsed = Array.isArray(notes) && notes.length > 0;
+    const isLinkUsed = Array.isArray(links) && links.length > 0;
+    const isCalendarUsed = !!intentSettings.icalUrl;
+    const userId = crypto.randomUUID();
+
+    const feedback = `Used Todos: ${isTodoUsed ? "Yes" : "No"}, Notes: ${isNoteUsed ? "Yes" : "No"}, Links: ${isLinkUsed ? "Yes" : "No"}, Calendar: ${isCalendarUsed ? "Yes" : "No"}, User ID: ${userId}`;
+
+    await fetch("https://intent-server-git-main-lzbs-projects-77777663.vercel.app/addUserFeedback", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ feedback }),
+    });
+
+    await chrome.storage.local.set({ lastFeatureFeedback: now });
+  } catch (err) {
+    console.error("Feedback collection failed:", err);
+  }
+};
+
+const scheduleFeedbackCheck = () => {
+  if ("requestIdleCallback" in window) {
+    requestIdleCallback(runFeedbackCollection, { timeout: 10000 });
+  } else {
+    setTimeout(runFeedbackCollection, 4000);
+  }
+};
+
+if (document.visibilityState === "visible") {
+  scheduleFeedbackCheck();
+} else {
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") {
+      scheduleFeedbackCheck();
+    }
+  }, { once: true });
+}

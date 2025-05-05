@@ -10,25 +10,38 @@ import { syncSettings } from "../redux/sessionSlice";
 // Convert time string to the specified timezone
 const getTimeInTimezone = (time: string, timezone: string) => {
   // Convert the time to the specified timezone
-  return moment
-    .parseZone(time)
-    .tz(timezone)
-    .format("YYYY-MM-DDTHH:mm:ssZ");
+  return moment.parseZone(time).tz(timezone).format("YYYY-MM-DDTHH:mm:ssZ");
 };
 
 export const getDataFromAPI = async (url: string) => {
-  const response = await fetch(
-    "https://intent-server-git-main-lzbs-projects-77777663.vercel.app/getIcalEvents",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ url }),
-    }
-  );
+  let attempts = 0;
+  const maxAttempts = 3;
 
-  return response.json();
+  while (attempts < maxAttempts) {
+    try {
+      const response = await fetch(
+        "https://intent-server-git-main-lzbs-projects-77777663.vercel.app/getIcalEvents",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ url }),
+        }
+      );
+
+      return response.json();
+    } catch {
+      attempts++;
+
+      if (attempts >= maxAttempts) {
+        return [];
+      }
+
+      // Wait for a short period before retrying
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+    }
+  }
 };
 
 const cancelAlarms = (ids: string[]) => {
@@ -90,10 +103,11 @@ const getRecurringEvents = (event: any, targetDate: Date, timezone: string) => {
         // Check if target date matches any of the nth weekday rules
         const targetMoment = moment.tz(targetDate, timezone);
         // Convert from JS weekday to RRule weekday (JS: 0=Sunday, RRule: 0=Monday)
-        const targetRRuleWeekday = targetMoment.day() === 0 ? 6 : targetMoment.day() - 1;
+        const targetRRuleWeekday =
+          targetMoment.day() === 0 ? 6 : targetMoment.day() - 1;
 
         // Calculate which occurrence of this weekday it is in the month
-        const firstDayOfMonth = targetMoment.clone().startOf('month');
+        const firstDayOfMonth = targetMoment.clone().startOf("month");
         const daysToAdd = (7 + targetMoment.day() - firstDayOfMonth.day()) % 7;
         const firstOccurrenceOfWeekday = daysToAdd + 1;
         const targetNth = Math.ceil(
@@ -116,18 +130,18 @@ const getRecurringEvents = (event: any, targetDate: Date, timezone: string) => {
       return occurrences.map((occurrence) => {
         // Create a moment object in the target timezone
         const occurrenceMoment = moment.tz(occurrence, timezone);
-        
+
         // Get the time components from the original event start
         const originalStartMoment = moment.tz(eventStart, timezone);
-        
+
         // Set the time components on the occurrence date
         occurrenceMoment.hour(originalStartMoment.hour());
         occurrenceMoment.minute(originalStartMoment.minute());
         occurrenceMoment.second(originalStartMoment.second());
-        
+
         // Get the timestamp
         const startTime = occurrenceMoment.valueOf();
-        
+
         return {
           id: createId(),
           uid,
@@ -175,9 +189,13 @@ const fetchEvents = async (
             !isNaN(eventEnd.getTime())
           ) {
             // Compare dates in the specified timezone
-            const eventDateStr = moment.tz(eventStart, timezone).format('YYYY-MM-DD');
-            const targetDateStr = moment.tz(targetDate, timezone).format('YYYY-MM-DD');
-            
+            const eventDateStr = moment
+              .tz(eventStart, timezone)
+              .format("YYYY-MM-DD");
+            const targetDateStr = moment
+              .tz(targetDate, timezone)
+              .format("YYYY-MM-DD");
+
             if (eventDateStr === targetDateStr) {
               return [
                 {
@@ -216,11 +234,17 @@ export const handleImportCalendar = async (forceImport: boolean = false) => {
     userSettings.intentSettings || {};
   const userTimezone = timezone || moment.tz.guess();
 
-  const shouldImport =
-    icalUrl &&
-    (forceImport ||
-      !lastCalendarFetchTime ||
-      new Date(lastCalendarFetchTime).getDate() < new Date().getDate());
+  let shouldImport = forceImport;
+
+  if (lastCalendarFetchTime && icalUrl) {
+    const last = new Date(lastCalendarFetchTime);
+    const now = new Date();
+
+    const hoursDiff = (now.getTime() - last.getTime()) / (1000 * 60 * 60);
+
+    shouldImport =
+      shouldImport || hoursDiff > 24 || last.getDate() !== now.getDate();
+  }
 
   try {
     if (shouldImport) {
@@ -235,7 +259,7 @@ export const handleImportCalendar = async (forceImport: boolean = false) => {
       updateEventsData(filteredEvents).then(() => {
         store.dispatch(updateEvents(filteredEvents));
         store.dispatch(setIsImporting(false));
-        
+
         // Set alarms for upcoming events
         filteredEvents.forEach((event) => {
           const timeUntilEvent = event.start - Date.now();
@@ -255,12 +279,15 @@ export const handleImportCalendar = async (forceImport: boolean = false) => {
     } else {
       // If not importing, make sure we have alarms for existing events
       const existingEvents = (await getEventsData()) as TCalendarEvent[];
-      
+
       existingEvents.forEach((event) => {
         chrome.alarms.get(`calendar-event#${event.id}`, (alarm) => {
           if (!alarm) {
             const timeUntilEvent = event.start - Date.now();
-            const delayInMinutes = Math.max(Math.ceil(timeUntilEvent / 60000), 0);
+            const delayInMinutes = Math.max(
+              Math.ceil(timeUntilEvent / 60000),
+              0
+            );
 
             if (delayInMinutes > 5) {
               chrome.alarms.create(`calendar-event#${event.id}`, {
@@ -270,7 +297,7 @@ export const handleImportCalendar = async (forceImport: boolean = false) => {
           }
         });
       });
-      
+
       store.dispatch(updateEvents(existingEvents));
     }
   } catch (error) {
