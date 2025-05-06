@@ -1,9 +1,4 @@
-import PageSwitcher from "../page-switcher";
-import { selectActivePage, syncSettings } from "../../redux/sessionSlice";
-import { useSelector } from "react-redux";
-import { Pages } from "../../types";
 import "./index.scss";
-import { SettingOutlined } from "@ant-design/icons";
 import { ReactComponent as CollapseIcon } from "../../assets/icons/collapse.svg";
 import classNames from "classnames";
 import { Button, Modal, Popover, Tooltip } from "antd";
@@ -13,6 +8,7 @@ import SettingsModal from "../settings-modal";
 import { ReactComponent as SmilyIcon } from "../../assets/icons/smily.svg";
 import { ReactComponent as QuestionIcon } from "../../assets/icons/question.svg";
 import { ReactComponent as DatabaseIcon } from "../../assets/icons/database.svg";
+import {ReactComponent as SettingOutlined} from '../../assets/icons/setting.svg';
 
 import HelpUsImprove from "../help-us-improve";
 
@@ -22,7 +18,6 @@ interface TopbarProps {
   setIsDrawerOpen: (open: boolean) => void;
   isDrawerOpen: boolean;
   showCollapsedIcon: boolean;
-  setIsWhatsNewModalOpen: (open: boolean) => void;
   setIsLinkBoardOpen: () => void;
 }
 
@@ -33,18 +28,10 @@ const Topbar = ({
   isDrawerOpen,
   showCollapsedIcon,
   setIsLinkBoardOpen,
-  setIsWhatsNewModalOpen
 }: TopbarProps) => {
-  const page = useSelector(selectActivePage);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const [isDataStorageModalOpen, setIsDataStorageModalOpen] = useState(false);
-
-  const setPage = (page: Pages) => {
-    syncSettings({
-      activePage: page,
-    });
-  };
 
   return (
     <div className="topbar">
@@ -85,7 +72,6 @@ const Topbar = ({
         </div>
       </div>
       <div className="topbar-right">
-        <PageSwitcher page={page} setPage={setPage} />
         <Tooltip
           arrow={false}
           autoAdjustOverflow={true}
@@ -104,23 +90,6 @@ const Topbar = ({
             {""}            
           </Button>
         </Tooltip>
-        {/* <Button 
-          type="primary"
-          className="features-button"
-          size="small"
-          onClick={() => setIsWhatsNewModalOpen(true)}
-        >
-          Whats new?
-        </Button> */}
-        <Button
-          type="primary"
-          className="check-schedule-button"
-          size="small"
-          onClick={() => setIsDrawerOpen(!isDrawerOpen)}
-          icon={<ScheduleIcon />}
-        >
-          Calendar
-        </Button>
         <Popover
           content={<HelpUsImprove setPopoverState={setIsPopoverOpen} />}
           title={null}
@@ -135,13 +104,21 @@ const Topbar = ({
             <QuestionIcon />
           </div>
         </Popover>
-
         <div
-          className="settings"
+          className="settings-btn"
           onClick={() => setIsSettingsModalOpen(!isSettingsModalOpen)}
         >
           <SettingOutlined />
         </div>
+        <Button
+          type="primary"
+          className="check-schedule-button"
+          size="small"
+          onClick={() => setIsDrawerOpen(!isDrawerOpen)}
+          icon={<ScheduleIcon />}
+        >
+          Calendar
+        </Button>
         <Button
           type="primary"
           className="link-board-button"

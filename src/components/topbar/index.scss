@@ -76,12 +76,16 @@
         }
 
 
-        .settings {
+        .settings-btn {
             cursor: pointer;
+            display: flex;
+            align-items: center;
 
             svg {
-                height: 16px;
-                width: 16px;
+                color: var(--primary-color);
+                path {
+                    fill: var(--primary-color);
+                }
             }
         }
 

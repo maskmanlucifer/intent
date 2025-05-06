@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Intent",
-  "version": "2.0",
+  "version": "2.1",
   "description": "Your All-in-One Productivity Hub",
   "permissions": ["storage", "alarms", "offscreen", "tabs", "contextMenus"],
   "background": {

@@ -5,7 +5,6 @@ import todoReducer from "./todoSlice";
 import categoryReducer from "./categorySlice";
 import sessionReducer from "./sessionSlice";
 import eventsReducer from "./eventsSlice";
-import notesReducer from "./notesSlice";
 import linkboardReducer from "./linkboardSlice";
 
 const rootReducer = combineReducers({
@@ -13,7 +12,6 @@ const rootReducer = combineReducers({
   categories: categoryReducer,
   session: sessionReducer,
   events: eventsReducer,
-  notes: notesReducer,
   linkboard: linkboardReducer,
 });
 
