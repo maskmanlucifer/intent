@@ -115,3 +115,11 @@ body {
         flex-direction: row-reverse;
     }
 }
+
+.watch-demo-btn {
+    color: var(--blue-600);
+
+    &:hover {
+        color: var(--blue-500) !important;
+    }
+}
