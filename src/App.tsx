@@ -15,7 +15,6 @@ import {
 import Topbar from "./components/topbar";
 import TimeBlock from "./components/todays-calendar";
 import Break from "./pages/break";
-import Note from "./pages/note";
 import CustomAudioPlayer from "./components/custom-audio-player";
 import SettingsModal from "./components/settings-modal";
 import Linkboard from "./components/linkboard";
@@ -62,7 +61,6 @@ function App() {
             isDrawerOpen={isDrawerOpen}
             showCollapsedIcon={activePage === PAGES.TODO}
             setIsLinkBoardOpen={() => setIsLinkBoardOpen(!isLinkBoardOpen)}
-            setIsWhatsNewModalOpen={setIsWhatsNewModalOpen}
           />
         )}
         {activePage === PAGES.TODO && (
@@ -71,7 +69,6 @@ function App() {
             setIsSidebarCollapsed={handleSidebarCollapsed}
           />
         )}
-        {activePage === PAGES.NOTES && <Note />}
         {activePage !== PAGES.BREAK && (
           <Drawer
             closeIcon={true}
