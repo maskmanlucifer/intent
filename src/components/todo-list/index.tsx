@@ -228,7 +228,7 @@ const TodoList = ({
         </Collapse>
       )}
       {focusedTaskId === null && todos.length > 0 && (
-        <Tooltip arrow={false} title="Add new task" mouseEnterDelay={0}>
+        <Tooltip arrow={false} title="Add new task (n)" mouseEnterDelay={0}>
           <Button
             type="primary"
             onClick={() => dispatch(addNewTask({ categoryId: selectedFolder }))}

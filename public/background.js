@@ -12,10 +12,6 @@ async function ensureOffscreenDocument() {
   }
 }
 
-chrome.runtime.onInstalled.addListener(() => {
-    chrome.storage.local.set({ showFeatureTour: true });
-});
-
 chrome.action.onClicked.addListener((tab) => {
   chrome.storage.local.get({ linkboard: 0 }, (data) => {
     const isSaved = Number(data.linkboard);

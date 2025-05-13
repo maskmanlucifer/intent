@@ -1,6 +1,7 @@
-import BreakPill from "../../components/break-pill";
 import BreakReschedule from "../../components/break-reschedule";
+import {ReactComponent as BreakImage} from "../../assets/images/break.svg";
 import "./index.scss";
+import BreakPill from "../../components/break-pill";
 
 const Break = () => {
   return (
@@ -24,6 +25,7 @@ const Break = () => {
           </svg>
         </div>
       </div>
+      <BreakImage className="break-hero-image" />
       <BreakPill
         text="Take a walk"
           inlineStyle={{
@@ -45,16 +47,8 @@ const Break = () => {
         text="Do nothing"
         inlineStyle={{
           top: "20%",
-          left: "44%",
+          left: "50%",
           color: "#BDB4FE",
-        }}
-      />
-      <BreakPill
-        text="Play some music"
-        inlineStyle={{
-          top: "50%",
-          left: "63%",
-          color: "#FEA3B4",
         }}
       />
       <BreakPill

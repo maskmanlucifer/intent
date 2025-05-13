@@ -58,8 +58,14 @@ const CompletedTodoList = () => {
     {}
   );
 
-  const handleDeleteAll = () => {
+  const handleDeleteAll = async () => {
     dispatch(clearCompletedTasks());
+    const confetti = (await import('canvas-confetti')).default;
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.5, x: 0.52 },
+    });
     messageApi.open({
       type: "success",
       content: "All completed todos deleted!",

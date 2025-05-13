@@ -1,15 +1,16 @@
 .break-pill {
     position: absolute;
     font-size: 14px;
-    padding: 12px;
+    padding: 4px 12px;
     display: flex;
     gap: 8px;
     flex-direction: column;
-    border-radius: 12px;
+    border-radius: 4px;
     border: 1px solid transparent;
     font-family: var(--primary-font);
-    background: var(--blue-50);
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1), 0px 1px 3px rgba(0, 0, 0, 0.06);
+    border: 1px solid #E4E7EC;
+    background-color: #F9FAFB;
+    color: #333333;
 
     .header {
         display: flex;

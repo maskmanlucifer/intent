@@ -27,8 +27,8 @@ export function initDatabase() {
         db.createObjectStore(DB_CONFIG.stores.todos.name, { keyPath: "id" });
       }
 
-      if (!db.objectStoreNames.contains(DB_CONFIG.stores.notes.name)) {
-        db.createObjectStore(DB_CONFIG.stores.notes.name, { keyPath: "id" });
+      if (db.objectStoreNames.contains(DB_CONFIG.stores.notes.name)) {
+        db.deleteObjectStore(DB_CONFIG.stores.notes.name);
       }
 
       if (!db.objectStoreNames.contains(DB_CONFIG.stores.categories.name)) {

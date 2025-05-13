@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import Mousetrap from 'mousetrap';
 import { Button, Empty, Layout } from "antd";
 import "./index.scss";
 import { ReactComponent as EmptyTodo } from "../../assets/images/empty-todo.svg";
@@ -41,6 +42,19 @@ const Todo = ({ isSidebarCollapsed, setIsSidebarCollapsed }: { isSidebarCollapse
   const handleAddTask = () => {
     dispatch(addNewTask({ categoryId: selectedFolder }));
   } 
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      e.preventDefault();
+      handleAddTask();
+    };
+
+    Mousetrap.bind('n', handler);
+
+    return () => {
+      Mousetrap.unbind('n');
+    };
+  }, []);
 
   return (
     <div className="todo-page">
