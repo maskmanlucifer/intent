@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Mousetrap from "mousetrap";
-import { Button, Empty, Layout } from "antd";
+import { Button, Empty, Layout, Tooltip } from "antd";
 import "./index.scss";
 import { ReactComponent as EmptyTodo } from "../../assets/images/empty-todo.svg";
 import Sidebar from "../../components/sidebar";
@@ -89,9 +89,15 @@ const Todo = ({
                 image={<EmptyTodo />}
                 description={<span>All clear, Take a breather. 🍃</span>}
               >
-                <Button type="primary" size="small" onClick={handleAddTask}>
-                  Add new task
-                </Button>
+                <Tooltip
+                  arrow={false}
+                  title="Add new task (n)"
+                  mouseEnterDelay={0}
+                >
+                  <Button type="primary" size="small" onClick={handleAddTask}>
+                    Add new task
+                  </Button>
+                </Tooltip>
               </Empty>
             </div>
           )}

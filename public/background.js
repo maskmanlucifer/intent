@@ -202,9 +202,9 @@ chrome.alarms.onAlarm.addListener(function (alarm) {
   if (alarm && alarm.name === "resetBreakAlarm") {
     chrome.alarms.clear("resetBreakAlarm");
     chrome.storage.local.get("intentSettings", (data) => {
-          if (data.intentSettings) {
-            chrome.storage.local.set({
-              intentSettings: {
+      if (data.intentSettings) {
+        chrome.storage.local.set({
+          intentSettings: {
             ...data.intentSettings,
             activePage: "Todo",
           },
