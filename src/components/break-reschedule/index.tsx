@@ -15,6 +15,7 @@ const BreakReschedule = () => {
       activePage: PAGES.TODO,
     });
 
+    chrome.alarms.clear("resetBreakAlarm");
     chrome.alarms.clear("genericAlarm", () => {
       const now = new Date();
       const currentEpoch = now.getTime();
@@ -50,6 +51,7 @@ const BreakReschedule = () => {
       activePage: PAGES.TODO,
     });
 
+    chrome.alarms.clear("resetBreakAlarm");
     chrome.alarms.clear("genericAlarm", () => {
       chrome.alarms.create("genericAlarm", {
         delayInMinutes: time,

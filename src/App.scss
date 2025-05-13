@@ -74,17 +74,18 @@ body {
 }
 
 .iframe-container {
-    width: calc(100vw - 132px);
-    height: calc(100vh - 132px);
+    width: 1200px;
+    height: 600px;
     position: absolute;
-    top: 30px;
-    left: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 4px;
+    box-shadow: 0 0px 8px rgba(0, 0, 0, 0.2);
     z-index: 3;
     padding: 36px;
     padding-top: 20px;
-    background-color: #feeacb;
+    background-color: #f5f5f5;
 
     .iframe-header {
         display: flex;

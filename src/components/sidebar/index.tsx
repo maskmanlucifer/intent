@@ -312,6 +312,7 @@ const Sidebar = ({
                 type="default"
                 onClick={() => setIsDeleting(false)}
                 size="small"
+                className="modal-cancel-button"
               >
                 Cancel
               </Button>
