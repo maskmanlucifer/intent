@@ -189,9 +189,30 @@ chrome.alarms.onAlarm.addListener(function (alarm) {
             lastUpdatedAt: Date.now(),
           },
         });
+
+        chrome.alarms.clear("resetBreakAlarm", () => {
+          chrome.alarms.create("resetBreakAlarm", {
+            delayInMinutes: 180,
+          });
+        });
       }
     });
   }
+
+  if (alarm && alarm.name === "resetBreakAlarm") {
+    chrome.alarms.clear("resetBreakAlarm");
+    chrome.storage.local.get("intentSettings", (data) => {
+          if (data.intentSettings) {
+            chrome.storage.local.set({
+              intentSettings: {
+            ...data.intentSettings,
+            activePage: "Todo",
+          },
+        });
+      }
+    });
+  }
+
   if (alarm && alarm.name.startsWith("calendar-event#")) {
     const eventId = alarm.name.split("#")[1];
     chrome.storage.local.get("intentSettings", (data) => {
@@ -227,6 +248,8 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 
   if (request.action === "setAlarm") {
     const { delayInMinutes } = request;
+
+    chrome.alarms.clear("resetBreakAlarm");
     chrome.alarms.clear("genericAlarm", () => {
       chrome.alarms.create("genericAlarm", {
         delayInMinutes,

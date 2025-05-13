@@ -165,22 +165,18 @@ function App() {
         {isWhatsNewModalOpen && (
           <div className="iframe-container">
             <div className="iframe-header">
-              <span>Whats new?</span>
+              <span>LINKBOARD</span>
               <div className="close-icon">
                 <CloseIcon onClick={() => setIsWhatsNewModalOpen(false)} />
               </div>
             </div>
-            <iframe
-              width="100%"
-              height="94%"
-              style={{ borderRadius: "4px" }}
-              id="iframe-feature"
-              src="https://www.youtube.com/embed/K0KMvgEHVH8?si=v-ZjJ79wn_MD6AFs"
-              title="YouTube video player"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerPolicy="strict-origin-when-cross-origin"
-              allowFullScreen
-            ></iframe>
+            <video width="1200" height="560" controls>
+              <source
+                src="https://ik.imagekit.io/dnz8iqrsyc/linkboard-intro.mp4"
+                type="video/mp4"
+              />
+              Your browser does not support the video tag.
+            </video>
           </div>
         )}
       </div>

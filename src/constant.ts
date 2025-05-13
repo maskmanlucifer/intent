@@ -91,7 +91,7 @@ export const KEYBOARD_SHORTCUTS = [
     description: "Calendar",
   },
   {
-    key: "b",
+    key: "l",
     description: "Linkboard",
   },
   {

@@ -62,13 +62,13 @@ const Topbar = ({
 
     Mousetrap.bind("s", handler1);
     Mousetrap.bind("c", handler2);
-    Mousetrap.bind("b", handler3);
+    Mousetrap.bind("l", handler3);
     Mousetrap.bind("/", handler4);
 
     return () => {
       Mousetrap.unbind("s");
       Mousetrap.unbind("c");
-      Mousetrap.unbind("b");
+      Mousetrap.unbind("l");
       Mousetrap.unbind("/");
     };
   }, [isDrawerOpen, isSettingsModalOpen, isLinkBoardOpen, isShortcutModalOpen]);
