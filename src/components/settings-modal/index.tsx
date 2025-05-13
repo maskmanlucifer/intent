@@ -45,7 +45,11 @@ interface SettingsModalProps {
   tab?: string;
 }
 
-const SettingsModal = ({ visible = true, onClose, tab = 'general' }: SettingsModalProps) => {
+const SettingsModal = ({
+  visible = true,
+  onClose,
+  tab = "general",
+}: SettingsModalProps) => {
   const [selectedMenu, setSelectedMenu] = useState(tab);
   const settings = useSelector(selectSettings);
   const [messageApi, contextHolder] = message.useMessage();
@@ -68,11 +72,11 @@ const SettingsModal = ({ visible = true, onClose, tab = 'general' }: SettingsMod
     });
     if (value) {
       messageApi.success(
-        "Music widget enabled. You can now listen to music in the app."
+        "Music widget enabled. You can now listen to music in the app.",
       );
     } else {
       messageApi.success(
-        "Music widget disabled. You will no longer hear music in the app."
+        "Music widget disabled. You will no longer hear music in the app.",
       );
       if (isMusicPlaying && chrome.runtime)
         chrome.runtime.sendMessage({ action: "PAUSE_MUSIC" });
@@ -96,7 +100,7 @@ const SettingsModal = ({ visible = true, onClose, tab = 'general' }: SettingsMod
     syncSettings({
       timezone: value,
     });
-    if(settings.icalUrl) {
+    if (settings.icalUrl) {
       handleImportCalendar(!!settings.icalUrl);
     }
   };
@@ -186,7 +190,7 @@ const SettingsModal = ({ visible = true, onClose, tab = 'general' }: SettingsMod
                     <TimePicker
                       defaultValue={dayjs(
                         settings.workingHours?.[0] || "09:00",
-                        format
+                        format,
                       )}
                       format={format}
                       className="time-picker"
@@ -202,7 +206,7 @@ const SettingsModal = ({ visible = true, onClose, tab = 'general' }: SettingsMod
                     <TimePicker
                       defaultValue={dayjs(
                         settings.workingHours?.[1] || "17:00",
-                        format
+                        format,
                       )}
                       format={format}
                       className="time-picker"
@@ -248,19 +252,18 @@ const SettingsModal = ({ visible = true, onClose, tab = 'general' }: SettingsMod
                   />
                 </div>
                 <div className="setting-item">
-
-                <div className="toggle-container">
-                  <Text style={{ fontSize: "16px" }} strong>
-                    {" "}
-                    Break Reminder Notifications
-                  </Text>{" "}
-                  <Switch
-                    size="small"
-                    checked={settings.sendBreakReminder}
-                    onChange={handleBreakReminderChange}
-                  />
-                </div>
-                <Text
+                  <div className="toggle-container">
+                    <Text style={{ fontSize: "16px" }} strong>
+                      {" "}
+                      Break Reminder Notifications
+                    </Text>{" "}
+                    <Switch
+                      size="small"
+                      checked={settings.sendBreakReminder}
+                      onChange={handleBreakReminderChange}
+                    />
+                  </div>
+                  <Text
                     type="secondary"
                     className="setting-description"
                     style={{ fontSize: "14px" }}
@@ -270,25 +273,24 @@ const SettingsModal = ({ visible = true, onClose, tab = 'general' }: SettingsMod
                   </Text>
                 </div>
                 <div className="setting-item">
-
-                <div className="toggle-container">
-                  <Text style={{ fontSize: "16px" }} strong>
-                    {" "}
-                    Break Visual Reminder
-                  </Text>{" "}
-                  <Switch
-                    size="small"
-                    checked={settings.enableVisualBreakReminder}
-                    onChange={handleVisualBreakReminderChange}
-                  />
-                 
-                </div>
-                <Text
+                  <div className="toggle-container">
+                    <Text style={{ fontSize: "16px" }} strong>
+                      {" "}
+                      Break Visual Reminder
+                    </Text>{" "}
+                    <Switch
+                      size="small"
+                      checked={settings.enableVisualBreakReminder}
+                      onChange={handleVisualBreakReminderChange}
+                    />
+                  </div>
+                  <Text
                     type="secondary"
                     className="setting-description"
                     style={{ fontSize: "14px" }}
                   >
-                    Enable this to automatically dim your current page when it's time for a break.
+                    Enable this to automatically dim your current page when it's
+                    time for a break.
                   </Text>
                 </div>
               </div>
@@ -334,13 +336,13 @@ const SettingsModal = ({ visible = true, onClose, tab = 'general' }: SettingsMod
                     />
                   </div>
                   <Text
-                      type="secondary"
-                      className="setting-description"
-                      style={{ fontSize: "14px" }}
-                    >
-                      Enable this to receive reminders for upcoming calendar
-                      events while browsing your current page.
-                    </Text>
+                    type="secondary"
+                    className="setting-description"
+                    style={{ fontSize: "14px" }}
+                  >
+                    Enable this to receive reminders for upcoming calendar
+                    events while browsing your current page.
+                  </Text>
                 </div>
                 <div className="setting-item">
                   <div className="toggle-container">
@@ -355,16 +357,19 @@ const SettingsModal = ({ visible = true, onClose, tab = 'general' }: SettingsMod
                     />
                   </div>
                   <Text
-                      type="secondary"
-                      className="setting-description"
-                      style={{ fontSize: "14px" }}
-                    >
-                      Set your time zone to get accurate event timings.
-                    </Text>
+                    type="secondary"
+                    className="setting-description"
+                    style={{ fontSize: "14px" }}
+                  >
+                    Set your time zone to get accurate event timings.
+                  </Text>
 
-                    <div className="time-zone-picker-container">
-                      <TimeZonePicker value={settings.timezone} onChange={handleTimeZoneChange} />
-                    </div>
+                  <div className="time-zone-picker-container">
+                    <TimeZonePicker
+                      value={settings.timezone}
+                      onChange={handleTimeZoneChange}
+                    />
+                  </div>
                 </div>
                 <div className="setting-item">
                   <Text
@@ -404,7 +409,7 @@ const SettingsModal = ({ visible = true, onClose, tab = 'general' }: SettingsMod
                         });
                         handleImportCalendar(!!settings.icalUrl);
                         messageApi.success(
-                          "Settings saved. Your calendar events will be imported in the background."
+                          "Settings saved. Your calendar events will be imported in the background.",
                         );
                       }}
                     >

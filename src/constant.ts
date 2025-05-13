@@ -8,7 +8,7 @@ export const TODAY_CATEGORY_ID = "1";
 
 export const TIME_IN_MS = {
   DAY: 1000 * 60 * 60 * 24,
-}
+};
 
 export const LINKBOARD_FILTER_OPTIONS = [
   {
@@ -60,7 +60,7 @@ export const DB_CONFIG = {
     linkboard: {
       name: "linkboard",
       keyPath: "id",
-    }
+    },
   },
 };
 

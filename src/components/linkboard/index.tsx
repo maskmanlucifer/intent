@@ -13,7 +13,7 @@ const Linkboard = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [messageApi, contextHolder] = message.useMessage();
   const [linkTypeFilter, setLinkTypeFilter] = React.useState(
-    LINKBOARD_FILTER_OPTIONS[0].value
+    LINKBOARD_FILTER_OPTIONS[0].value,
   );
 
   const filteredLinks = [...links].filter((link) => {
@@ -27,19 +27,26 @@ const Linkboard = () => {
     <div className="linkboard">
       {contextHolder}
       <div className="link-list">
-      {links.length > 0 && <Space.Compact className="linkboard-filter" block>
-      <Select defaultValue={linkTypeFilter} options={LINKBOARD_FILTER_OPTIONS} style={{width: '45%'}} onChange={(item) => {
-        setLinkTypeFilter(item);
-      }}/>
-    </Space.Compact>}
-        {links.length === 0 && (linkTypeFilter === 'all') && (
+        {links.length > 0 && (
+          <Space.Compact className="linkboard-filter" block>
+            <Select
+              defaultValue={linkTypeFilter}
+              options={LINKBOARD_FILTER_OPTIONS}
+              style={{ width: "45%" }}
+              onChange={(item) => {
+                setLinkTypeFilter(item);
+              }}
+            />
+          </Space.Compact>
+        )}
+        {links.length === 0 && linkTypeFilter === "all" && (
           <Empty
             className="empty-link-list"
             image={Empty.PRESENTED_IMAGE_SIMPLE}
             description="No links added"
           />
         )}
-        {filteredLinks.length === 0 && (linkTypeFilter !== 'all') && (
+        {filteredLinks.length === 0 && linkTypeFilter !== "all" && (
           <Empty
             className="empty-link-list"
             image={Empty.PRESENTED_IMAGE_SIMPLE}
@@ -53,7 +60,15 @@ const Linkboard = () => {
               className="link-item"
               onClick={() => window.open(link.url, "_blank")}
             >
-              {<img src={link.imageUrl || 'https://ik.imagekit.io/dnz8iqrsyc/Group%2040.png'} alt="link" />}
+              {
+                <img
+                  src={
+                    link.imageUrl ||
+                    "https://ik.imagekit.io/dnz8iqrsyc/Group%2040.png"
+                  }
+                  alt="link"
+                />
+              }
               <div className="link-details">
                 {link.title && <h2>{link.title}</h2>}
                 {link.url && <span>{link.url}</span>}
@@ -67,7 +82,7 @@ const Linkboard = () => {
                     e?.stopPropagation();
                   }}
                   onConfirm={(
-                    e?: React.MouseEvent<HTMLElement, MouseEvent>
+                    e?: React.MouseEvent<HTMLElement, MouseEvent>,
                   ) => {
                     e?.stopPropagation();
                     dispatch(removeLink(link.id));

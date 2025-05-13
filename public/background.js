@@ -1,14 +1,16 @@
 /* eslint-disable no-undef */
 async function ensureOffscreenDocument() {
   const existingContexts = await chrome.runtime.getContexts({});
-  const hasOffscreen = existingContexts.some((c) => c.contextType === "OFFSCREEN_DOCUMENT");
+  const hasOffscreen = existingContexts.some(
+    (c) => c.contextType === "OFFSCREEN_DOCUMENT",
+  );
 
   if (!hasOffscreen) {
-      await chrome.offscreen.createDocument({
-          url: "offscreen.html",
-          reasons: ["AUDIO_PLAYBACK"],
-          justification: "Play background music",
-      });
+    await chrome.offscreen.createDocument({
+      url: "offscreen.html",
+      reasons: ["AUDIO_PLAYBACK"],
+      justification: "Play background music",
+    });
   }
 }
 
@@ -21,7 +23,7 @@ chrome.action.onClicked.addListener((tab) => {
       chrome.storage.local.set({ linkboard: 1 });
     }
 
-    if(!tab.url) {
+    if (!tab.url) {
       return;
     }
 
@@ -29,23 +31,27 @@ chrome.action.onClicked.addListener((tab) => {
       id: Date.now().toString(),
       url: tab.url,
       createdAt: Date.now(),
-      type: 'webpage'
+      type: "webpage",
     };
 
-    if(tab.url.includes("medium.com")) {
-      linkData.imageUrl = "https://ik.imagekit.io/dnz8iqrsyc/1_jcY-BmXNNrWTJCOchzqJrQ.webp";
+    if (tab.url.includes("medium.com")) {
+      linkData.imageUrl =
+        "https://ik.imagekit.io/dnz8iqrsyc/1_jcY-BmXNNrWTJCOchzqJrQ.webp";
       putLinkDataToIDB(linkData);
       return;
     }
 
     putLinkDataToIDB(linkData);
 
-    fetch(`https://og-fetcher.onrender.com/preview/?url=${encodeURIComponent(tab.url)}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
+    fetch(
+      `https://og-fetcher.onrender.com/preview/?url=${encodeURIComponent(tab.url)}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
       },
-    })
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -58,7 +64,7 @@ chrome.action.onClicked.addListener((tab) => {
           ...linkData,
           title: title,
           imageUrl: image,
-          type: 'webpage'
+          type: "webpage",
         };
         putLinkDataToIDB(linkDataWithPreview);
       })
@@ -72,13 +78,13 @@ chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
     id: "save-link",
     title: "Save Link in Intent",
-    contexts: ["link"]
+    contexts: ["link"],
   });
 
   chrome.contextMenus.create({
     id: "save-image",
     title: "Save Image in Intent",
-    contexts: ["image"]
+    contexts: ["image"],
   });
 });
 
@@ -96,7 +102,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 
   if (!url) return;
 
-  if(!url.startsWith("http")) {
+  if (!url.startsWith("http")) {
     return;
   }
 
@@ -107,10 +113,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
   };
 
   if (info.menuItemId === "save-link") {
-    if (
-      url.includes("youtube.com/watch") ||
-      url.includes("youtu.be")
-    ) {
+    if (url.includes("youtube.com/watch") || url.includes("youtu.be")) {
       linkData.type = "video";
       linkData.imageUrl = getYouTubeThumbnailUrl(url);
     } else {
@@ -134,22 +137,26 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     }
   });
 
-  if(linkData.type !== 'webpage') {
+  if (linkData.type !== "webpage") {
     return;
   }
 
-  if(url.includes("medium.com")) {
-    linkData.imageUrl = "https://ik.imagekit.io/dnz8iqrsyc/1_jcY-BmXNNrWTJCOchzqJrQ.webp";
+  if (url.includes("medium.com")) {
+    linkData.imageUrl =
+      "https://ik.imagekit.io/dnz8iqrsyc/1_jcY-BmXNNrWTJCOchzqJrQ.webp";
     putLinkDataToIDB(linkData);
     return;
   }
 
-  fetch(`https://og-fetcher.onrender.com/preview/?url=${encodeURIComponent(url)}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
+  fetch(
+    `https://og-fetcher.onrender.com/preview/?url=${encodeURIComponent(url)}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
     },
-  })
+  )
     .then((response) => {
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -162,7 +169,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
         ...linkData,
         title: title,
         imageUrl: image,
-        type: 'webpage'
+        type: "webpage",
       };
       putLinkDataToIDB(linkDataWithPreview);
     })
@@ -172,22 +179,28 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 });
 
 chrome.alarms.onAlarm.addListener(function (alarm) {
-  if (alarm && alarm.name === 'genericAlarm') {
+  if (alarm && alarm.name === "genericAlarm") {
     chrome.storage.local.get("intentSettings", (data) => {
       if (data.intentSettings) {
-          chrome.storage.local.set({
-            intentSettings: { ...data.intentSettings, activePage: "Break", lastUpdatedAt: Date.now() },
-          });
+        chrome.storage.local.set({
+          intentSettings: {
+            ...data.intentSettings,
+            activePage: "Break",
+            lastUpdatedAt: Date.now(),
+          },
+        });
       }
     });
   }
-  if (alarm && alarm.name.startsWith('calendar-event#')) {
-    const eventId = alarm.name.split('#')[1];
+  if (alarm && alarm.name.startsWith("calendar-event#")) {
+    const eventId = alarm.name.split("#")[1];
     chrome.storage.local.get("intentSettings", (data) => {
       if (data.intentSettings && data.intentSettings.sendEventReminder) {
-        getDataFromIDB(eventId).then(event => {
-          if(event.start > Date.now()) {
-            chrome.storage.local.set({ event: { id: eventId, title: event.title, start: event.start } });
+        getDataFromIDB(eventId).then((event) => {
+          if (event.start > Date.now()) {
+            chrome.storage.local.set({
+              event: { id: eventId, title: event.title, start: event.start },
+            });
           }
         });
       }
@@ -197,18 +210,22 @@ chrome.alarms.onAlarm.addListener(function (alarm) {
 
 chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
   if (request.action === "PLAY_MUSIC") {
-      await ensureOffscreenDocument();
-      chrome.runtime.sendMessage({ action: "play", url: request.url });
-      chrome.storage.local.get("intentSettings", (data) => {
-        if (data.intentSettings) {
-            chrome.storage.local.set({
-              intentSettings: { ...data.intentSettings, isMusicPlaying: true, lastUpdatedAt: Date.now() },
-            });
-        }
+    await ensureOffscreenDocument();
+    chrome.runtime.sendMessage({ action: "play", url: request.url });
+    chrome.storage.local.get("intentSettings", (data) => {
+      if (data.intentSettings) {
+        chrome.storage.local.set({
+          intentSettings: {
+            ...data.intentSettings,
+            isMusicPlaying: true,
+            lastUpdatedAt: Date.now(),
+          },
+        });
+      }
     });
   }
 
-  if(request.action === "setAlarm") {
+  if (request.action === "setAlarm") {
     const { delayInMinutes } = request;
     chrome.alarms.clear("genericAlarm", () => {
       chrome.alarms.create("genericAlarm", {
@@ -221,11 +238,15 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     chrome.runtime.sendMessage({ action: "pause" });
     chrome.storage.local.get("intentSettings", (data) => {
       if (data.intentSettings) {
-          chrome.storage.local.set({
-            intentSettings: { ...data.intentSettings, isMusicPlaying: false, lastUpdatedAt: Date.now() },
-          });
+        chrome.storage.local.set({
+          intentSettings: {
+            ...data.intentSettings,
+            isMusicPlaying: false,
+            lastUpdatedAt: Date.now(),
+          },
+        });
       }
-  });
+    });
   }
 
   sendResponse({ success: true });
@@ -233,15 +254,15 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 
 const openDB = () => {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open('intent', 2);
-    
+    const request = indexedDB.open("intent", 2);
+
     request.onupgradeneeded = (event) => {
       const db = event.target.result;
-      if (!db.objectStoreNames.contains('calendarEvents')) {
-        db.createObjectStore('calendarEvents', { keyPath: 'id' });
+      if (!db.objectStoreNames.contains("calendarEvents")) {
+        db.createObjectStore("calendarEvents", { keyPath: "id" });
       }
-      if (!db.objectStoreNames.contains('linkboard')) {
-        db.createObjectStore('linkboard', { keyPath: 'id' });
+      if (!db.objectStoreNames.contains("linkboard")) {
+        db.createObjectStore("linkboard", { keyPath: "id" });
       }
     };
 
@@ -257,8 +278,8 @@ const openDB = () => {
 
 const getDataFromIDB = async (eventId) => {
   const db = await openDB();
-  const transaction = db.transaction('calendarEvents', 'readonly');
-  const store = transaction.objectStore('calendarEvents');
+  const transaction = db.transaction("calendarEvents", "readonly");
+  const store = transaction.objectStore("calendarEvents");
   return new Promise((resolve, reject) => {
     const request = store.get(eventId);
     request.onsuccess = (event) => {
@@ -272,8 +293,8 @@ const getDataFromIDB = async (eventId) => {
 
 const putLinkDataToIDB = async (linkData) => {
   const db = await openDB();
-  const transaction = db.transaction('linkboard', 'readwrite');
-  const store = transaction.objectStore('linkboard');
+  const transaction = db.transaction("linkboard", "readwrite");
+  const store = transaction.objectStore("linkboard");
   return new Promise((resolve, reject) => {
     const request = store.put(linkData);
     request.onsuccess = (event) => {
@@ -284,4 +305,4 @@ const putLinkDataToIDB = async (linkData) => {
       reject(event.target.error);
     };
   });
-}
+};

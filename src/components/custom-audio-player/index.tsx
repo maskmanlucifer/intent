@@ -1,7 +1,11 @@
 /* eslint-disable no-undef */
 import "./index.scss";
 import { useSelector } from "react-redux";
-import { selectMusicMode, selectSettings, syncSettings } from "../../redux/sessionSlice";
+import {
+  selectMusicMode,
+  selectSettings,
+  syncSettings,
+} from "../../redux/sessionSlice";
 import classNames from "classnames";
 
 import {
@@ -54,7 +58,10 @@ const CustomAudioPlayer = () => {
       <StepBackwardOutlined onClick={handlePlayPrev} />
 
       {isMusicPlaying ? (
-        <PauseCircleTwoTone onClick={togglePlayPause} className="pause-circle" />
+        <PauseCircleTwoTone
+          onClick={togglePlayPause}
+          className="pause-circle"
+        />
       ) : (
         <PlayCircleTwoTone onClick={togglePlayPause} />
       )}

@@ -4,13 +4,12 @@ import { RootState, store } from "./store";
 import dbHelper from "../db/helper";
 import { getLinks } from "../db";
 
-
-export const fetchLinks = createAsyncThunk('linkboard/fetchLinks', async () => {
+export const fetchLinks = createAsyncThunk("linkboard/fetchLinks", async () => {
   const links = await getLinks();
   return links;
 });
 
-if(chrome.runtime) {
+if (chrome.runtime) {
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.type === "LINK_DATA_UPDATED") {
       store.dispatch(fetchLinks());
@@ -18,10 +17,9 @@ if(chrome.runtime) {
   });
 }
 
-
 const initialState = {
   links: [] as TLink[],
-};  
+};
 
 const notesSlice = createSlice({
   name: "linkboard",
@@ -46,7 +44,7 @@ const notesSlice = createSlice({
         state.links[index] = action.payload;
         dbHelper.putLink(action.payload);
       }
-    },  
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchLinks.fulfilled, (state, action) => {
@@ -57,14 +55,15 @@ const notesSlice = createSlice({
 
 export const { addLink, removeLink, updateLink, addLinks } = notesSlice.actions;
 
-export const selectLinks = (state: RootState) => [...state.linkboard.links].sort((a, b) => {
-  if (a.createdAt > b.createdAt) {
-    return -1;
-  }
-  if (a.createdAt < b.createdAt) {
-    return 1;
-  }
-  return 0;
-});
+export const selectLinks = (state: RootState) =>
+  [...state.linkboard.links].sort((a, b) => {
+    if (a.createdAt > b.createdAt) {
+      return -1;
+    }
+    if (a.createdAt < b.createdAt) {
+      return 1;
+    }
+    return 0;
+  });
 
 export default notesSlice.reducer;

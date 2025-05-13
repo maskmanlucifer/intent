@@ -8,14 +8,14 @@
     "service_worker": "background.js"
   },
   "action": {
-  "default_title": "Intent",
-  "default_icon": {
-    "16": "add.png",
-    "32": "add.png",
-    "48": "add.png",
-    "128": "add.png"
-  }
-},
+    "default_title": "Intent",
+    "default_icon": {
+      "16": "add.png",
+      "32": "add.png",
+      "48": "add.png",
+      "128": "add.png"
+    }
+  },
   "content_scripts": [
     {
       "matches": ["http://*/*", "https://*/*"],

@@ -20,7 +20,8 @@ const BreakPill = ({
         {text === "Take a walk" && <span>🚶‍♂️</span>}
         {text === "Drink some water" && <span>🥤</span>}
         {text === "Have a snack" && <span>🍫</span>}
-      <span>{text}</span></div>
+        <span>{text}</span>
+      </div>
     </div>
   );
 };

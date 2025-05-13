@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import Mousetrap from 'mousetrap';
+import Mousetrap from "mousetrap";
 import { Button, Empty, Layout } from "antd";
 import "./index.scss";
 import { ReactComponent as EmptyTodo } from "../../assets/images/empty-todo.svg";
@@ -25,23 +25,31 @@ const siderStyle: React.CSSProperties = {
   width: "300px",
 };
 
-const Todo = ({ isSidebarCollapsed, setIsSidebarCollapsed }: { isSidebarCollapsed: boolean, setIsSidebarCollapsed: (isSidebarCollapsed: boolean) => void }) => {
+const Todo = ({
+  isSidebarCollapsed,
+  setIsSidebarCollapsed,
+}: {
+  isSidebarCollapsed: boolean;
+  setIsSidebarCollapsed: (isSidebarCollapsed: boolean) => void;
+}) => {
   const folders = useSelector(selectCategories);
   const settings = useSelector(selectSettings);
-  const {selectedFolder} = settings;
-  const todos = useSelector((state: RootState) => selectTodoList(state, selectedFolder));
+  const { selectedFolder } = settings;
+  const todos = useSelector((state: RootState) =>
+    selectTodoList(state, selectedFolder),
+  );
 
   const handleFolderChange = (folderId: string) => {
     syncSettings({
-      selectedFolder: folderId
-    })
-  }
+      selectedFolder: folderId,
+    });
+  };
 
   const dispatch = useDispatch();
 
   const handleAddTask = () => {
     dispatch(addNewTask({ categoryId: selectedFolder }));
-  } 
+  };
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -49,18 +57,30 @@ const Todo = ({ isSidebarCollapsed, setIsSidebarCollapsed }: { isSidebarCollapse
       handleAddTask();
     };
 
-    Mousetrap.bind('n', handler);
+    Mousetrap.bind("n", handler);
 
     return () => {
-      Mousetrap.unbind('n');
+      Mousetrap.unbind("n");
     };
   }, []);
 
   return (
     <div className="todo-page">
       <Layout hasSider>
-        <Sider width={260} style={siderStyle} trigger={null} collapsible collapsed={isSidebarCollapsed}>
-            <Sidebar folders={folders} selectedFolder={selectedFolder} setSelectedFolder={handleFolderChange} isSidebarCollapsed={isSidebarCollapsed} setIsSidebarCollapsed={setIsSidebarCollapsed} />
+        <Sider
+          width={260}
+          style={siderStyle}
+          trigger={null}
+          collapsible
+          collapsed={isSidebarCollapsed}
+        >
+          <Sidebar
+            folders={folders}
+            selectedFolder={selectedFolder}
+            setSelectedFolder={handleFolderChange}
+            isSidebarCollapsed={isSidebarCollapsed}
+            setIsSidebarCollapsed={setIsSidebarCollapsed}
+          />
         </Sider>
         <div className="todo-items">
           {todos.length === 0 && selectedFolder !== "completed" && (
@@ -69,16 +89,16 @@ const Todo = ({ isSidebarCollapsed, setIsSidebarCollapsed }: { isSidebarCollapse
                 image={<EmptyTodo />}
                 description={<span>All clear, Take a breather. 🍃</span>}
               >
-                <Button type="primary" size="small" onClick={handleAddTask}>Add new task</Button>
+                <Button type="primary" size="small" onClick={handleAddTask}>
+                  Add new task
+                </Button>
               </Empty>
             </div>
           )}
           {todos.length > 0 && selectedFolder !== "completed" && (
             <TodoList selectedFolder={selectedFolder} todos={todos} />
           )}
-          {selectedFolder === "completed" && (
-            <CompletedTodoList />
-          )}
+          {selectedFolder === "completed" && <CompletedTodoList />}
         </div>
       </Layout>
     </div>

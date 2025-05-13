@@ -89,7 +89,7 @@ export const putCategory = (category: Category) => {
 
   const transaction = db.transaction(
     [DB_CONFIG.stores.categories.name],
-    "readwrite"
+    "readwrite",
   );
 
   const store = transaction.objectStore(DB_CONFIG.stores.categories.name);
@@ -104,7 +104,7 @@ export const getCategories = () => {
 
     const transaction = db.transaction(
       [DB_CONFIG.stores.categories.name],
-      "readonly"
+      "readonly",
     );
     const store = transaction.objectStore(DB_CONFIG.stores.categories.name);
     const request = store.getAll();
@@ -128,7 +128,7 @@ export const getLinks = () => {
 
     const transaction = db.transaction(
       [DB_CONFIG.stores.linkboard.name],
-      "readonly"
+      "readonly",
     );
     const store = transaction.objectStore(DB_CONFIG.stores.linkboard.name);
     const request = store.getAll();
@@ -153,7 +153,7 @@ export const getEventsData = () => {
 
     const transaction = db.transaction(
       [DB_CONFIG.stores.calendarEvents.name],
-      "readonly"
+      "readonly",
     );
     const store = transaction.objectStore(DB_CONFIG.stores.calendarEvents.name);
     const request = store.getAll();
@@ -178,7 +178,7 @@ export const updateEventsData = (eventsData: TCalendarEvent[]) => {
 
     const transaction = db.transaction(
       [DB_CONFIG.stores.calendarEvents.name],
-      "readwrite"
+      "readwrite",
     );
 
     const store = transaction.objectStore(DB_CONFIG.stores.calendarEvents.name);
@@ -204,7 +204,7 @@ export const cleanEventsData = () => {
 
     const transaction = db.transaction(
       [DB_CONFIG.stores.calendarEvents.name],
-      "readwrite"
+      "readwrite",
     );
     const store = transaction.objectStore(DB_CONFIG.stores.calendarEvents.name);
     const clearRequest = store.clear();
@@ -227,7 +227,7 @@ export const getTodos = () => {
 
     const transaction = db.transaction(
       [DB_CONFIG.stores.todos.name],
-      "readonly"
+      "readonly",
     );
     const store = transaction.objectStore(DB_CONFIG.stores.todos.name);
     const request = store.getAll();

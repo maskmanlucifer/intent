@@ -1,6 +1,6 @@
-import { Select } from 'antd';
-import moment from 'moment-timezone';
-import { FC, useMemo } from 'react';
+import { Select } from "antd";
+import moment from "moment-timezone";
+import { FC, useMemo } from "react";
 
 interface TimeZonePickerProps {
   value?: string | null;
@@ -8,43 +8,42 @@ interface TimeZonePickerProps {
 }
 
 const timeZones = [
-    'UTC',
-    // America
-    'America/New_York',
-    'America/Chicago',
-    'America/Los_Angeles',
-    // Europe
-    'Europe/London',
-    'Europe/Paris',
-    'Europe/Berlin',
-    // Asia
-    'Asia/Kolkata',
-    'Asia/Tokyo',
-    'Asia/Shanghai',
-    'Asia/Singapore',
-    'Australia/Sydney',
-    // Middle East
-    'Asia/Dubai',
-    'Asia/Riyadh',
-    'Asia/Baghdad',
-    'Asia/Tehran',
-    'Asia/Jerusalem',
-    'Asia/Amman',
-    'Asia/Kuwait',
-    'Asia/Bahrain',
-    'Asia/Qatar',
-    'Asia/Muscat',
-  ];
+  "UTC",
+  // America
+  "America/New_York",
+  "America/Chicago",
+  "America/Los_Angeles",
+  // Europe
+  "Europe/London",
+  "Europe/Paris",
+  "Europe/Berlin",
+  // Asia
+  "Asia/Kolkata",
+  "Asia/Tokyo",
+  "Asia/Shanghai",
+  "Asia/Singapore",
+  "Australia/Sydney",
+  // Middle East
+  "Asia/Dubai",
+  "Asia/Riyadh",
+  "Asia/Baghdad",
+  "Asia/Tehran",
+  "Asia/Jerusalem",
+  "Asia/Amman",
+  "Asia/Kuwait",
+  "Asia/Bahrain",
+  "Asia/Qatar",
+  "Asia/Muscat",
+];
 
 const formatTimeZone = (tz: string) => {
-  const offset = moment.tz(tz).format('Z');
+  const offset = moment.tz(tz).format("Z");
   return `${tz} (UTC${offset})`;
-}
+};
 
 const TimeZonePicker: FC<TimeZonePickerProps> = ({ value, onChange }) => {
   const options = useMemo(() => {
     return timeZones.map((tz) => {
-        
       return {
         label: formatTimeZone(tz),
         value: tz,
@@ -55,7 +54,7 @@ const TimeZonePicker: FC<TimeZonePickerProps> = ({ value, onChange }) => {
   return (
     <Select
       style={{ width: 300 }}
-      size='small'
+      size="small"
       placeholder="Select Time Zone"
       value={formatTimeZone(value || moment.tz.guess())}
       onChange={onChange}

@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { TCalendarEvent } from '../types';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { TCalendarEvent } from "../types";
 
 interface EventsState {
   events: TCalendarEvent[];
@@ -12,7 +12,7 @@ const initialState: EventsState = {
 };
 
 const eventsSlice = createSlice({
-  name: 'events',
+  name: "events",
   initialState,
   reducers: {
     updateEvents(state, action: PayloadAction<TCalendarEvent[]>) {
@@ -26,8 +26,10 @@ const eventsSlice = createSlice({
 
 export const { updateEvents, setIsImporting } = eventsSlice.actions;
 
-export const selectEvents = (state: { events: EventsState }) => state.events.events;
+export const selectEvents = (state: { events: EventsState }) =>
+  state.events.events;
 
-export const selectIsImporting = (state: { events: EventsState }) => state.events.isImporting;
+export const selectIsImporting = (state: { events: EventsState }) =>
+  state.events.isImporting;
 
 export default eventsSlice.reducer;
