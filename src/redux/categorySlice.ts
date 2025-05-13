@@ -13,7 +13,7 @@ export const fetchCategories = createAsyncThunk(
   async () => {
     const categories = await getCategories();
     return categories;
-  }
+  },
 );
 
 const categorySlice = createSlice({
@@ -29,7 +29,7 @@ const categorySlice = createSlice({
     },
     updateCategory: (
       state,
-      action: PayloadAction<Partial<Category> & { id: string }>
+      action: PayloadAction<Partial<Category> & { id: string }>,
     ) => {
       const { id, ...rest } = action.payload;
       let updatedCategory;
@@ -48,7 +48,7 @@ const categorySlice = createSlice({
     },
     deleteCategory: (state, action: PayloadAction<string>) => {
       state.items = state.items.filter(
-        (category) => category.id !== action.payload
+        (category) => category.id !== action.payload,
       );
       dbHelper.deleteCategory(action.payload);
     },
@@ -62,12 +62,12 @@ const categorySlice = createSlice({
 
 export const selectCategories = createSelector(
   (state: { categories: { items: Category[] } }) => state.categories.items,
-  (items) => items
+  (items) => items,
 );
 
 export const selectCategoryById = createSelector(
   [(state) => state.categories.items, (_, id) => id],
-  (items, id) => items.find((item: Category) => item.id === id)
+  (items, id) => items.find((item: Category) => item.id === id),
 );
 
 export const { addCategory, updateCategory, deleteCategory, addCategories } =

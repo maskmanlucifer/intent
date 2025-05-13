@@ -19,9 +19,8 @@ import CustomAudioPlayer from "./components/custom-audio-player";
 import SettingsModal from "./components/settings-modal";
 import Linkboard from "./components/linkboard";
 import { MehOutlined } from "@ant-design/icons";
-import {ReactComponent as CloseIcon} from "./assets/icons/close.svg";
-import Mousetrap from 'mousetrap';
-
+import { ReactComponent as CloseIcon } from "./assets/icons/close.svg";
+import Mousetrap from "mousetrap";
 
 function App() {
   const activePage = useSelector(selectActivePage);
@@ -38,10 +37,10 @@ function App() {
       handleSidebarCollapsed(!isSidebarCollapsed);
     };
 
-    Mousetrap.bind('e', handler);
+    Mousetrap.bind("e", handler);
 
     return () => {
-      Mousetrap.unbind('e');
+      Mousetrap.unbind("e");
     };
   }, [isSidebarCollapsed]);
 
@@ -95,10 +94,32 @@ function App() {
             width={400}
             maskClosable={true}
             mask={true}
-            title={<div style={{ display: 'flex', flexDirection: 'row-reverse', justifyContent: 'flex-end', alignItems: 'center', fontFamily: 'var(--secondary-font)', fontSize: '20px' }}> <Button icon={<MehOutlined />} type="link" className="watch-demo-btn" onClick={() => {setIsWhatsNewModalOpen(true);
-              setIsLinkBoardOpen(false)
-            }}>Watch demo</Button>
-             LINKBOARD </div>}
+            title={
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row-reverse",
+                  justifyContent: "flex-end",
+                  alignItems: "center",
+                  fontFamily: "var(--secondary-font)",
+                  fontSize: "20px",
+                }}
+              >
+                {" "}
+                <Button
+                  icon={<MehOutlined />}
+                  type="link"
+                  className="watch-demo-btn"
+                  onClick={() => {
+                    setIsWhatsNewModalOpen(true);
+                    setIsLinkBoardOpen(false);
+                  }}
+                >
+                  Watch demo
+                </Button>
+                LINKBOARD{" "}
+              </div>
+            }
           >
             <Linkboard />
           </Drawer>
@@ -141,14 +162,27 @@ function App() {
             <TimeBlock />
           </Drawer>
         )}
-        {isWhatsNewModalOpen && <div className="iframe-container"> 
-        <div className="iframe-header">
-          <span>Whats new?</span>
-          <div className="close-icon"><CloseIcon onClick={() => setIsWhatsNewModalOpen(false)} /></div>
-        </div>
-        <iframe width="100%" height="94%" style={{borderRadius: '4px'}} id="iframe-feature" src="https://www.youtube.com/embed/K0KMvgEHVH8?si=v-ZjJ79wn_MD6AFs" title="YouTube video player"  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
-        </div>
-      }
+        {isWhatsNewModalOpen && (
+          <div className="iframe-container">
+            <div className="iframe-header">
+              <span>Whats new?</span>
+              <div className="close-icon">
+                <CloseIcon onClick={() => setIsWhatsNewModalOpen(false)} />
+              </div>
+            </div>
+            <iframe
+              width="100%"
+              height="94%"
+              style={{ borderRadius: "4px" }}
+              id="iframe-feature"
+              src="https://www.youtube.com/embed/K0KMvgEHVH8?si=v-ZjJ79wn_MD6AFs"
+              title="YouTube video player"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+            ></iframe>
+          </div>
+        )}
       </div>
     </ConfigProvider>
   );

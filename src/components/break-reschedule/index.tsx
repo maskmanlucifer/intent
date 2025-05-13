@@ -16,14 +16,18 @@ const BreakReschedule = () => {
     });
 
     chrome.alarms.clear("genericAlarm", () => {
-      
       const now = new Date();
       const currentEpoch = now.getTime();
       const breakDuration = breakInterval * 60 * 1000;
       const endHour = workingHours[1];
       const endTime = new Date();
 
-      endTime.setHours(Number(endHour.split(":")[0]), Number(endHour.split(":")[1]), 0, 0);
+      endTime.setHours(
+        Number(endHour.split(":")[0]),
+        Number(endHour.split(":")[1]),
+        0,
+        0,
+      );
 
       const workingHourEnd = endTime.getTime();
       if (currentEpoch + breakDuration <= workingHourEnd) {
@@ -44,14 +48,14 @@ const BreakReschedule = () => {
   const handleBreakPostpone = (time: number) => {
     syncSettings({
       activePage: PAGES.TODO,
-    })
+    });
 
     chrome.alarms.clear("genericAlarm", () => {
       chrome.alarms.create("genericAlarm", {
         delayInMinutes: time,
       });
     });
-    
+
     messageApi.success(`Break postponed for ${time} minutes`);
   };
 
@@ -90,9 +94,9 @@ const BreakReschedule = () => {
         />
       </svg>
       <div className="end-break">
-          <Button danger type="link" size="small" onClick={handleEndBreak}>
-            End Break
-          </Button>
+        <Button danger type="link" size="small" onClick={handleEndBreak}>
+          End Break
+        </Button>
       </div>
     </div>
   );

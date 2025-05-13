@@ -8,9 +8,9 @@ import SettingsModal from "../settings-modal";
 import { ReactComponent as SmilyIcon } from "../../assets/icons/smily.svg";
 import { ReactComponent as QuestionIcon } from "../../assets/icons/question.svg";
 import { ReactComponent as DatabaseIcon } from "../../assets/icons/database.svg";
-import {ReactComponent as SettingOutlined} from '../../assets/icons/setting.svg';
-import {ReactComponent as KeyboardOutlined} from '../../assets/icons/keyboard.svg';
-import Mousetrap from 'mousetrap';      
+import { ReactComponent as SettingOutlined } from "../../assets/icons/setting.svg";
+import { ReactComponent as KeyboardOutlined } from "../../assets/icons/keyboard.svg";
+import Mousetrap from "mousetrap";
 
 import HelpUsImprove from "../help-us-improve";
 import KeyboardShortcuts from "../shortcuts";
@@ -60,16 +60,16 @@ const Topbar = ({
       setIsShortcutModalOpen(!isShortcutModalOpen);
     };
 
-    Mousetrap.bind('s', handler1);
-    Mousetrap.bind('c', handler2);
-    Mousetrap.bind('b', handler3);
-    Mousetrap.bind('/', handler4);
+    Mousetrap.bind("s", handler1);
+    Mousetrap.bind("c", handler2);
+    Mousetrap.bind("b", handler3);
+    Mousetrap.bind("/", handler4);
 
     return () => {
-      Mousetrap.unbind('s');
-      Mousetrap.unbind('c');
-      Mousetrap.unbind('b');
-      Mousetrap.unbind('/');
+      Mousetrap.unbind("s");
+      Mousetrap.unbind("c");
+      Mousetrap.unbind("b");
+      Mousetrap.unbind("/");
     };
   }, [isDrawerOpen, isSettingsModalOpen, isLinkBoardOpen, isShortcutModalOpen]);
 
@@ -91,7 +91,9 @@ const Topbar = ({
               autoAdjustOverflow={true}
               placement="bottom"
               title={
-                !isSidebarCollapsed ? "Collapse sidebar [e]" : "Expand sidebar [e]"
+                !isSidebarCollapsed
+                  ? "Collapse sidebar [e]"
+                  : "Expand sidebar [e]"
               }
               mouseEnterDelay={0}
             >
@@ -127,7 +129,7 @@ const Topbar = ({
             onClick={() => setIsDataStorageModalOpen(true)}
             icon={<DatabaseIcon />}
           >
-            {""}            
+            {""}
           </Button>
         </Tooltip>
         <Popover
@@ -188,13 +190,13 @@ const Topbar = ({
           mouseEnterDelay={0}
         >
           <Button
-          type="primary"
-          className="check-schedule-button"
-          size="small"
-          onClick={() => setIsDrawerOpen(!isDrawerOpen)}
-          icon={<ScheduleIcon />}
-        >
-          Calendar
+            type="primary"
+            className="check-schedule-button"
+            size="small"
+            onClick={() => setIsDrawerOpen(!isDrawerOpen)}
+            icon={<ScheduleIcon />}
+          >
+            Calendar
           </Button>
         </Tooltip>
         <Tooltip
@@ -207,11 +209,11 @@ const Topbar = ({
           <Button
             type="primary"
             className="link-board-button"
-          size="small"
-          onClick={() => setIsLinkBoardOpen(!isLinkBoardOpen)}
-        >
-          Linkboard
-        </Button>
+            size="small"
+            onClick={() => setIsLinkBoardOpen(!isLinkBoardOpen)}
+          >
+            Linkboard
+          </Button>
         </Tooltip>
       </div>
       <SettingsModal
@@ -229,7 +231,15 @@ const Topbar = ({
         centered={true}
         width={800}
         okText="Got it"
-        footer={[<Button key="ok" type="primary" onClick={() => setIsDataStorageModalOpen(false)}>Got it</Button>]}
+        footer={[
+          <Button
+            key="ok"
+            type="primary"
+            onClick={() => setIsDataStorageModalOpen(false)}
+          >
+            Got it
+          </Button>,
+        ]}
         onOk={() => setIsDataStorageModalOpen(false)}
       >
         <div className="info-modal-content">

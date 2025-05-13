@@ -27,7 +27,7 @@ export const getDataFromAPI = async (url: string) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ url }),
-        }
+        },
       );
 
       return response.json();
@@ -67,13 +67,13 @@ const getRecurringEvents = (event: any, targetDate: Date, timezone: string) => {
       // Convert string dates to proper Date objects with timezone
       if (typeof ruleOptions.dtstart === "string") {
         ruleOptions.dtstart = new Date(
-          getTimeInTimezone(ruleOptions.dtstart, timezone)
+          getTimeInTimezone(ruleOptions.dtstart, timezone),
         );
       }
 
       if (typeof ruleOptions.until === "string") {
         ruleOptions.until = new Date(
-          getTimeInTimezone(ruleOptions.until, timezone)
+          getTimeInTimezone(ruleOptions.until, timezone),
         );
       }
 
@@ -111,13 +111,13 @@ const getRecurringEvents = (event: any, targetDate: Date, timezone: string) => {
         const daysToAdd = (7 + targetMoment.day() - firstDayOfMonth.day()) % 7;
         const firstOccurrenceOfWeekday = daysToAdd + 1;
         const targetNth = Math.ceil(
-          (targetMoment.date() - firstOccurrenceOfWeekday + 1) / 7
+          (targetMoment.date() - firstOccurrenceOfWeekday + 1) / 7,
         );
 
         // Check if any rule matches our target date's weekday and nth occurrence
         const matchesNthWeekdayRule = nthWeekdayRules.some(
           (rule: any) =>
-            rule.weekday === targetRRuleWeekday && rule.nth === targetNth
+            rule.weekday === targetRRuleWeekday && rule.nth === targetNth,
         );
 
         // If no rule matches, return empty array
@@ -162,7 +162,7 @@ const getRecurringEvents = (event: any, targetDate: Date, timezone: string) => {
 
 const fetchEvents = async (
   icalUrl: string,
-  timezone: string
+  timezone: string,
 ): Promise<TCalendarEvent[]> => {
   try {
     const data = await getDataFromAPI(icalUrl);
@@ -213,7 +213,7 @@ const fetchEvents = async (
           return getRecurringEvents(event, targetDate, timezone);
         }
         return [];
-      }
+      },
     );
 
     return filteredEvents;
@@ -237,12 +237,15 @@ export const handleImportCalendar = async (forceImport: boolean = false) => {
   let shouldImport = forceImport;
 
   if (icalUrl) {
-    const last = lastCalendarFetchTime ? new Date(lastCalendarFetchTime) : new Date(0);
+    const last = lastCalendarFetchTime
+      ? new Date(lastCalendarFetchTime)
+      : new Date(0);
     const now = new Date();
 
     const hoursDiff = (now.getTime() - last.getTime()) / (1000 * 60 * 60);
 
-    shouldImport = shouldImport || (hoursDiff > 24) || (last.getDate() !== now.getDate());
+    shouldImport =
+      shouldImport || hoursDiff > 24 || last.getDate() !== now.getDate();
   }
 
   try {
@@ -285,7 +288,7 @@ export const handleImportCalendar = async (forceImport: boolean = false) => {
             const timeUntilEvent = event.start - Date.now();
             const delayInMinutes = Math.max(
               Math.ceil(timeUntilEvent / 60000),
-              0
+              0,
             );
 
             if (delayInMinutes > 5) {

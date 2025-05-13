@@ -11,13 +11,10 @@ const initialState = {
   activeItem: null as string | null,
 };
 
-export const fetchTodos = createAsyncThunk(
-  "todos/fetchTodos",
-  async () => {
-    const todos = await getTodos();
-    return todos;
-  }
-);
+export const fetchTodos = createAsyncThunk("todos/fetchTodos", async () => {
+  const todos = await getTodos();
+  return todos;
+});
 
 const todoSlice = createSlice({
   name: "todos",
@@ -29,15 +26,20 @@ const todoSlice = createSlice({
 
       if (isSubtask) {
         state.items = state.items.map((todo) => {
-          if(todo.id === parentId) {
-            parentFinalTodo = { ...todo, subtasks: todo.subtasks.map((subtask) => subtask.id === id ? { ...subtask, text } : subtask) };
+          if (todo.id === parentId) {
+            parentFinalTodo = {
+              ...todo,
+              subtasks: todo.subtasks.map((subtask) =>
+                subtask.id === id ? { ...subtask, text } : subtask,
+              ),
+            };
             return parentFinalTodo;
           }
           return todo;
         });
       } else {
         state.items = state.items.map((task) => {
-          if(task.id === id) {
+          if (task.id === id) {
             parentFinalTodo = { ...task, text };
             return parentFinalTodo;
           }
@@ -51,25 +53,31 @@ const todoSlice = createSlice({
     },
     deleteTask: (state, action) => {
       const { id } = action.payload;
-      state.items = state.items.filter((todo) => todo.id !== id).map((todo, index) => ({ ...todo, order: index + 1 }));
+      state.items = state.items
+        .filter((todo) => todo.id !== id)
+        .map((todo, index) => ({ ...todo, order: index + 1 }));
       dbHelper.deleteTodo(id);
     },
     deleteSubtask: (state, action) => {
       const { id, parentId } = action.payload;
-      let parentFinalTodo  = undefined;
+      let parentFinalTodo = undefined;
 
       const parentTodo = state.items.find((todo) => todo.id === parentId);
 
       if (!parentTodo) return;
 
-      const indexOfSubtask = parentTodo.subtasks.findIndex((subtask) => subtask.id === id);
+      const indexOfSubtask = parentTodo.subtasks.findIndex(
+        (subtask) => subtask.id === id,
+      );
 
       if (indexOfSubtask === -1) return;
 
-      const updatedSubtasks = parentTodo.subtasks.filter((subtask) => subtask.id !== id);
+      const updatedSubtasks = parentTodo.subtasks.filter(
+        (subtask) => subtask.id !== id,
+      );
 
-      const updatedTodos = state.items.map((todo) =>{ 
-        if(todo.id === parentId) {
+      const updatedTodos = state.items.map((todo) => {
+        if (todo.id === parentId) {
           parentFinalTodo = { ...todo, subtasks: updatedSubtasks };
           return parentFinalTodo;
         }
@@ -82,7 +90,6 @@ const todoSlice = createSlice({
 
       state.items = updatedTodos;
 
-
       if (parentFinalTodo) {
         dbHelper.updateTodo(parentFinalTodo);
       }
@@ -94,20 +101,31 @@ const todoSlice = createSlice({
 
       if (isSubtask) {
         state.items = state.items.map((todo) => {
-          if(todo.id === parentId) {
-            parentFinalTodo = { ...todo, subtasks: todo.subtasks.map((subtask) => subtask.id === id ? { ...subtask, isCompleted: !subtask.isCompleted } : subtask) };
+          if (todo.id === parentId) {
+            parentFinalTodo = {
+              ...todo,
+              subtasks: todo.subtasks.map((subtask) =>
+                subtask.id === id
+                  ? { ...subtask, isCompleted: !subtask.isCompleted }
+                  : subtask,
+              ),
+            };
             return parentFinalTodo;
           }
           return todo;
         });
 
         const parentTodo = state.items.find((todo) => todo.id === parentId);
-        
+
         const allSubtasksCompleted = parentTodo?.subtasks.every(
           (subtask) => subtask.isCompleted,
         );
 
-        if (allSubtasksCompleted && parentTodo && parentTodo.isCompleted === false) {
+        if (
+          allSubtasksCompleted &&
+          parentTodo &&
+          parentTodo.isCompleted === false
+        ) {
           state.items = state.items.map((todo) =>
             todo.id === parentId ? { ...todo, isCompleted: true } : todo,
           );
@@ -121,9 +139,8 @@ const todoSlice = createSlice({
         return;
       }
 
-
       state.items = state.items.map((todo) => {
-        if(todo.id === id) {
+        if (todo.id === id) {
           parentFinalTodo = { ...todo, isCompleted: !todo.isCompleted };
           return parentFinalTodo;
         }
@@ -149,9 +166,8 @@ const todoSlice = createSlice({
 
       let parentFinalTodo = undefined;
 
-      state.items = state.items.map((todo) =>
-      {
-        if(todo.id === parentId) {
+      state.items = state.items.map((todo) => {
+        if (todo.id === parentId) {
           const newSubtasks = [...todo.subtasks];
           const insertIndex = index >= 0 ? index + 1 : 0;
           newSubtasks.splice(insertIndex, 0, newSubtask);
@@ -159,8 +175,7 @@ const todoSlice = createSlice({
           return parentFinalTodo;
         }
         return todo;
-      }
-      );
+      });
 
       if (parentFinalTodo) {
         dbHelper.updateTodo(parentFinalTodo);
@@ -179,13 +194,13 @@ const todoSlice = createSlice({
       let updatedTodo = undefined;
 
       state.items = state.items.map((todo) => {
-        if(todo.id === id) {
+        if (todo.id === id) {
           updatedTodo = { ...todo, categoryId };
           return updatedTodo;
         }
         return todo;
       });
-      
+
       if (updatedTodo) {
         dbHelper.updateTodo(updatedTodo);
       }
@@ -200,17 +215,19 @@ const todoSlice = createSlice({
 
 export const selectCompletedTodoListWithoutFolder = createSelector(
   (state: { todos: { items: Task[] } }) => state.todos.items,
-  (todos) => todos.filter((todo) => todo.isCompleted)
+  (todos) => todos.filter((todo) => todo.isCompleted),
 );
 
 export const selectTodoList = createSelector(
   (state: { todos: { items: Task[] } }) => state.todos.items,
   (state: { todos: { items: Task[] } }, categoryId: string) => categoryId,
   (todos, categoryId) =>
-    todos.filter(todo => !categoryId || todo.categoryId === categoryId).map(todo => ({
-      ...todo,
-      subtasks: [...todo.subtasks],
-    })),
+    todos
+      .filter((todo) => !categoryId || todo.categoryId === categoryId)
+      .map((todo) => ({
+        ...todo,
+        subtasks: [...todo.subtasks],
+      })),
 );
 
 export const selectCompletedTodoListLength = createSelector(
@@ -218,9 +235,8 @@ export const selectCompletedTodoListLength = createSelector(
   (items) => items.filter((todo) => todo.isCompleted).length,
 );
 
-export const selectCompletedTodoList = createSelector(
-  selectTodoList,
-  (items) => items.filter((todo) => todo.isCompleted),
+export const selectCompletedTodoList = createSelector(selectTodoList, (items) =>
+  items.filter((todo) => todo.isCompleted),
 );
 
 export const selectActiveTodo = (state: RootState) => state.todos.activeItem;
@@ -233,7 +249,7 @@ export const {
   clearCompletedTasks,
   deleteTask,
   deleteSubtask,
-  changeCategoryOfTask
+  changeCategoryOfTask,
 } = todoSlice.actions;
 
 export default todoSlice.reducer;

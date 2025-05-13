@@ -27,7 +27,13 @@ export const getNewTask = (categoryId: string): Task => {
   };
 };
 
-export const getNewSubtask = ({ parentId, text = "" }: { parentId: string, text?: string }): Subtask => {
+export const getNewSubtask = ({
+  parentId,
+  text = "",
+}: {
+  parentId: string;
+  text?: string;
+}): Subtask => {
   return {
     id: uuidv4(),
     text,

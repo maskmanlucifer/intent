@@ -31,7 +31,7 @@ export type TUserSettingsData = {
   workingHours: string[];
   breakInterval: number;
   showCustomAudioPlayer: boolean;
-  musicMode: 'JAZZ' | 'NATURE' | 'LO_FI';
+  musicMode: "JAZZ" | "NATURE" | "LO_FI";
   lastCalendarFetchTime?: number;
   sidebarCollapsed: boolean;
   selectedFolder: string;
@@ -45,7 +45,7 @@ export type TUserSettingsData = {
   enableVisualBreakReminder: boolean;
   timezone: string | null;
   focusedTaskId: string | null;
-}
+};
 
 export type Note = {
   id: string;
@@ -64,7 +64,7 @@ export type TCalendarEvent = {
   start: number;
   end: number;
   description: string;
-}
+};
 
 export type TLink = {
   id: string;

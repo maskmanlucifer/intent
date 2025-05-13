@@ -31,9 +31,22 @@ interface SidebarProps {
   setIsSidebarCollapsed: (isSidebarCollapsed: boolean) => void;
 }
 
-const withTooltip = (component: React.ReactNode, tooltip: string, isSidebarCollapsed: boolean) => {
+const withTooltip = (
+  component: React.ReactNode,
+  tooltip: string,
+  isSidebarCollapsed: boolean,
+) => {
   if (isSidebarCollapsed) {
-    return <Tooltip title={tooltip} placement="right" arrow={false} mouseEnterDelay={0}>{component}</Tooltip>;
+    return (
+      <Tooltip
+        title={tooltip}
+        placement="right"
+        arrow={false}
+        mouseEnterDelay={0}
+      >
+        {component}
+      </Tooltip>
+    );
   }
   return component;
 };
@@ -52,7 +65,7 @@ const EditCategoryBtn = ({
   const dispatch = useDispatch();
 
   const [updatedFolderName, setUpdatedFolderName] = useState(
-    folder?.name || ""
+    folder?.name || "",
   );
 
   const editInputRef = useRef<HTMLInputElement>(null);
@@ -120,7 +133,7 @@ const Sidebar = ({
   const todayFolder = folders.find((folder) => folder.name === "Today");
 
   const restFolders = folders.filter(
-    (folder) => folder.name !== "Today" && folder.name !== "Trash"
+    (folder) => folder.name !== "Today" && folder.name !== "Trash",
   );
 
   const completedFolder = { id: "completed", name: "Completed" };
@@ -128,7 +141,6 @@ const Sidebar = ({
   const [isDeleting, setIsDeleting] = useState<Boolean | string>(false);
   const [messageApi, contextHolder] = message.useMessage();
   const dispatch = useDispatch();
-
 
   const onDelete = () => {
     if (!isDeleting || typeof isDeleting === "boolean") {
@@ -179,93 +191,106 @@ const Sidebar = ({
         })}
       >
         {contextHolder}
-        {todayFolder && (
-          withTooltip(<div
-            className={classNames("folder-item", "today-folder", {
-              selected: selectedFolder === todayFolder.id,
-            })}
-            onClick={() => setSelectedFolder(todayFolder.id)}
-          >
-            <TodayFolderIcon />
-            <span>{todayFolder.name}</span>
-          </div>, "Today", isSidebarCollapsed)
+        {todayFolder &&
+          withTooltip(
+            <div
+              className={classNames("folder-item", "today-folder", {
+                selected: selectedFolder === todayFolder.id,
+              })}
+              onClick={() => setSelectedFolder(todayFolder.id)}
+            >
+              <TodayFolderIcon />
+              <span>{todayFolder.name}</span>
+            </div>,
+            "Today",
+            isSidebarCollapsed,
+          )}
+        {restFolders.map((folder: Category) =>
+          withTooltip(
+            <div
+              className={classNames("folder-item", {
+                selected: selectedFolder === folder.id,
+              })}
+              key={folder.id}
+              onClick={() => {
+                if (!isEditing) {
+                  setSelectedFolder(folder.id);
+                  setIsEditing(false);
+                  setIsDeleting(false);
+                }
+              }}
+            >
+              {isEditing === folder.id && (
+                <EditCategoryBtn
+                  folder={folder}
+                  setSelectedFolder={setSelectedFolder}
+                  setIsEditing={setIsEditing}
+                  messageApi={messageApi}
+                />
+              )}
+              {isEditing !== folder.id && (
+                <>
+                  <FolderIcon />
+                  <span className="folder-item-name">{folder.name}</span>
+                  <div
+                    className="folder-item-actions"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <Dropdown
+                      trigger={["click"]}
+                      menu={{ items: menuItems(folder) }}
+                      overlayClassName="folder-edit-actions-item-dropdown"
+                    >
+                      <span
+                        className="folder-item-action ellipsis-icon"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <EllipsisOutlined />
+                      </span>
+                    </Dropdown>
+                  </div>
+                </>
+              )}
+            </div>,
+            folder.name,
+            isSidebarCollapsed,
+          ),
         )}
-        {restFolders.map((folder: Category) => (
-          withTooltip(<div
-            className={classNames("folder-item", {
-              selected: selectedFolder === folder.id,
-            })}
-            key={folder.id}
-            onClick={() => {
-              if (!isEditing) {
-                setSelectedFolder(folder.id);
+        {completedFolder &&
+          withTooltip(
+            <div
+              className={classNames("folder-item", "completed-folder", {
+                selected: selectedFolder === completedFolder.id,
+              })}
+              onClick={() => {
+                setSelectedFolder(completedFolder.id);
                 setIsEditing(false);
                 setIsDeleting(false);
-              }
-            }}
-          >
-            {isEditing === folder.id && (
-              <EditCategoryBtn
-                folder={folder}
-                setSelectedFolder={setSelectedFolder}
-                setIsEditing={setIsEditing}
-                messageApi={messageApi}
-              />
-            )}
-            {isEditing !== folder.id && (
-              <>
-                <FolderIcon />
-                <span className="folder-item-name">{folder.name}</span>
-                <div
-                  className="folder-item-actions"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <Dropdown
-                    trigger={["click"]}
-                    menu={{ items: menuItems(folder) }}
-                    overlayClassName="folder-edit-actions-item-dropdown"
-                  >
-                    <span
-                      className="folder-item-action ellipsis-icon"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <EllipsisOutlined />
-                    </span>
-                  </Dropdown>
-                </div>
-              </>
-            )}
-          </div>, folder.name, isSidebarCollapsed)
-        ))}
-        {completedFolder && (
-          withTooltip(<div
-            className={classNames("folder-item", "completed-folder", {
-              selected: selectedFolder === completedFolder.id,
-            })}
-            onClick={() => {
-              setSelectedFolder(completedFolder.id);
-              setIsEditing(false);
-              setIsDeleting(false);
-            }}
-          >
-            <CompletedIcon />
-            <span>{completedFolder.name}</span>
-          </div>, "Completed", isSidebarCollapsed)
-        )}
-        {isEditing !== true && (
-          withTooltip(<div
-            className={classNames("folder-item", "add-folder-item")}
-            onClick={() => {
-              if (isSidebarCollapsed) {
-                setIsSidebarCollapsed(false);
-              }
-              setIsEditing(true);
-            }}
-          >
-            <AddSquareIcon />
-            <span>Add Folder</span>
-          </div>, "Add Folder", isSidebarCollapsed)
-        )}
+              }}
+            >
+              <CompletedIcon />
+              <span>{completedFolder.name}</span>
+            </div>,
+            "Completed",
+            isSidebarCollapsed,
+          )}
+        {isEditing !== true &&
+          withTooltip(
+            <div
+              className={classNames("folder-item", "add-folder-item")}
+              onClick={() => {
+                if (isSidebarCollapsed) {
+                  setIsSidebarCollapsed(false);
+                }
+                setIsEditing(true);
+              }}
+            >
+              <AddSquareIcon />
+              <span>Add Folder</span>
+            </div>,
+            "Add Folder",
+            isSidebarCollapsed,
+          )}
         {isEditing === true && (
           <div className="folder-item">
             <EditCategoryBtn
@@ -301,7 +326,6 @@ const Sidebar = ({
           </p>
         </Modal>
       </div>
-     
     </div>
   );
 };

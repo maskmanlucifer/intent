@@ -1,5 +1,13 @@
 import { DeleteOutlined, PlusOutlined, SwapOutlined } from "@ant-design/icons";
-import { Button, Collapse, Dropdown, Menu, message, Popconfirm, Tooltip } from "antd";
+import {
+  Button,
+  Collapse,
+  Dropdown,
+  Menu,
+  message,
+  Popconfirm,
+  Tooltip,
+} from "antd";
 import "./index.scss";
 import TodoItem from "../todo-item";
 import classNames from "classnames";
@@ -29,20 +37,18 @@ const TodoList = ({
   const folders = useSelector((state: RootState) => state.categories.items);
   const focusedTaskId = useSelector(selectFocusedTaskId);
 
-  const doesFocusedTaskExist = todos.some(
-    (todo) => todo.id === focusedTaskId
-  );
+  const doesFocusedTaskExist = todos.some((todo) => todo.id === focusedTaskId);
 
   if (focusedTaskId && !doesFocusedTaskExist) {
     syncSettings({
-      focusedTaskId: null
-    })
+      focusedTaskId: null,
+    });
   }
 
   const genExtra = (task: Task) => {
     const isFocused = focusedTaskId === task.id;
     const filteredFolders = folders.filter(
-      (folder) => folder.id !== task.categoryId
+      (folder) => folder.id !== task.categoryId,
     );
 
     return (
@@ -55,15 +61,15 @@ const TodoList = ({
             onClick={() => {
               if (isFocused) {
                 syncSettings({
-                  focusedTaskId: null
-                })
+                  focusedTaskId: null,
+                });
                 messageApi.open({
                   type: "success",
                   content: `Task ${task.text} unfocused!`,
                 });
               } else {
                 syncSettings({
-                  focusedTaskId: task.id
+                  focusedTaskId: task.id,
                 });
                 messageApi.open({
                   type: "success",
@@ -87,7 +93,7 @@ const TodoList = ({
                       return;
                     }
                     dispatch(
-                      changeCategoryOfTask({ id: task.id, categoryId: key })
+                      changeCategoryOfTask({ id: task.id, categoryId: key }),
                     );
                   }}
                 >
@@ -111,10 +117,10 @@ const TodoList = ({
         <Popconfirm
           title="Are you sure you want to delete this task?"
           okText="Yes, delete"
-            onConfirm={() => {
+          onConfirm={() => {
             dispatch(deleteTask({ id: task.id }));
             syncSettings({
-              focusedTaskId: null
+              focusedTaskId: null,
             });
             messageApi.open({
               type: "success",
@@ -122,7 +128,7 @@ const TodoList = ({
             });
           }}
         >
-          <DeleteOutlined className='delete-icon' />
+          <DeleteOutlined className="delete-icon" />
         </Popconfirm>
       </div>
     );
@@ -137,7 +143,7 @@ const TodoList = ({
       updateCategory({
         id: selectedFolder,
         showCompletedTasks: !currentFolder?.showCompletedTasks,
-      })
+      }),
     );
   };
 
@@ -175,10 +181,8 @@ const TodoList = ({
   return (
     <div className="todo-list">
       {focusedTaskId !== null && (
-        <div className="focus-mode">
-          Focus mode is enabled
-        </div>
-        )}
+        <div className="focus-mode">Focus mode is enabled</div>
+      )}
       {contextHolder}
       {focusedTaskId === null && doWeHaveCompletedTasks && (
         <Button

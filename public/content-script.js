@@ -92,8 +92,10 @@ chrome.storage.onChanged.addListener((changes) => {
       }
     }
 
-    if(key === "linkboard" && oldValue !== newValue) {
-      const existingTooltip = document.getElementById("item-saved-tooltip-intent");
+    if (key === "linkboard" && oldValue !== newValue) {
+      const existingTooltip = document.getElementById(
+        "item-saved-tooltip-intent",
+      );
       if (existingTooltip) {
         existingTooltip.remove();
       }
