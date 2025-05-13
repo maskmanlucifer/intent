@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PAGES } from "./constant";
 import "./App.scss";
 import { Button, ConfigProvider, Drawer } from "antd";
@@ -20,6 +20,8 @@ import SettingsModal from "./components/settings-modal";
 import Linkboard from "./components/linkboard";
 import { MehOutlined } from "@ant-design/icons";
 import {ReactComponent as CloseIcon} from "./assets/icons/close.svg";
+import Mousetrap from 'mousetrap';
+
 
 function App() {
   const activePage = useSelector(selectActivePage);
@@ -29,6 +31,19 @@ function App() {
   const isSidebarCollapsed = useSelector(selectIsSidebarCollapsed);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [isWhatsNewModalOpen, setIsWhatsNewModalOpen] = useState(false);
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      e.preventDefault();
+      handleSidebarCollapsed(!isSidebarCollapsed);
+    };
+
+    Mousetrap.bind('e', handler);
+
+    return () => {
+      Mousetrap.unbind('e');
+    };
+  }, [isSidebarCollapsed]);
 
   const handleSidebarCollapsed = (isCollapsed: boolean) => {
     syncSettings({
@@ -60,7 +75,8 @@ function App() {
             setIsDrawerOpen={setIsDrawerOpen}
             isDrawerOpen={isDrawerOpen}
             showCollapsedIcon={activePage === PAGES.TODO}
-            setIsLinkBoardOpen={() => setIsLinkBoardOpen(!isLinkBoardOpen)}
+            setIsLinkBoardOpen={setIsLinkBoardOpen}
+            isLinkBoardOpen={isLinkBoardOpen}
           />
         )}
         {activePage === PAGES.TODO && (

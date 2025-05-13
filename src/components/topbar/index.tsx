@@ -3,14 +3,17 @@ import { ReactComponent as CollapseIcon } from "../../assets/icons/collapse.svg"
 import classNames from "classnames";
 import { Button, Modal, Popover, Tooltip } from "antd";
 import { ReactComponent as ScheduleIcon } from "../../assets/icons/schedule.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SettingsModal from "../settings-modal";
 import { ReactComponent as SmilyIcon } from "../../assets/icons/smily.svg";
 import { ReactComponent as QuestionIcon } from "../../assets/icons/question.svg";
 import { ReactComponent as DatabaseIcon } from "../../assets/icons/database.svg";
 import {ReactComponent as SettingOutlined} from '../../assets/icons/setting.svg';
+import {ReactComponent as KeyboardOutlined} from '../../assets/icons/keyboard.svg';
+import Mousetrap from 'mousetrap';      
 
 import HelpUsImprove from "../help-us-improve";
+import KeyboardShortcuts from "../shortcuts";
 
 interface TopbarProps {
   isSidebarCollapsed: boolean;
@@ -18,7 +21,8 @@ interface TopbarProps {
   setIsDrawerOpen: (open: boolean) => void;
   isDrawerOpen: boolean;
   showCollapsedIcon: boolean;
-  setIsLinkBoardOpen: () => void;
+  setIsLinkBoardOpen: (open: boolean) => void;
+  isLinkBoardOpen: boolean;
 }
 
 const Topbar = ({
@@ -28,10 +32,46 @@ const Topbar = ({
   isDrawerOpen,
   showCollapsedIcon,
   setIsLinkBoardOpen,
+  isLinkBoardOpen,
 }: TopbarProps) => {
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const [isDataStorageModalOpen, setIsDataStorageModalOpen] = useState(false);
+  const [isShortcutModalOpen, setIsShortcutModalOpen] = useState(false);
+
+  useEffect(() => {
+    const handler1 = (e: KeyboardEvent) => {
+      e.preventDefault();
+      setIsSettingsModalOpen(!isSettingsModalOpen);
+    };
+
+    const handler2 = (e: KeyboardEvent) => {
+      e.preventDefault();
+      setIsDrawerOpen(!isDrawerOpen);
+    };
+
+    const handler3 = (e: KeyboardEvent) => {
+      e.preventDefault();
+      setIsLinkBoardOpen(!isLinkBoardOpen);
+    };
+
+    const handler4 = (e: KeyboardEvent) => {
+      e.preventDefault();
+      setIsShortcutModalOpen(!isShortcutModalOpen);
+    };
+
+    Mousetrap.bind('s', handler1);
+    Mousetrap.bind('c', handler2);
+    Mousetrap.bind('b', handler3);
+    Mousetrap.bind('/', handler4);
+
+    return () => {
+      Mousetrap.unbind('s');
+      Mousetrap.unbind('c');
+      Mousetrap.unbind('b');
+      Mousetrap.unbind('/');
+    };
+  }, [isDrawerOpen, isSettingsModalOpen, isLinkBoardOpen, isShortcutModalOpen]);
 
   return (
     <div className="topbar">
@@ -51,7 +91,7 @@ const Topbar = ({
               autoAdjustOverflow={true}
               placement="bottom"
               title={
-                !isSidebarCollapsed ? "Collapse sidebar" : "Expand sidebar"
+                !isSidebarCollapsed ? "Collapse sidebar [e]" : "Expand sidebar [e]"
               }
               mouseEnterDelay={0}
             >
@@ -63,7 +103,7 @@ const Topbar = ({
               arrow={false}
               autoAdjustOverflow={true}
               placement="right"
-              title="Expand sidebar"
+              title="Expand sidebar [e]"
               mouseEnterDelay={0}
             >
               <SmilyIcon className="smily-icon" />
@@ -101,16 +141,53 @@ const Topbar = ({
           arrow={false}
         >
           <div className="feedback">
-            <QuestionIcon />
+            <Tooltip
+              arrow={false}
+              autoAdjustOverflow={true}
+              placement="bottom"
+              title="Help us improve"
+              mouseEnterDelay={0}
+            >
+              <QuestionIcon />
+            </Tooltip>
           </div>
         </Popover>
         <div
           className="settings-btn"
+          onClick={() => setIsShortcutModalOpen(!isShortcutModalOpen)}
+        >
+          <Tooltip
+            arrow={false}
+            autoAdjustOverflow={true}
+            placement="bottom"
+            title="Keyboard Shortcuts (/)"
+            mouseEnterDelay={0}
+          >
+            <KeyboardOutlined />
+          </Tooltip>
+        </div>
+        <div
+          className="settings-btn"
           onClick={() => setIsSettingsModalOpen(!isSettingsModalOpen)}
         >
-          <SettingOutlined />
+          <Tooltip
+            arrow={false}
+            autoAdjustOverflow={true}
+            placement="bottom"
+            title="Settings (s)"
+            mouseEnterDelay={0}
+          >
+            <SettingOutlined />
+          </Tooltip>
         </div>
-        <Button
+        <Tooltip
+          arrow={false}
+          autoAdjustOverflow={true}
+          placement="bottom"
+          title="Calendar (c)"
+          mouseEnterDelay={0}
+        >
+          <Button
           type="primary"
           className="check-schedule-button"
           size="small"
@@ -118,15 +195,24 @@ const Topbar = ({
           icon={<ScheduleIcon />}
         >
           Calendar
-        </Button>
-        <Button
-          type="primary"
-          className="link-board-button"
+          </Button>
+        </Tooltip>
+        <Tooltip
+          arrow={false}
+          autoAdjustOverflow={true}
+          placement="bottom"
+          title="Linkboard (b)"
+          mouseEnterDelay={0}
+        >
+          <Button
+            type="primary"
+            className="link-board-button"
           size="small"
-          onClick={() => setIsLinkBoardOpen()}
+          onClick={() => setIsLinkBoardOpen(!isLinkBoardOpen)}
         >
           Linkboard
         </Button>
+        </Tooltip>
       </div>
       <SettingsModal
         visible={isSettingsModalOpen}
@@ -179,6 +265,16 @@ const Topbar = ({
             devices. If this interests you, we’d love your feedback!
           </p>
         </div>
+      </Modal>
+      <Modal
+        open={isShortcutModalOpen}
+        title="Keyboard Shortcuts"
+        onOk={() => setIsShortcutModalOpen(false)}
+        onCancel={() => setIsShortcutModalOpen(false)}
+        footer={null}
+        centered={true}
+      >
+        <KeyboardShortcuts />
       </Modal>
     </div>
   );

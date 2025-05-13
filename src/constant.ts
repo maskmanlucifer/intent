@@ -31,7 +31,7 @@ export const LINKBOARD_FILTER_OPTIONS = [
 
 export const DB_CONFIG = {
   name: "intent",
-  version: 2,
+  version: 3,
   stores: {
     todos: {
       name: "todos",
@@ -79,28 +79,28 @@ export const MESSAGE_TYPES = {
 
 export const KEYBOARD_SHORTCUTS = [
   {
-    key: "Enter",
+    key: "n",
     description: "Add a new task",
   },
   {
-    key: "Tab",
-    description: "Change task to subtask",
+    key: "s",
+    description: "Settings",
   },
   {
-    key: "⌫",
-    description: "Delete task",
+    key: "c",
+    description: "Calendar",
   },
   {
-    key: "▲",
-    description: "Navigate task up",
-  },
-  {
-    key: "▼",
-    description: "Navigate task down",
+    key: "b",
+    description: "Linkboard",
   },
   {
     key: "⌘ + Enter",
-    description: "Toggle task state",
+    description: "Mark task as completed",
+  },
+  {
+    key: "e",
+    description: "Expand / Collapse sidebar",
   },
 ];
 

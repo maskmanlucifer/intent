@@ -5,6 +5,8 @@
     height: 100vh;
     width: 100%;
     font-family: var(--secondary-font);
+    display: flex;
+    align-items: center;
 
     .break-header {
         font-size: 48px;
@@ -15,5 +17,11 @@
         font-weight: 500;
         display: flex;
         gap: 16px;
+    }
+
+    .break-hero-image {
+        width: 100%;
+        height: calc(100% - 200px);
+        margin-top: -150px;
     }
 }

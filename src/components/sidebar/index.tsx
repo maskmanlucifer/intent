@@ -31,6 +31,13 @@ interface SidebarProps {
   setIsSidebarCollapsed: (isSidebarCollapsed: boolean) => void;
 }
 
+const withTooltip = (component: React.ReactNode, tooltip: string, isSidebarCollapsed: boolean) => {
+  if (isSidebarCollapsed) {
+    return <Tooltip title={tooltip} placement="right" arrow={false} mouseEnterDelay={0}>{component}</Tooltip>;
+  }
+  return component;
+};
+
 const EditCategoryBtn = ({
   folder,
   setSelectedFolder,
@@ -173,7 +180,7 @@ const Sidebar = ({
       >
         {contextHolder}
         {todayFolder && (
-          <div
+          withTooltip(<div
             className={classNames("folder-item", "today-folder", {
               selected: selectedFolder === todayFolder.id,
             })}
@@ -181,10 +188,10 @@ const Sidebar = ({
           >
             <TodayFolderIcon />
             <span>{todayFolder.name}</span>
-          </div>
+          </div>, "Today", isSidebarCollapsed)
         )}
         {restFolders.map((folder: Category) => (
-          <div
+          withTooltip(<div
             className={classNames("folder-item", {
               selected: selectedFolder === folder.id,
             })}
@@ -228,10 +235,10 @@ const Sidebar = ({
                 </div>
               </>
             )}
-          </div>
+          </div>, folder.name, isSidebarCollapsed)
         ))}
         {completedFolder && (
-          <div
+          withTooltip(<div
             className={classNames("folder-item", "completed-folder", {
               selected: selectedFolder === completedFolder.id,
             })}
@@ -243,10 +250,10 @@ const Sidebar = ({
           >
             <CompletedIcon />
             <span>{completedFolder.name}</span>
-          </div>
+          </div>, "Completed", isSidebarCollapsed)
         )}
         {isEditing !== true && (
-          <div
+          withTooltip(<div
             className={classNames("folder-item", "add-folder-item")}
             onClick={() => {
               if (isSidebarCollapsed) {
@@ -257,7 +264,7 @@ const Sidebar = ({
           >
             <AddSquareIcon />
             <span>Add Folder</span>
-          </div>
+          </div>, "Add Folder", isSidebarCollapsed)
         )}
         {isEditing === true && (
           <div className="folder-item">

@@ -236,14 +236,13 @@ export const handleImportCalendar = async (forceImport: boolean = false) => {
 
   let shouldImport = forceImport;
 
-  if (lastCalendarFetchTime && icalUrl) {
-    const last = new Date(lastCalendarFetchTime);
+  if (icalUrl) {
+    const last = lastCalendarFetchTime ? new Date(lastCalendarFetchTime) : new Date(0);
     const now = new Date();
 
     const hoursDiff = (now.getTime() - last.getTime()) / (1000 * 60 * 60);
 
-    shouldImport =
-      shouldImport || hoursDiff > 24 || last.getDate() !== now.getDate();
+    shouldImport = shouldImport || (hoursDiff > 24) || (last.getDate() !== now.getDate());
   }
 
   try {

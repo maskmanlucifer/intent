@@ -36,6 +36,13 @@ const TodoItem = ({ todoItem, index }: { todoItem: Task | Subtask, index: number
                 onClick={(event) => event.stopPropagation()}
                 onFocus={(event) => event.stopPropagation()}
                 onKeyDown={(event) => {
+                    if (event.key === 'Enter' && event.metaKey) {
+                        event.stopPropagation();
+                        event.preventDefault();
+                        dispatch(toggleTaskState({ id: todoItem.id, isSubtask: todoItem.isSubtask, parentId: todoItem.parentId }));
+                        return;
+                    }
+
                     if(event.key === 'Enter') {
                         event.stopPropagation();
                         event.preventDefault();
