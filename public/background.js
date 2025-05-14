@@ -257,6 +257,10 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     });
   }
 
+  if(request.action === "resetBreakAlarm") {
+    chrome.alarms.clear("resetBreakAlarm");
+  }
+
   if (request.action === "PAUSE_MUSIC") {
     chrome.runtime.sendMessage({ action: "pause" });
     chrome.storage.local.get("intentSettings", (data) => {
