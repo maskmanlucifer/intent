@@ -52,7 +52,7 @@ const handleBreakPostpone = (minutes) => {
 };
 
 const handleEndBreak = () => {
-  chrome.alarms.clear("resetBreakAlarm");
+  chrome.runtime.sendMessage({ action: "resetBreakAlarm" });
   chrome.storage.local.get("intentSettings", (data) => {
     if (data.intentSettings) {
       chrome.storage.local.set({
