@@ -281,7 +281,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 
 const openDB = () => {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open("intent", 2);
+    const request = indexedDB.open("intent", 3);
 
     request.onupgradeneeded = (event) => {
       const db = event.target.result;
