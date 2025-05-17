@@ -14,7 +14,7 @@ const useDnd = (selectedFolder: string, finalTodos: Task[]) => {
   const [dragIndex, setDragIndex] = useState<{ from?: number; to?: number }>(
     INITIAL_DRAG_INDEX,
   );
-  
+
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {

@@ -287,6 +287,8 @@ chrome.alarms.onAlarm.addListener(function (alarm) {
           });
         });
       }
+
+      chrome.alarms.clear("resetBreakAlarm");
     });
   }
 
@@ -440,3 +442,46 @@ const putLinkDataToIDB = async (linkData) => {
     };
   });
 };
+
+const handleMigration = async () => {
+  const db = await openDB();
+  const transaction = db.transaction("todos", "readwrite");
+  const store = transaction.objectStore("todos");
+
+  const getAllRequest = store.getAll();
+
+  getAllRequest.onsuccess = async (event) => {
+    const originalTasks = event.target.result;
+
+    const categoryBasedTasks = originalTasks.reduce((acc, task) => {
+      if (!acc[task.categoryId]) {
+        acc[task.categoryId] = [];
+      }
+      acc[task.categoryId].push(task);
+      return acc;
+    }, {});
+
+    for (const categoryId in categoryBasedTasks) {
+      const tasks = categoryBasedTasks[categoryId];
+      const tasksWithOrder = tasks.map((task, index) => ({
+        ...task,
+        order: index,
+      }));
+
+      for (const task of tasksWithOrder) {
+        store.put(task);
+      }
+    }
+  };
+
+  getAllRequest.onerror = (err) => {
+    console.error("Failed to fetch todos for migration:", err);
+  };
+};
+
+chrome.runtime.onInstalled.addListener(async (details) => {
+  const { reason } = details;
+  if (reason === chrome.runtime.OnInstalledReason.UPDATE) {
+    await handleMigration();
+  }
+});

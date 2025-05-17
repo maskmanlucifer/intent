@@ -5,6 +5,15 @@ export const handleBreakSchedule = (force?: boolean) => {
         const userSettings =
           (await chrome.storage.local.get("intentSettings")) || {};
 
+        if (!userSettings.intentSettings) {
+          return;
+        }
+
+        if (!userSettings.intentSettings.sendBreakReminder) {
+          chrome.alarms.clear("genericAlarm");
+          return;
+        }
+
         const { workingHours = ["09:00", "17:00"], breakInterval = 90 } =
           userSettings.intentSettings || {};
 
@@ -63,6 +72,18 @@ export const handleBreakSchedule = (force?: boolean) => {
             when: breakTs,
           });
         }
+      }
+
+      const userSettings =
+        (await chrome.storage.local.get("intentSettings")) || {};
+
+      if (!userSettings.intentSettings) {
+        return;
+      }
+
+      if (!userSettings.intentSettings.sendBreakReminder) {
+        chrome.alarms.clear("genericAlarm");
+        return;
       }
     });
   }
