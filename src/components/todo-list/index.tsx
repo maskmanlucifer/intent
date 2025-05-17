@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-concat */
 import { DeleteOutlined, PlusOutlined, SwapOutlined } from "@ant-design/icons";
 import {
   Button,
@@ -16,6 +17,7 @@ import {
   addNewSubtask,
   addNewTask,
   changeCategoryOfTask,
+  deleteAllCompletedCategoryTasks,
   deleteTask,
 } from "../../redux/todoSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,6 +26,9 @@ import { ReactComponent as FolderIcon } from "../../assets/icons/folder.svg";
 import { RootState } from "../../redux/store";
 import { updateCategory } from "../../redux/categorySlice";
 import { selectFocusedTaskId, syncSettings } from "../../redux/sessionSlice";
+import useDnd from "../../hooks/useDnd";
+import { ReactComponent as DragIcon } from "../../assets/icons/drag-icon.svg";
+import { KEYBOARD_SHORTCUTS } from "../../constant";
 
 const TodoList = ({
   selectedFolder,
@@ -36,7 +41,6 @@ const TodoList = ({
   const [messageApi, contextHolder] = message.useMessage();
   const folders = useSelector((state: RootState) => state.categories.items);
   const focusedTaskId = useSelector(selectFocusedTaskId);
-
   const doesFocusedTaskExist = todos.some((todo) => todo.id === focusedTaskId);
 
   if (focusedTaskId && !doesFocusedTaskExist) {
@@ -53,7 +57,12 @@ const TodoList = ({
 
     return (
       <div className="todo-actions">
-        <Tooltip arrow={false} title="Focus on task" mouseEnterDelay={0}>
+        <Tooltip
+          arrow={false}
+          title="Focus on task"
+          mouseEnterDelay={0}
+          mouseLeaveDelay={0}
+        >
           <FocusIcon
             className={classNames("focus-icon", {
               focused: isFocused,
@@ -84,6 +93,7 @@ const TodoList = ({
             arrow={false}
             title="Move item to folder"
             mouseEnterDelay={0}
+            mouseLeaveDelay={0}
           >
             <Dropdown
               overlay={
@@ -93,7 +103,11 @@ const TodoList = ({
                       return;
                     }
                     dispatch(
-                      changeCategoryOfTask({ id: task.id, categoryId: key }),
+                      changeCategoryOfTask({
+                        id: task.id,
+                        sourceCategoryId: task.categoryId,
+                        destinationCategoryId: key,
+                      }),
                     );
                   }}
                 >
@@ -118,7 +132,7 @@ const TodoList = ({
           title="Are you sure you want to delete this task?"
           okText="Yes, delete"
           onConfirm={() => {
-            dispatch(deleteTask({ id: task.id }));
+            dispatch(deleteTask({ id: task.id, categoryId: task.categoryId }));
             syncSettings({
               focusedTaskId: null,
             });
@@ -135,7 +149,9 @@ const TodoList = ({
   };
 
   const handleAddSubtask = (id: string, index: number) => {
-    dispatch(addNewSubtask({ parentId: id, index }));
+    dispatch(
+      addNewSubtask({ parentId: id, index, categoryId: selectedFolder }),
+    );
   };
 
   const handleToggleCompletedTasks = () => {
@@ -151,59 +167,105 @@ const TodoList = ({
 
   const finalTodos = focusedTaskId
     ? todos.filter((todo) => todo.id === focusedTaskId)
-    : !currentFolder?.showCompletedTasks
+    : currentFolder && !currentFolder.showCompletedTasks
       ? todos.filter((todo) => !todo.isCompleted)
       : todos;
 
-  const sortedTodos = [
-    ...finalTodos
-      .map((todo) => ({
-        ...todo,
-        subtasks: [
-          ...todo.subtasks.filter((subtask) => !subtask.isCompleted),
-          ...todo.subtasks.filter((subtask) => subtask.isCompleted),
-        ],
-      }))
-      .filter((todo) => !todo.isCompleted),
-    ...finalTodos
-      .map((todo) => ({
-        ...todo,
-        subtasks: [
-          ...todo.subtasks.filter((subtask) => !subtask.isCompleted),
-          ...todo.subtasks.filter((subtask) => subtask.isCompleted),
-        ],
-      }))
-      .filter((todo) => todo.isCompleted),
-  ];
+  const { isDragging } = useDnd(selectedFolder, finalTodos);
 
-  const doWeHaveCompletedTasks = todos.some((todo) => todo.isCompleted);
+  const nonCompletedTodos = todos.filter((todo) => !todo.isCompleted);
+  const doWeHaveCompletedTasks = todos.length > nonCompletedTodos.length;
 
   return (
     <div className="todo-list">
+      {focusedTaskId === null && (
+        <div className="todo-list-header">
+          <div className="todo-list-header-left">{currentFolder?.name}</div>
+          <div className="todo-list-header-right">
+            {todos.length - nonCompletedTodos.length}/{todos.length}
+          </div>
+        </div>
+      )}
       {focusedTaskId !== null && (
-        <div className="focus-mode">Focus mode is enabled</div>
+        <div className="focus-mode">
+          <div className="focus-mode-header">Focus mode is enabled</div>
+          <Button
+            className="disable-focus-mode-button"
+            onClick={() =>
+              syncSettings({
+                focusedTaskId: null,
+              })
+            }
+            size="small"
+            type="text"
+          >
+            Exit focus mode
+          </Button>
+        </div>
       )}
       {contextHolder}
       {focusedTaskId === null && doWeHaveCompletedTasks && (
-        <Button
-          className="completed-tasks-toggle"
-          onClick={handleToggleCompletedTasks}
-          size="small"
-          type="text"
-        >
-          {!currentFolder?.showCompletedTasks
-            ? "Show completed tasks"
-            : "Hide completed tasks"}
-        </Button>
+        <div className="completed-tasks-toggle-container">
+          {currentFolder?.showCompletedTasks && (
+            <Popconfirm
+              title="Are you sure you want to delete all completed todos?"
+              okText="Yes, delete"
+              onConfirm={async () => {
+                dispatch(
+                  deleteAllCompletedCategoryTasks({
+                    categoryId: selectedFolder,
+                  }),
+                );
+                const confetti = (await import("canvas-confetti")).default;
+                confetti({
+                  particleCount: 100,
+                  spread: 70,
+                  origin: { y: 0.3, x: 0.52 },
+                });
+                messageApi.open({
+                  type: "success",
+                  content: `All completed todos deleted successfully!`,
+                });
+              }}
+            >
+              <Button type="primary" size="small" className="delete-all-button">
+                Delete All Completed Todos
+              </Button>
+            </Popconfirm>
+          )}
+          <Button
+            className="completed-tasks-toggle"
+            onClick={handleToggleCompletedTasks}
+            size="small"
+            type="text"
+          >
+            {!currentFolder?.showCompletedTasks
+              ? "Show completed tasks"
+              : "Hide completed tasks"}
+          </Button>
+        </div>
       )}{" "}
-      {sortedTodos.length > 0 && (
-        <Collapse expandIconPosition={"start"}>
-          {sortedTodos.map((task, index) => (
+      {finalTodos.length > 0 && (
+        <Collapse
+          defaultActiveKey={focusedTaskId ? [focusedTaskId] : []}
+          expandIconPosition={"start"}
+          className={classNames("todo-list-collapse", {
+            dragging: isDragging,
+          })}
+        >
+          {finalTodos.map((task, index) => (
             <Collapse.Panel
-              header={<TodoItem todoItem={task} index={index} />}
+              header={
+                <>
+                  <DragIcon className="drag-icon" />
+                  <TodoItem todoItem={task} index={index} />
+                </>
+              }
               key={`${task.id}-${selectedFolder}`}
               extra={genExtra(task)}
               collapsible="header"
+              data-allow-drop={true}
+              className="drag-handle"
             >
               <div className="subtasks">
                 {task.subtasks.map((subtask: Subtask, index: number) => (
@@ -232,10 +294,23 @@ const TodoList = ({
         </Collapse>
       )}
       {focusedTaskId === null && todos.length > 0 && (
-        <Tooltip arrow={false} title="Add new task (n)" mouseEnterDelay={0}>
+        <Tooltip
+          arrow={false}
+          title={"Add new task" + " (" + KEYBOARD_SHORTCUTS.addTask.key + ")"}
+          mouseEnterDelay={0}
+          mouseLeaveDelay={0}
+          placement={finalTodos.length === 0 ? "top" : "right"}
+        >
           <Button
             type="primary"
-            onClick={() => dispatch(addNewTask({ categoryId: selectedFolder }))}
+            onClick={() =>
+              dispatch(
+                addNewTask({
+                  categoryId: selectedFolder,
+                  order: nonCompletedTodos.length,
+                }),
+              )
+            }
             className={classNames("add-task-button", {
               "empty-folder": finalTodos.length === 0,
             })}

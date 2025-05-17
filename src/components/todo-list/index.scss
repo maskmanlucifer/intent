@@ -6,19 +6,26 @@
    position: relative;
 
    .focus-mode {
-      font-size: 36px;
       margin-bottom: 24px;
+      gap: 16px;
       font-family: var(--secondary-font);
       width: 100%;
       display: flex;
       justify-content: center;
-      font-weight: 500;
+      flex-direction: column;
+      align-items: center;
+
+      .focus-mode-header {
+         font-size: 36px;         
+         font-weight: 500;
+      }
+
+      .disable-focus-mode-button {
+         background-color: rgba(0, 0, 0, 0.04);
+      }
    }
 
    .completed-tasks-toggle {
-      margin-bottom: 16px;
-      margin-left: 100%;
-      transform: translate(-100%, 0);
       background-color: rgba(0, 0, 0, 0.04);
    }
 
@@ -37,7 +44,7 @@
          left: 0;
          right: unset;
          transform: translate(0, -50%);
-         top: 14px;
+         top: 58px;
       }
    }
 
@@ -152,4 +159,63 @@
 }
 .folder-move-item-to .ant-dropdown-menu-title-content {
    color: var(--primary-color);
+}
+
+.todo-list-collapse.dragging {
+   cursor: all-scroll;
+
+   .sortable-ghost {
+      visibility: hidden;
+   }
+}
+
+.drag-handle {
+   .drag-icon {
+      height: 16px;
+      width: 16px;
+      position: absolute;
+      top: 3px;
+      left: -38px;
+      display: none;
+   }
+
+   &:hover {
+      .ant-collapse-header-text {
+         position: relative;
+      
+         .drag-icon {
+            display: block;
+         }
+      }
+   }
+}
+
+.drag-selected {
+   background-color: var(--blue-10);
+}
+
+
+.todo-list-header {
+   display: flex;
+   align-items: first baseline;
+   margin-bottom: 16px;
+   gap: 8px;
+
+   .todo-list-header-left {
+      font-size: 24px;
+   }
+
+   .todo-list-header-right {
+      font-size: 14px;
+      display: flex;
+      color: rgba(0, 0, 0, 0.5);
+   }
+}
+
+.completed-tasks-toggle-container {
+   display: flex;
+   align-items: center;
+   margin-bottom: 16px;
+   justify-content: flex-end;
+   gap: 16px;
 }

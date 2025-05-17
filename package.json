@@ -32,6 +32,7 @@
     "redux-thunk": "^3.1.0",
     "rrule": "^2.8.1",
     "sass": "^1.83.0",
+    "sortablejs": "^1.15.6",
     "uuid": "^11.0.3"
   },
   "scripts": {
@@ -64,6 +65,7 @@
     "@types/chrome": "^0.0.306",
     "@types/mousetrap": "^1.6.15",
     "@types/react": "^19.0.10",
+    "@types/sortablejs": "^1.15.8",
     "prettier": "^3.4.2"
   }
 }

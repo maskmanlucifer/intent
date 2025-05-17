@@ -12,7 +12,8 @@
         font-size: 48px;
         position: absolute;
         top: calc(100% / 32);
-        left: calc(100% / 32);
+        left: 50%;
+        transform: translateX(-50%);
         font-family: var(--secondary-font);
         font-weight: 500;
         display: flex;
@@ -20,8 +21,18 @@
     }
 
     .break-hero-image {
-        width: 100%;
+        width: 300px;
         height: calc(100% - 200px);
-        margin-top: -150px;
+        margin: auto;
+    }
+
+    .break-pills-container {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        position: absolute;
+        top: 50%;
+        left: 20%;
+        transform: translateY(-38%);
     }
 }

@@ -10,6 +10,20 @@ const BreakReschedule = () => {
   const settings = useSelector(selectSettings);
   const { breakInterval = 90, workingHours = ["09:00", "17:00"] } = settings;
 
+  const endBreakPermanently = () => {
+    messageApi.success("Break reminders turned off permanently", 1000);
+
+    setTimeout(() => {
+      chrome.alarms.clear("resetBreakAlarm");
+      chrome.alarms.clear("genericAlarm", () => {
+        syncSettings({
+          sendBreakReminder: false,
+          activePage: PAGES.TODO,
+        });
+      });
+    }, 1100);
+  };
+
   const handleEndBreak = () => {
     syncSettings({
       activePage: PAGES.TODO,
@@ -79,6 +93,33 @@ const BreakReschedule = () => {
             <Button size="small">{time}min</Button>
           </Popconfirm>
         ))}
+      </div>
+      <svg
+        width="2"
+        height="33"
+        viewBox="0 0 2 33"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <line
+          x1="0.710205"
+          y1="32.0156"
+          x2="0.710205"
+          y2="3.8147e-06"
+          stroke="#E4E7EC"
+        />
+      </svg>
+      <div className="end-break">
+        <Popconfirm
+          title="Turn off break reminders permanently"
+          onConfirm={endBreakPermanently}
+          okText="Turn off"
+          cancelText="Cancel"
+        >
+          <Button type="link" size="small">
+            Turn off break reminders
+          </Button>
+        </Popconfirm>
       </div>
       <svg
         width="2"

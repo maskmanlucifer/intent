@@ -11,6 +11,8 @@
     border-radius: 8px;
     font-size: 16px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: var(--primary-font);
+    color: #333333;
 
     svg {
         margin-left: 8px;
@@ -20,13 +22,12 @@
         display: flex;
         gap: 4px;
         align-items: center;
-        font-family: var(--secondary-font);
+        font-size: 14px;
 
         button {
             color: #475467;
             border: 1px solid #98A2B3;
-            font-size: 14px;
-            background-color: var(--blue-50);
+            background-color: var(--blue-10);
 
             div {
                 display: none;

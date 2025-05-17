@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-concat */
 import "./index.scss";
 import { ReactComponent as CollapseIcon } from "../../assets/icons/collapse.svg";
 import classNames from "classnames";
@@ -11,9 +12,9 @@ import { ReactComponent as DatabaseIcon } from "../../assets/icons/database.svg"
 import { ReactComponent as SettingOutlined } from "../../assets/icons/setting.svg";
 import { ReactComponent as KeyboardOutlined } from "../../assets/icons/keyboard.svg";
 import Mousetrap from "mousetrap";
-
 import HelpUsImprove from "../help-us-improve";
 import KeyboardShortcuts from "../shortcuts";
+import { KEYBOARD_SHORTCUTS } from "../../constant";
 
 interface TopbarProps {
   isSidebarCollapsed: boolean;
@@ -60,16 +61,16 @@ const Topbar = ({
       setIsShortcutModalOpen(!isShortcutModalOpen);
     };
 
-    Mousetrap.bind("s", handler1);
-    Mousetrap.bind("c", handler2);
-    Mousetrap.bind("l", handler3);
-    Mousetrap.bind("/", handler4);
+    Mousetrap.bind(KEYBOARD_SHORTCUTS.settings.binding, handler1);
+    Mousetrap.bind(KEYBOARD_SHORTCUTS.calendar.binding, handler2);
+    Mousetrap.bind(KEYBOARD_SHORTCUTS.linkboard.binding, handler3);
+    Mousetrap.bind(KEYBOARD_SHORTCUTS.help.binding, handler4);
 
     return () => {
-      Mousetrap.unbind("s");
-      Mousetrap.unbind("c");
-      Mousetrap.unbind("l");
-      Mousetrap.unbind("/");
+      Mousetrap.unbind(KEYBOARD_SHORTCUTS.settings.binding);
+      Mousetrap.unbind(KEYBOARD_SHORTCUTS.calendar.binding);
+      Mousetrap.unbind(KEYBOARD_SHORTCUTS.linkboard.binding);
+      Mousetrap.unbind(KEYBOARD_SHORTCUTS.help.binding);
     };
   }, [isDrawerOpen, isSettingsModalOpen, isLinkBoardOpen, isShortcutModalOpen]);
 
@@ -91,11 +92,15 @@ const Topbar = ({
               autoAdjustOverflow={true}
               placement="bottom"
               title={
-                !isSidebarCollapsed
-                  ? "Collapse sidebar [e]"
-                  : "Expand sidebar [e]"
+                (!isSidebarCollapsed
+                  ? "Collapse sidebar"
+                  : "Expand sidebar") +
+                    " (" +
+                    KEYBOARD_SHORTCUTS.toggleSidebar.key +
+                    ")"
               }
               mouseEnterDelay={0}
+              mouseLeaveDelay={0}
             >
               <CollapseIcon />
             </Tooltip>
@@ -105,8 +110,14 @@ const Topbar = ({
               arrow={false}
               autoAdjustOverflow={true}
               placement="right"
-              title="Expand sidebar [e]"
+              title={
+                "Expand sidebar" +
+                " (" +
+                KEYBOARD_SHORTCUTS.toggleSidebar.key +
+                ")"
+              }
               mouseEnterDelay={0}
+              mouseLeaveDelay={0}
             >
               <SmilyIcon className="smily-icon" />
             </Tooltip>
@@ -120,6 +131,7 @@ const Topbar = ({
           placement="bottom"
           title={"How We Store Your Data"}
           mouseEnterDelay={0}
+          mouseLeaveDelay={0}
           className="data-storage-tooltip"
         >
           <Button
@@ -149,6 +161,7 @@ const Topbar = ({
               placement="bottom"
               title="Help us improve"
               mouseEnterDelay={0}
+              mouseLeaveDelay={0}
             >
               <QuestionIcon />
             </Tooltip>
@@ -162,8 +175,11 @@ const Topbar = ({
             arrow={false}
             autoAdjustOverflow={true}
             placement="bottom"
-            title="Keyboard Shortcuts (/)"
+            title={
+              "Keyboard Shortcuts" + " (" + KEYBOARD_SHORTCUTS.help.key + ")"
+            }
             mouseEnterDelay={0}
+            mouseLeaveDelay={0}
           >
             <KeyboardOutlined />
           </Tooltip>
@@ -176,8 +192,9 @@ const Topbar = ({
             arrow={false}
             autoAdjustOverflow={true}
             placement="bottom"
-            title="Settings (s)"
+            title={"Settings" + " (" + KEYBOARD_SHORTCUTS.settings.key + ")"}
             mouseEnterDelay={0}
+            mouseLeaveDelay={0}
           >
             <SettingOutlined />
           </Tooltip>
@@ -186,8 +203,9 @@ const Topbar = ({
           arrow={false}
           autoAdjustOverflow={true}
           placement="bottom"
-          title="Calendar (c)"
+          title={"Calendar" + " (" + KEYBOARD_SHORTCUTS.calendar.key + ")"}
           mouseEnterDelay={0}
+          mouseLeaveDelay={0}
         >
           <Button
             type="primary"
@@ -203,8 +221,9 @@ const Topbar = ({
           arrow={false}
           autoAdjustOverflow={true}
           placement="bottom"
-          title="Linkboard (b)"
+          title={"Linkboard" + " (" + KEYBOARD_SHORTCUTS.linkboard.key + ")"}
           mouseEnterDelay={0}
+          mouseLeaveDelay={0}
         >
           <Button
             type="primary"

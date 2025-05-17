@@ -2,26 +2,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 4px 16px;
+    padding: 4px 8px;
     gap: 4px;
     background: var(--primary-color);
     border-radius: 4px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     position: absolute;
     right: 48px;
-    bottom: 24px;
-    transition: background 0.3s ease;
-
-    &.playing {
-        background: linear-gradient(
-            270deg,
-            #9aceff,  /* Peach pink */
-            #5d39fc,  /* Light pink */
-            #9aceff   /* Repeats smoothly */
-        );
-    background-size: 200% 200%;
-    animation: gradientMove 6s linear infinite;
-    }
+    bottom: 36px;
 
     svg {
         height: 24px;
@@ -31,11 +19,34 @@
     }
 }
 
-@keyframes gradientMove {
+.cd-icon {
+    height: 50px;
+    width: 50px;
+    position: absolute;
+    right: 74px;
+    bottom: 36px;
+    display: none;
+
+    &.playing {
+        animation: rotate 4s linear infinite;
+        display: block;
+    }
+}
+
+.music-notes {
+    bottom: 65px;
+
+    &.playing {
+        animation: none;
+        display: block;
+    }
+}
+
+@keyframes rotate {
     0% {
-        background-position: -100% -100%;
+        transform: rotate(0deg);
     }
     100% {
-        background-position: 100% 100%;
+        transform: rotate(360deg);
     }
 }

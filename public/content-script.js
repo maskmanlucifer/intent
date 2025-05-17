@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 const applyDarkTheme = (intentSettings) => {
   const body = document.querySelector("body");
-  if (body && intentSettings.enableVisualBreakReminder) {
+  if (body && intentSettings.sendBreakReminder) {
     const style = document.createElement("style");
     style.id = "dark-theme-style";
     style.innerHTML = `
@@ -35,6 +35,22 @@ const removeDarkTheme = () => {
   }
 };
 
+const handleTurnOffReminders = () => {
+  chrome.runtime.sendMessage({ action: "resetBreakAlarm" });
+  chrome.storage.local.get("intentSettings", (data) => {
+    if (data.intentSettings) {
+      chrome.storage.local.set({
+        intentSettings: {
+          ...data.intentSettings,
+          sendBreakReminder: false,
+          activePage: "Todo",
+          lastUpdatedAt: Date.now(),
+        },
+      });
+    }
+  });
+};
+
 const handleBreakPostpone = (minutes) => {
   chrome.storage.local.get("intentSettings", (data) => {
     if (data.intentSettings) {
@@ -48,7 +64,9 @@ const handleBreakPostpone = (minutes) => {
     }
   });
 
-  chrome.runtime.sendMessage({ action: "setAlarm", delayInMinutes: minutes });
+  if (data.intentSettings.sendBreakReminder) {
+    chrome.runtime.sendMessage({ action: "setAlarm", delayInMinutes: minutes });
+  }
 };
 
 const handleEndBreak = () => {
@@ -64,6 +82,28 @@ const handleEndBreak = () => {
       });
     }
   });
+
+  const now = new Date();
+  const currentEpoch = now.getTime();
+  const breakDuration = data.intentSettings.breakInterval * 60 * 1000;
+  const endHour = data.intentSettings.workingHours[1];
+  const endTime = new Date();
+
+  endTime.setHours(
+    Number(endHour.split(":")[0]),
+    Number(endHour.split(":")[1]),
+    0,
+    0,
+  );
+
+  const workingHourEnd = endTime.getTime();
+
+  if ((currentEpoch + breakDuration <= workingHourEnd) && data.intentSettings.sendBreakReminder) {
+    chrome.runtime.sendMessage({
+      action: "setAlarm",
+      delayInMinutes: (currentEpoch + breakDuration - Date.now()) / 60000,
+    });
+  }
 };
 
 chrome.storage.onChanged.addListener((changes) => {
@@ -189,23 +229,24 @@ const showBreakTooltip = () => {
   tooltip.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.2)";
   tooltip.style.borderRadius = "12px";
   tooltip.style.zIndex = 2147483647;
-  tooltip.style.maxWidth = "90%";
+  tooltip.style.maxWidth = "95%";
   tooltip.style.padding = "12px";
-  tooltip.style.backgroundColor = "#eff6ff"; // Blue-50
-  tooltip.style.fontFamily = `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif`; // <<< important addition
-  tooltip.style.color = "#1c398e"; // Blue-900
+  tooltip.style.backgroundColor = "#eff6ff";
+  tooltip.style.fontFamily = `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif`;
+  tooltip.style.color = "#1c398e";
   tooltip.style.fontSize = "14px";
+  tooltip.style.width = "725px";
 
-  // Tooltip content
   tooltip.innerHTML = `
     <div style="display: flex; align-items: center; gap: 10px;">
       <span id="blinking-icon" style="font-size: 16px;">⏳</span>
       <span><strong>Time for a break!</strong> Step away, refresh your mind, and come back energized. 💙</span>
     </div>
     <div style="margin-top: 10px; display: flex; justify-content: space-between; gap: 8px;">
-      <button id="postpone-5" style="flex: 1; padding: 6px 10px; background: #2b7fff; color: #fff; border: none; border-radius: 6px; cursor: pointer;">Postpone 5 min</button>
-      <button id="postpone-10" style="flex: 1; padding: 6px 10px; background: #2b7fff; color: #fff; border: none; border-radius: 6px; cursor: pointer;">Postpone 10 min</button>
-      <button id="end-break" style="flex: 1; padding: 6px 10px; background: #f04438; color: #fff; border: none; border-radius: 6px; cursor: pointer;">End break</button>
+      <button id="postpone-5" style="flex: 1; padding: 8px 4px; background: #2b7fff; color: #fff; border: none; border-radius: 6px; cursor: pointer;">Postpone 5 min</button>
+      <button id="postpone-10" style="flex: 1; padding: 8px 4px; background: #2b7fff; color: #fff; border: none; border-radius: 6px; cursor: pointer;">Postpone 10 min</button>
+      <button id="turn-off-reminders" style="flex: 1; padding: 8px 4px; background: #ff7043; color: #fff; border: none; border-radius: 6px; cursor: pointer;">Turn off break reminders</button>
+      <button id="end-break" style="flex: 1; padding: 8px 4px; background: #f04438; color: #fff; border: none; border-radius: 6px; cursor: pointer;">End break</button>
     </div>
   `;
 
@@ -225,6 +266,13 @@ const showBreakTooltip = () => {
     tooltip.remove();
     handleEndBreak();
   });
+
+  document
+    .getElementById("turn-off-reminders")
+    .addEventListener("click", () => {
+      tooltip.remove();
+      handleTurnOffReminders();
+    });
 };
 
 const showItemSavedTooltip = () => {
@@ -254,12 +302,12 @@ const showItemSavedTooltip = () => {
   tooltip.style.transform = "translateX(-50%)";
   tooltip.style.boxShadow = "0 6px 20px rgba(0, 0, 0, 0.1)";
   tooltip.style.borderRadius = "10px";
-  tooltip.style.border = "1px solid #d1d5db"; // light gray border
+  tooltip.style.border = "1px solid #d1d5db";
   tooltip.style.zIndex = "2147483647";
   tooltip.style.maxWidth = "90%";
   tooltip.style.padding = "10px 16px";
-  tooltip.style.background = "#ffffff"; // pure white background
-  tooltip.style.color = "#111827"; // dark gray text
+  tooltip.style.background = "#ffffff";
+  tooltip.style.color = "#111827";
   tooltip.style.fontSize = "14px";
   tooltip.style.fontWeight = "500";
   tooltip.style.fontFamily = `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif`;

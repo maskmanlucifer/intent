@@ -5,10 +5,10 @@ import { KEYBOARD_SHORTCUTS } from "../../constant";
 const KeyboardShortcuts = () => {
   return (
     <div className="keyboard-shortcuts">
-      {KEYBOARD_SHORTCUTS.map(({ key, description }) => (
+      {Object.entries(KEYBOARD_SHORTCUTS).map(([key, { key: shortcutKey, description }]) => (
         <div key={key} className="shortcut-list">
           <div className="keyboard-shortcut-description">{description}</div>
-          <div className="keyboard-shortcut-key">{key}</div>
+          <div className="keyboard-shortcut-key">{shortcutKey}</div>
         </div>
       ))}
     </div>

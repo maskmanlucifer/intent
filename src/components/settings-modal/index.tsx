@@ -18,7 +18,6 @@ import { SettingOutlined } from "@ant-design/icons";
 import "./index.scss";
 import dayjs from "dayjs";
 import { ReactComponent as GeneralSettingsIcon } from "../../assets/icons/general-settings.svg";
-// import { ReactComponent as SubscriptionIcon } from "../../assets/icons/subscription.svg"
 import { ReactComponent as MusicIcon } from "../../assets/icons/music.svg";
 import { ReactComponent as CalendarIcon } from "../../assets/icons/calendar.svg";
 import {
@@ -67,9 +66,11 @@ const SettingsModal = ({
 
   const handleShowMusicWidgetChange = (value: boolean) => {
     const { isMusicPlaying } = settings;
+
     syncSettings({
       showCustomAudioPlayer: value,
     });
+
     if (value) {
       messageApi.success(
         "Music widget enabled. You can now listen to music in the app.",
@@ -111,12 +112,6 @@ const SettingsModal = ({
     });
   };
 
-  const handleVisualBreakReminderChange = (value: boolean) => {
-    syncSettings({
-      enableVisualBreakReminder: value,
-    });
-  };
-
   const menuItems = [
     {
       key: "general",
@@ -133,11 +128,6 @@ const SettingsModal = ({
       label: "Music",
       icon: <MusicIcon className="music-icon" />,
     },
-    // {
-    //   key: "subscription",
-    //   icon: <SubscriptionIcon />,
-    //   label: "Subscription",
-    // },
   ];
 
   return (
@@ -255,7 +245,7 @@ const SettingsModal = ({
                   <div className="toggle-container">
                     <Text style={{ fontSize: "16px" }} strong>
                       {" "}
-                      Break Reminder Notifications
+                      Get break reminders
                     </Text>{" "}
                     <Switch
                       size="small"
@@ -268,29 +258,8 @@ const SettingsModal = ({
                     className="setting-description"
                     style={{ fontSize: "14px" }}
                   >
-                    Enable this to receive reminders notification for break
-                    while browsing your current page.
-                  </Text>
-                </div>
-                <div className="setting-item">
-                  <div className="toggle-container">
-                    <Text style={{ fontSize: "16px" }} strong>
-                      {" "}
-                      Break Visual Reminder
-                    </Text>{" "}
-                    <Switch
-                      size="small"
-                      checked={settings.enableVisualBreakReminder}
-                      onChange={handleVisualBreakReminderChange}
-                    />
-                  </div>
-                  <Text
-                    type="secondary"
-                    className="setting-description"
-                    style={{ fontSize: "14px" }}
-                  >
-                    Enable this to automatically dim your current page when it's
-                    time for a break.
+                    Enable this to receive break reminder notifications <br/>
+                    Note: Your page will be greyed out during break reminders.
                   </Text>
                 </div>
               </div>
@@ -485,9 +454,16 @@ const SettingsModal = ({
                         flexDirection: "column",
                       }}
                       value={musicMode}
-                      onChange={(e) =>
-                        syncSettings({ musicMode: e.target.value })
-                      }
+                      onChange={(e) => {
+                        const musicMode = e.target.value;
+                        syncSettings({ musicMode });
+                        if (settings.isMusicPlaying) {
+                          chrome.runtime.sendMessage({
+                            action: "PLAY_MUSIC",
+                            mode: musicMode,
+                          });
+                        }
+                      }}
                       options={[
                         { label: "Jazz", value: "JAZZ" },
                         { label: "Nature", value: "NATURE" },

@@ -1,11 +1,7 @@
 /* eslint-disable no-undef */
 import "./index.scss";
 import { useSelector } from "react-redux";
-import {
-  selectMusicMode,
-  selectSettings,
-  syncSettings,
-} from "../../redux/sessionSlice";
+import { selectMusicMode, selectSettings } from "../../redux/sessionSlice";
 import classNames from "classnames";
 
 import {
@@ -15,59 +11,71 @@ import {
   StepForwardOutlined,
 } from "@ant-design/icons";
 
-import { SONGS } from "../../constant";
-
 const CustomAudioPlayer = () => {
-  const { isMusicPlaying, songIndex } = useSelector(selectSettings);
+  const { isMusicPlaying } = useSelector(selectSettings);
 
   const musicMode = useSelector(selectMusicMode);
 
   const togglePlayPause = () => {
     chrome.runtime.sendMessage({
       action: isMusicPlaying ? "PAUSE_MUSIC" : "PLAY_MUSIC",
-      url: !isMusicPlaying ? SONGS[musicMode][0].src : undefined,
+      mode: musicMode,
     });
   };
 
   const handlePlayPrev = () => {
-    const songsLength = SONGS[musicMode].length;
-    const newSongIndex = (songIndex - 1 + songsLength) % songsLength;
-    const songSrc = SONGS[musicMode][newSongIndex].src;
-
     if (isMusicPlaying && chrome.runtime) {
-      chrome.runtime.sendMessage({ action: "PLAY_MUSIC", url: songSrc });
-      syncSettings({ songIndex: newSongIndex });
+      chrome.runtime.sendMessage({
+        action: "PLAY_MUSIC",
+        mode: musicMode,
+        prev: true,
+      });
     }
   };
 
   const handlePlayNext = () => {
-    const songsLength = SONGS[musicMode].length;
-    const newSongIndex = (songIndex + 1) % songsLength;
-    const songSrc = SONGS[musicMode][newSongIndex].src;
-
     if (isMusicPlaying && chrome.runtime) {
-      chrome.runtime.sendMessage({ action: "PLAY_MUSIC", url: songSrc });
-      syncSettings({ songIndex: newSongIndex });
+      chrome.runtime.sendMessage({
+        action: "PLAY_MUSIC",
+        mode: musicMode,
+        next: true,
+      });
     }
   };
 
   return (
-    <div
-      className={classNames("custom-audio-player", { playing: isMusicPlaying })}
-    >
-      <StepBackwardOutlined onClick={handlePlayPrev} />
-
-      {isMusicPlaying ? (
-        <PauseCircleTwoTone
-          onClick={togglePlayPause}
-          className="pause-circle"
-        />
-      ) : (
-        <PlayCircleTwoTone onClick={togglePlayPause} />
+    <>
+      {isMusicPlaying && (
+        <>
+          <img
+            src="https://ik.imagekit.io/dnz8iqrsyc/cd.png"
+            alt="cd"
+            className="cd-icon"
+          />
+          <img
+            src="https://ik.imagekit.io/dnz8iqrsyc/music.gif"
+            alt="notes"
+            className="music-notes cd-icon"
+          />
+        </>
       )}
-
-      <StepForwardOutlined onClick={handlePlayNext} />
-    </div>
+      <div
+        className={classNames("custom-audio-player", {
+          playing: isMusicPlaying,
+        })}
+      >
+        <StepBackwardOutlined onClick={handlePlayPrev} />
+        {isMusicPlaying ? (
+          <PauseCircleTwoTone
+            onClick={togglePlayPause}
+            className="pause-circle"
+          />
+        ) : (
+          <PlayCircleTwoTone onClick={togglePlayPause} />
+        )}
+        <StepForwardOutlined onClick={handlePlayNext} />
+      </div>
+    </>
   );
 };
 

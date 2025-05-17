@@ -25,7 +25,7 @@ const CompletedTodoList = () => {
           title="Are you sure you want to delete this task?"
           okText="Yes, delete"
           onConfirm={() => {
-            dispatch(deleteTask({ id: task.id }));
+            dispatch(deleteTask({ id: task.id, categoryId: task.categoryId }));
             messageApi.open({
               type: "success",
               content: `Task ${task.text} deleted successfully!`,
