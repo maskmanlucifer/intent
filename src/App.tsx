@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import { useEffect, useState } from "react";
-import { PAGES } from "./constant";
+import { KEYBOARD_SHORTCUTS, PAGES } from "./constant";
 import "./App.scss";
 import { Button, ConfigProvider, Drawer } from "antd";
 import "./db";
@@ -37,10 +37,10 @@ function App() {
       handleSidebarCollapsed(!isSidebarCollapsed);
     };
 
-    Mousetrap.bind("e", handler);
+    Mousetrap.bind(KEYBOARD_SHORTCUTS.toggleSidebar.binding, handler);
 
     return () => {
-      Mousetrap.unbind("e");
+      Mousetrap.unbind(KEYBOARD_SHORTCUTS.toggleSidebar.binding);
     };
   }, [isSidebarCollapsed]);
 

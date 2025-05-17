@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-concat */
 import React, { useEffect } from "react";
 import Mousetrap from "mousetrap";
 import { Button, Empty, Layout, Tooltip } from "antd";
@@ -11,6 +12,7 @@ import { selectCategories } from "../../redux/categorySlice";
 import { addNewTask, selectTodoList } from "../../redux/todoSlice";
 import CompletedTodoList from "../../components/completed-todo-list";
 import { selectSettings, syncSettings } from "../../redux/sessionSlice";
+import { KEYBOARD_SHORTCUTS } from "../../constant";
 const { Sider } = Layout;
 
 const siderStyle: React.CSSProperties = {
@@ -45,10 +47,19 @@ const Todo = ({
     });
   };
 
+  const nonCompletedTodosLength = todos.filter(
+    (todo) => !todo.isCompleted,
+  ).length;
+
   const dispatch = useDispatch();
 
   const handleAddTask = () => {
-    dispatch(addNewTask({ categoryId: selectedFolder }));
+    dispatch(
+      addNewTask({
+        categoryId: selectedFolder,
+        order: nonCompletedTodosLength,
+      }),
+    );
   };
 
   useEffect(() => {
@@ -57,10 +68,10 @@ const Todo = ({
       handleAddTask();
     };
 
-    Mousetrap.bind("n", handler);
+    Mousetrap.bind(KEYBOARD_SHORTCUTS.addTask.binding, handler);
 
     return () => {
-      Mousetrap.unbind("n");
+      Mousetrap.unbind(KEYBOARD_SHORTCUTS.addTask.binding);
     };
   }, []);
 
@@ -91,8 +102,11 @@ const Todo = ({
               >
                 <Tooltip
                   arrow={false}
-                  title="Add new task (n)"
+                  title={
+                    "Add new task" + " (" + KEYBOARD_SHORTCUTS.addTask.key + ")"
+                  }
                   mouseEnterDelay={0}
+                  mouseLeaveDelay={0}
                 >
                   <Button type="primary" size="small" onClick={handleAddTask}>
                     Add new task
@@ -102,7 +116,11 @@ const Todo = ({
             </div>
           )}
           {todos.length > 0 && selectedFolder !== "completed" && (
-            <TodoList selectedFolder={selectedFolder} todos={todos} />
+            <TodoList
+              selectedFolder={selectedFolder}
+              todos={todos}
+              key={selectedFolder}
+            />
           )}
           {selectedFolder === "completed" && <CompletedTodoList />}
         </div>

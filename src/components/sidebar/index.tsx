@@ -43,6 +43,7 @@ const withTooltip = (
         placement="right"
         arrow={false}
         mouseEnterDelay={0}
+        mouseLeaveDelay={0}
       >
         {component}
       </Tooltip>
@@ -242,7 +243,12 @@ const Sidebar = ({
                       overlayClassName="folder-edit-actions-item-dropdown"
                     >
                       <span
-                        className="folder-item-action ellipsis-icon"
+                        className={classNames(
+                          "folder-item-action ellipsis-icon",
+                          {
+                            expanded: !isSidebarCollapsed,
+                          },
+                        )}
                         onClick={(e) => e.stopPropagation()}
                       >
                         <EllipsisOutlined />

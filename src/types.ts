@@ -14,6 +14,7 @@ export type Task = {
   isSubtask: boolean;
   parentId: string | null;
   categoryId: string;
+  order: number;
 };
 
 export type Subtask = {
@@ -39,22 +40,10 @@ export type TUserSettingsData = {
   isMusicPlaying: boolean;
   tabId: string;
   lastUpdatedAt: number;
-  songIndex: number;
   sendEventReminder: boolean;
   sendBreakReminder: boolean;
-  enableVisualBreakReminder: boolean;
   timezone: string | null;
   focusedTaskId: string | null;
-};
-
-export type Note = {
-  id: string;
-  title: string;
-  subtitle: string;
-  content: string;
-  createdAt: number;
-  isNewNote?: boolean;
-  updatedAt: number;
 };
 
 export type TCalendarEvent = {

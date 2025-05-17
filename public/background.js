@@ -1,4 +1,95 @@
 /* eslint-disable no-undef */
+let currentSongIndex = 0;
+
+export const SONGS = {
+  JAZZ: [
+    {
+      title: "1st",
+      src: "https://jmp.sh/FSOE9GMN",
+      index: 0,
+    },
+    {
+      title: "2nd",
+      src: "https://jmp.sh/rVqRPZBG",
+      index: 1,
+    },
+    {
+      title: "3rd",
+      src: "https://jmp.sh/Ex5TcqhC",
+      index: 2,
+    },
+  ],
+  NATURE: [
+    {
+      title: "1st",
+      src: "https://jmp.sh/zWhKM5Q2",
+      index: 0,
+    },
+    {
+      title: "3rd",
+      src: "https://jmp.sh/TB79tOSj",
+      index: 1,
+    },
+    {
+      title: "4th",
+      src: "https://jmp.sh/ZRVRNDCN",
+      index: 2,
+    },
+    {
+      title: "5th",
+      src: "https://jmp.sh/3RmO75vl",
+      index: 3,
+    },
+    {
+      title: "6th",
+      src: "https://jmp.sh/Gs7etOmw",
+      index: 4,
+    },
+    {
+      title: "7th",
+      src: "https://jmp.sh/8HGbbEO5",
+      index: 5,
+    },
+  ],
+  LO_FI: [
+    {
+      title: "1st",
+      src: "https://jmp.sh/hSDj02Ki",
+      index: 0,
+    },
+    {
+      title: "2nd",
+      src: "https://jmp.sh/fi0E4AYy",
+      index: 1,
+    },
+    {
+      title: "3rd",
+      src: "https://jmp.sh/PQGbmLPd",
+      index: 2,
+    },
+    {
+      title: "4th",
+      src: "https://jmp.sh/vZ0XgRcu",
+      index: 3,
+    },
+    {
+      title: "6th",
+      src: "https://jmp.sh/7GIBV345",
+      index: 5,
+    },
+    {
+      title: "7th",
+      src: "https://jmp.sh/rXWfm5Os",
+      index: 6,
+    },
+    {
+      title: "8th",
+      src: "https://jmp.sh/EXoucRmc",
+      index: 7,
+    },
+  ],
+};
+
 async function ensureOffscreenDocument() {
   const existingContexts = await chrome.runtime.getContexts({});
   const hasOffscreen = existingContexts.some(
@@ -181,7 +272,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 chrome.alarms.onAlarm.addListener(function (alarm) {
   if (alarm && alarm.name === "genericAlarm") {
     chrome.storage.local.get("intentSettings", (data) => {
-      if (data.intentSettings) {
+      if (data.intentSettings && data.intentSettings.sendBreakReminder) {
         chrome.storage.local.set({
           intentSettings: {
             ...data.intentSettings,
@@ -232,7 +323,23 @@ chrome.alarms.onAlarm.addListener(function (alarm) {
 chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
   if (request.action === "PLAY_MUSIC") {
     await ensureOffscreenDocument();
-    chrome.runtime.sendMessage({ action: "play", url: request.url });
+
+    if (request.prev) {
+      currentSongIndex =
+        (currentSongIndex - 1 + SONGS[request.mode].length) %
+        SONGS[request.mode].length;
+    } else if (request.next) {
+      currentSongIndex = (currentSongIndex + 1) % SONGS[request.mode].length;
+    }
+
+    let songUrl = SONGS[request.mode][currentSongIndex].src;
+
+    if (!songUrl) {
+      songUrl = SONGS[request.mode][0].src;
+      currentSongIndex = 0;
+    }
+
+    chrome.runtime.sendMessage({ action: "play", url: songUrl });
     chrome.storage.local.get("intentSettings", (data) => {
       if (data.intentSettings) {
         chrome.storage.local.set({
@@ -257,7 +364,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     });
   }
 
-  if(request.action === "resetBreakAlarm") {
+  if (request.action === "resetBreakAlarm") {
     chrome.alarms.clear("resetBreakAlarm");
   }
 

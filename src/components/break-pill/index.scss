@@ -1,5 +1,4 @@
 .break-pill {
-    position: absolute;
     font-size: 14px;
     padding: 4px 12px;
     display: flex;
@@ -11,6 +10,10 @@
     border: 1px solid #E4E7EC;
     background-color: #F9FAFB;
     color: #333333;
+
+    .checkbox {
+        margin-right: 8px;
+    }
 
     .header {
         display: flex;

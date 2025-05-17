@@ -26,39 +26,35 @@ const Break = () => {
         </div>
       </div>
       <BreakImage className="break-hero-image" />
-      <BreakPill
-        text="Take a walk"
-        inlineStyle={{
-          top: "24%",
-          left: "8%",
-          color: "#FEC84B",
-        }}
-      />
-      <BreakPill
-        text="Drink some water"
-        inlineStyle={{
-          top: "50%",
-          left: "26%",
-          color: "#9EA5D1",
-        }}
-      />
+      <div className="break-pills-container">
+        <BreakPill
+          text="Take a walk"
+          inlineStyle={{
+            top: "calc(50% - 40px)",
+            left: "26%",
+            color: "#FEC84B",
+          }}
+        />
+        <BreakPill
+          text="Drink some water"
+          inlineStyle={{
+            color: "#9EA5D1",
+          }}
+        />
 
-      <BreakPill
-        text="Do nothing"
-        inlineStyle={{
-          top: "20%",
-          left: "50%",
-          color: "#BDB4FE",
-        }}
-      />
-      <BreakPill
-        text="Have a snack"
-        inlineStyle={{
-          top: "30%",
-          left: "83%",
-          color: "#FEC84B",
-        }}
-      />
+        <BreakPill
+          text="Do nothing"
+          inlineStyle={{
+            color: "#BDB4FE",
+          }}
+        />
+        <BreakPill
+          text="Have a snack"
+          inlineStyle={{
+            color: "#FEC84B",
+          }}
+        />
+      </div>
       <BreakReschedule />
     </div>
   );

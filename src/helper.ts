@@ -2,20 +2,11 @@ import { v4 as uuidv4 } from "uuid";
 import { Category, Task } from "./types";
 import { Subtask } from "./types";
 
-export const arrayMove = <T>(array: T[], from: number, to: number): T[] => {
-  const result = Array.from(array);
-  const startIndex = from < 0 ? result.length + from : from;
-  const endIndex = to < 0 ? result.length + to : to;
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
-  return result;
-};
-
 export const createId = (): string => {
   return uuidv4();
 };
 
-export const getNewTask = (categoryId: string): Task => {
+export const getNewTask = (categoryId: string, order: number): Task => {
   return {
     id: uuidv4(),
     text: "",
@@ -24,6 +15,7 @@ export const getNewTask = (categoryId: string): Task => {
     parentId: null,
     isSubtask: false,
     categoryId,
+    order,
   };
 };
 
@@ -42,18 +34,6 @@ export const getNewSubtask = ({
     subtasks: [],
     isSubtask: true,
     categoryId: "",
-  };
-};
-
-export const createNewNote = () => {
-  return {
-    id: uuidv4(),
-    title: "",
-    subtitle: "",
-    content: "{}",
-    createdAt: new Date().getTime(),
-    isNewNote: true,
-    updatedAt: new Date().getTime(),
   };
 };
 

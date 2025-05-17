@@ -21,20 +21,23 @@ const TodoItem = ({
 }) => {
   const dispatch = useDispatch();
   const [text, setText] = useState(todoItem.text);
-
+  const [isCompleted, setIsCompleted] = useState(todoItem.isCompleted);
   const activeItem = useSelector(selectActiveTodo);
 
   const inputRef = useRef<InputRef>(null);
 
   const handleCheckboxChange = (e: CheckboxChangeEvent) => {
     e.stopPropagation();
-    dispatch(
-      toggleTaskState({
-        id: todoItem.id,
-        isSubtask: todoItem.isSubtask,
-        parentId: todoItem.parentId,
-      }),
-    );
+    setTimeout(() => {
+      dispatch(
+        toggleTaskState({
+          id: todoItem.id,
+          isSubtask: todoItem.isSubtask,
+          parentId: todoItem.parentId,
+          categoryId: todoItem.categoryId,
+        }),
+      );
+    }, 350);
   };
 
   useEffect(() => {
@@ -48,8 +51,11 @@ const TodoItem = ({
     <div className="todo-item">
       <Checkbox
         onChange={handleCheckboxChange}
-        onClick={(event) => event.stopPropagation()}
-        checked={todoItem.isCompleted}
+        onClick={(event) => {
+          event.stopPropagation();
+          setIsCompleted(!isCompleted);
+        }}
+        checked={isCompleted}
       />
       <Input
         onChange={(e) => {
@@ -59,6 +65,7 @@ const TodoItem = ({
               text: e.target.value,
               parentId: todoItem.parentId,
               isSubtask: todoItem.isSubtask,
+              categoryId: todoItem.categoryId,
             }),
           );
           setText(e.target.value);
@@ -77,6 +84,7 @@ const TodoItem = ({
                 id: todoItem.id,
                 isSubtask: todoItem.isSubtask,
                 parentId: todoItem.parentId,
+                categoryId: todoItem.categoryId,
               }),
             );
             return;
@@ -87,9 +95,20 @@ const TodoItem = ({
             event.preventDefault();
 
             if (todoItem.isSubtask) {
-              dispatch(addNewSubtask({ parentId: todoItem.parentId, index }));
+              dispatch(
+                addNewSubtask({
+                  parentId: todoItem.parentId,
+                  index,
+                  categoryId: todoItem.categoryId,
+                }),
+              );
             } else {
-              dispatch(addNewTask({ categoryId: todoItem.categoryId }));
+              dispatch(
+                addNewTask({
+                  categoryId: todoItem.categoryId,
+                  order: index + 1,
+                }),
+              );
             }
           }
 
@@ -98,12 +117,21 @@ const TodoItem = ({
               event.stopPropagation();
               event.preventDefault();
               dispatch(
-                deleteSubtask({ id: todoItem.id, parentId: todoItem.parentId }),
+                deleteSubtask({
+                  id: todoItem.id,
+                  parentId: todoItem.parentId,
+                  categoryId: todoItem.categoryId,
+                }),
               );
             } else if (todoItem.subtasks.length === 0) {
               event.stopPropagation();
               event.preventDefault();
-              dispatch(deleteTask({ id: todoItem.id }));
+              dispatch(
+                deleteTask({
+                  id: todoItem.id,
+                  categoryId: todoItem.categoryId,
+                }),
+              );
             }
           }
         }}

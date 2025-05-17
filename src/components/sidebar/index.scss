@@ -45,11 +45,11 @@
             }
         }
 
-        &:hover, &.selected  {
-            .folder-item-actions {
-                display: flex;
-            }
-        }
+        // &:hover, &.selected  {
+        //     .folder-item-actions {
+        //         display: flex;
+        //     }
+        // }
 
         .folder-item-name {
             text-overflow: ellipsis;
@@ -59,8 +59,20 @@
 
         .folder-item-actions {
             margin-left: auto;
-            display: none;
+            display: flex;
             gap: 4px;
+
+            .folder-item-action {
+                padding: 2px;
+                background-color: rgba(0, 0, 0, 0.02);
+                border-radius: 2px;
+            }
+
+            &:hover {
+                .folder-item-action {
+                    background-color: rgba(0, 0, 0, 0.08);
+                }
+            }
 
             svg {
                 fill: var(--blue-800);
