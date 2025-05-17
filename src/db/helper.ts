@@ -7,6 +7,14 @@ class DBHelper {
 
   async init() {
     this.db = await openDB();
+
+    if (chrome && chrome.runtime) {
+      chrome.runtime.onMessage.addListener((message) => {
+        if (message.type === "TODOS_MIGRATED") {
+          window.location.reload();
+        }
+      });
+    }
   }
 
   async getTodos() {

@@ -92,12 +92,10 @@ const Topbar = ({
               autoAdjustOverflow={true}
               placement="bottom"
               title={
-                (!isSidebarCollapsed
-                  ? "Collapse sidebar"
-                  : "Expand sidebar") +
-                    " (" +
-                    KEYBOARD_SHORTCUTS.toggleSidebar.key +
-                    ")"
+                (!isSidebarCollapsed ? "Collapse sidebar" : "Expand sidebar") +
+                " (" +
+                KEYBOARD_SHORTCUTS.toggleSidebar.key +
+                ")"
               }
               mouseEnterDelay={0}
               mouseLeaveDelay={0}

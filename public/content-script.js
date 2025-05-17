@@ -98,7 +98,10 @@ const handleEndBreak = () => {
 
   const workingHourEnd = endTime.getTime();
 
-  if ((currentEpoch + breakDuration <= workingHourEnd) && data.intentSettings.sendBreakReminder) {
+  if (
+    currentEpoch + breakDuration <= workingHourEnd &&
+    data.intentSettings.sendBreakReminder
+  ) {
     chrome.runtime.sendMessage({
       action: "setAlarm",
       delayInMinutes: (currentEpoch + breakDuration - Date.now()) / 60000,

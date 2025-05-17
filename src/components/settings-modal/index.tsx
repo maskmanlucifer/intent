@@ -258,7 +258,7 @@ const SettingsModal = ({
                     className="setting-description"
                     style={{ fontSize: "14px" }}
                   >
-                    Enable this to receive break reminder notifications <br/>
+                    Enable this to receive break reminder notifications <br />
                     Note: Your page will be greyed out during break reminders.
                   </Text>
                 </div>

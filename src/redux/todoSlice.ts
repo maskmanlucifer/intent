@@ -297,9 +297,8 @@ const todoSlice = createSlice({
         (task) => task.id !== id,
       );
 
-      state.itemsByCategory[sourceCategoryId] = reorderTasksInCategory(
-        updatedSourceTasks,
-      );
+      state.itemsByCategory[sourceCategoryId] =
+        reorderTasksInCategory(updatedSourceTasks);
 
       const updatedTask = { ...taskToMove, categoryId: destinationCategoryId };
 
