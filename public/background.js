@@ -463,10 +463,19 @@ const handleMigration = async () => {
 
     for (const categoryId in categoryBasedTasks) {
       const tasks = categoryBasedTasks[categoryId];
-      const tasksWithOrder = tasks.map((task, index) => ({
-        ...task,
-        order: index,
-      }));
+
+      const nonCompletedTasks = tasks.filter(task => !task.isCompleted);
+      const completedTasks = tasks.filter(task => task.isCompleted);
+      const tasksWithOrder = [
+        ...nonCompletedTasks.map((task, index) => ({
+          ...task,
+          order: index,
+        })),
+        ...completedTasks.map((task, index) => ({
+          ...task,
+          order: nonCompletedTasks.length + index,
+        })),
+      ];
 
       for (const task of tasksWithOrder) {
         store.put(task);
