@@ -71,7 +71,15 @@ const Linkboard = () => {
               }
               <div className="link-details">
                 {link.title && <h2>{link.title}</h2>}
-                {link.url && <span>{link.url}</span>}
+                {link.url && (
+                  <div className="link-url">
+                    <img
+                      src={`https://www.google.com/s2/favicons?domain=${new URL(link.url).hostname}`}
+                      alt="favicon"
+                    />{" "}
+                    {link.url}
+                  </div>
+                )}
                 <Popconfirm
                   icon={<InfoCircleOutlined style={{ color: "#155dfc" }} />}
                   title="Remove url from linkboard"
