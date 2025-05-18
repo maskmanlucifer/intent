@@ -18,7 +18,7 @@ import Break from "./pages/break";
 import CustomAudioPlayer from "./components/custom-audio-player";
 import SettingsModal from "./components/settings-modal";
 import Linkboard from "./components/linkboard";
-import { MehOutlined } from "@ant-design/icons";
+import { CloseOutlined, MehOutlined } from "@ant-design/icons";
 import { ReactComponent as CloseIcon } from "./assets/icons/close.svg";
 import Mousetrap from "mousetrap";
 
@@ -156,6 +156,13 @@ function App() {
                     Import calendar
                   </Button>
                 )}
+                <Button
+                  icon={<CloseOutlined />}
+                  type="default"
+                  onClick={() => setIsDrawerOpen(false)}
+                  size="small"
+                  style={{ marginLeft: !settings.icalUrl ? "8px" : "auto" }}
+                />
               </div>
             }
           >

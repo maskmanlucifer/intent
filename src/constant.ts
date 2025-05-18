@@ -115,6 +115,11 @@ export const KEYBOARD_SHORTCUTS = {
     description: "Show shortcut guide",
     binding: "?",
   },
+  music: {
+    key: "Space",
+    description: "Play/Pause music",
+    binding: "space",
+  },
 };
 
 export const BREAK_TIME_DURATIONS = [5, 10, 20, 30];

@@ -430,6 +430,14 @@ const SettingsModal = ({
                       onChange={handleShowMusicWidgetChange}
                     />
                   </div>
+                  <Text
+                    type="secondary"
+                    className="setting-description"
+                    style={{ fontSize: "14px" }}
+                  >
+                    Music player will be added to the bottom right corner of the
+                    page.
+                  </Text>
                 </div>
                 <div className="setting-item">
                   <Text

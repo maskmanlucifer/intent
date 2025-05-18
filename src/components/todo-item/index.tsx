@@ -98,7 +98,7 @@ const TodoItem = ({
               dispatch(
                 addNewSubtask({
                   parentId: todoItem.parentId,
-                  index,
+                  index: index + 1,
                   categoryId: todoItem.categoryId,
                 }),
               );

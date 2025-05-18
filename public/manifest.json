@@ -22,13 +22,7 @@
       "js": ["content-script.js"]
     }
   ],
-  "host_permissions": [
-    "https://ia801207.us.archive.org/*",
-    "https://ia801008.us.archive.org/*",
-    "https://ia803000.us.archive.org/*",
-    "https://dn720300.ca.archive.org/*",
-    "https://stream.chillhop.com/*"
-  ],
+  "host_permissions": ["https://res.cloudinary.com/*"],
   "icons": {
     "16": "logo32.png",
     "32": "logo32.png",

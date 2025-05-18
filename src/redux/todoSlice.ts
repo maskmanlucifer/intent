@@ -229,15 +229,16 @@ const todoSlice = createSlice({
       dbHelper.upsertTasks(tasksToSave);
     },
     addNewSubtask: (state, action) => {
-      const { parentId, index = -1, categoryId } = action.payload;
-      const newSubtask = getNewSubtask({ parentId });
+      const { parentId, index, categoryId } = action.payload;
+
+      const newSubtask = getNewSubtask({ parentId, categoryId });
       let parentFinalTodo = undefined;
       const categoryTasks = state.itemsByCategory[categoryId] || [];
 
       state.itemsByCategory[categoryId] = categoryTasks.map((todo) => {
         if (todo.id === parentId) {
           const newSubtasks = [...todo.subtasks];
-          const insertIndex = index >= 0 ? index + 1 : 0;
+          const insertIndex = index >= 0 ? index : 0;
           newSubtasks.splice(insertIndex, 0, newSubtask);
           parentFinalTodo = { ...todo, subtasks: newSubtasks };
           return parentFinalTodo;
