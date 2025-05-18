@@ -247,7 +247,7 @@ const TodoList = ({
       )}{" "}
       {finalTodos.length > 0 && (
         <Collapse
-          defaultActiveKey={focusedTaskId ? [focusedTaskId] : []}
+          defaultActiveKey={focusedTaskId ? [focusedTaskId + "-" + selectedFolder] : []}
           expandIconPosition={"start"}
           className={classNames("todo-list-collapse", {
             dragging: isDragging,

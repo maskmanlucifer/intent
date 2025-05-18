@@ -107,6 +107,7 @@ const Todo = ({
                   }
                   mouseEnterDelay={0}
                   mouseLeaveDelay={0}
+                  placement="bottom"
                 >
                   <Button type="primary" size="small" onClick={handleAddTask}>
                     Add new task

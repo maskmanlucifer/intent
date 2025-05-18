@@ -22,9 +22,11 @@ export const getNewTask = (categoryId: string, order: number): Task => {
 export const getNewSubtask = ({
   parentId,
   text = "",
+  categoryId,
 }: {
   parentId: string;
   text?: string;
+  categoryId: string;
 }): Subtask => {
   return {
     id: uuidv4(),
@@ -33,7 +35,7 @@ export const getNewSubtask = ({
     parentId,
     subtasks: [],
     isSubtask: true,
-    categoryId: "",
+    categoryId,
   };
 };
 

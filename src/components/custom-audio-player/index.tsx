@@ -10,6 +10,9 @@ import {
   StepBackwardOutlined,
   StepForwardOutlined,
 } from "@ant-design/icons";
+import { useEffect } from "react";
+import Mousetrap from "mousetrap";
+import { KEYBOARD_SHORTCUTS } from "../../constant";
 
 const CustomAudioPlayer = () => {
   const { isMusicPlaying } = useSelector(selectSettings);
@@ -22,6 +25,14 @@ const CustomAudioPlayer = () => {
       mode: musicMode,
     });
   };
+
+  useEffect(() => {
+    Mousetrap.bind(KEYBOARD_SHORTCUTS.music.binding, togglePlayPause);
+
+    return () => {
+      Mousetrap.unbind(KEYBOARD_SHORTCUTS.music.binding);
+    };
+  }, [isMusicPlaying, musicMode]);
 
   const handlePlayPrev = () => {
     if (isMusicPlaying && chrome.runtime) {
@@ -50,12 +61,16 @@ const CustomAudioPlayer = () => {
           <img
             src="https://ik.imagekit.io/dnz8iqrsyc/cd.png"
             alt="cd"
-            className="cd-icon"
+            className={classNames("cd-icon", {
+              playing: isMusicPlaying,
+            })}
           />
           <img
             src="https://ik.imagekit.io/dnz8iqrsyc/music.gif"
             alt="notes"
-            className="music-notes cd-icon"
+            className={classNames("music-notes cd-icon", {
+              playing: isMusicPlaying,
+            })}
           />
         </>
       )}

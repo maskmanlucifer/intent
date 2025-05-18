@@ -1,94 +1,113 @@
 /* eslint-disable no-undef */
 let currentSongIndex = 0;
 
-export const SONGS = {
+const SONGS = {
   JAZZ: [
     {
       title: "1st",
-      src: "https://jmp.sh/FSOE9GMN",
+      src: "https://res.cloudinary.com/da3skwxam/video/upload/v1747524663/jazz_3_adiz8p.mp3",
       index: 0,
     },
     {
       title: "2nd",
-      src: "https://jmp.sh/rVqRPZBG",
+      src: "https://res.cloudinary.com/da3skwxam/video/upload/v1747524651/jazz_1_clrjdy.mp3",
       index: 1,
     },
     {
       title: "3rd",
-      src: "https://jmp.sh/Ex5TcqhC",
+      src: "https://res.cloudinary.com/da3skwxam/video/upload/v1747524622/jazz_2_tbjix0.mp3",
       index: 2,
     },
   ],
   NATURE: [
     {
       title: "1st",
-      src: "https://jmp.sh/zWhKM5Q2",
+      src: "https://res.cloudinary.com/da3skwxam/video/upload/v1747524627/nature_4_tvqqxw.mp3",
       index: 0,
     },
     {
       title: "3rd",
-      src: "https://jmp.sh/TB79tOSj",
+      src: "https://res.cloudinary.com/da3skwxam/video/upload/v1747524630/nature_3_bihpq4.mp3",
       index: 1,
     },
     {
       title: "4th",
-      src: "https://jmp.sh/ZRVRNDCN",
+      src: "https://res.cloudinary.com/da3skwxam/video/upload/v1747524634/nature_5_ycsdcv.m4a",
       index: 2,
     },
     {
       title: "5th",
-      src: "https://jmp.sh/3RmO75vl",
+      src: "https://res.cloudinary.com/da3skwxam/video/upload/v1747524623/nature_1_dimvbo.mp3",
       index: 3,
     },
     {
       title: "6th",
-      src: "https://jmp.sh/Gs7etOmw",
+      src: "https://res.cloudinary.com/da3skwxam/video/upload/v1747524622/nature_2_iywern.mp3",
       index: 4,
-    },
-    {
-      title: "7th",
-      src: "https://jmp.sh/8HGbbEO5",
-      index: 5,
     },
   ],
   LO_FI: [
     {
       title: "1st",
-      src: "https://jmp.sh/hSDj02Ki",
+      src: "https://res.cloudinary.com/da3skwxam/video/upload/v1747524572/lo_fi_4_vvrkoh.mp3",
       index: 0,
     },
     {
       title: "2nd",
-      src: "https://jmp.sh/fi0E4AYy",
+      src: "https://res.cloudinary.com/da3skwxam/video/upload/v1747524574/lo_fi_1_hzenyj.mp3",
       index: 1,
     },
     {
       title: "3rd",
-      src: "https://jmp.sh/PQGbmLPd",
+      src: "https://res.cloudinary.com/da3skwxam/video/upload/v1747524580/lo_fi_8_otxntl.mp3",
       index: 2,
     },
     {
       title: "4th",
-      src: "https://jmp.sh/vZ0XgRcu",
+      src: "https://res.cloudinary.com/da3skwxam/video/upload/v1747524581/lo_fi_7_bphfet.mp3",
       index: 3,
     },
     {
       title: "6th",
-      src: "https://jmp.sh/7GIBV345",
+      src: "https://res.cloudinary.com/da3skwxam/video/upload/v1747524582/lo_fi_2_vw6duv.mp3",
       index: 5,
     },
     {
       title: "7th",
-      src: "https://jmp.sh/rXWfm5Os",
+      src: "https://res.cloudinary.com/da3skwxam/video/upload/v1747524582/lo_fi_6_tamhgb.mp3",
       index: 6,
     },
     {
       title: "8th",
-      src: "https://jmp.sh/EXoucRmc",
+      src: "https://res.cloudinary.com/da3skwxam/video/upload/v1747524614/lo_fi_5_hipdag.mp3",
       index: 7,
+    },
+    {
+      title: "9th",
+      src: "https://res.cloudinary.com/da3skwxam/video/upload/v1747524571/lo_fi_3_lzzhi3.mp3",
+      index: 8,
     },
   ],
 };
+
+chrome.windows.onRemoved.addListener(() => {
+  chrome.windows.getAll({}, (windows) => {
+    if (windows.length === 0) {
+      chrome.runtime.sendMessage({ action: "pause" });
+      chrome.storage.local.get("intentSettings", (data) => {
+        if (data.intentSettings) {
+          chrome.storage.local.set({
+            intentSettings: {
+              ...data.intentSettings,
+              isMusicPlaying: false,
+              lastUpdatedAt: Date.now(),
+            },
+          });
+        }
+      });
+    }
+  });
+});
 
 async function ensureOffscreenDocument() {
   const existingContexts = await chrome.runtime.getContexts({});
@@ -464,8 +483,8 @@ const handleMigration = async () => {
     for (const categoryId in categoryBasedTasks) {
       const tasks = categoryBasedTasks[categoryId];
 
-      const nonCompletedTasks = tasks.filter(task => !task.isCompleted);
-      const completedTasks = tasks.filter(task => task.isCompleted);
+      const nonCompletedTasks = tasks.filter((task) => !task.isCompleted);
+      const completedTasks = tasks.filter((task) => task.isCompleted);
       const tasksWithOrder = [
         ...nonCompletedTasks.map((task, index) => ({
           ...task,
