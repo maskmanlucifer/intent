@@ -70,10 +70,17 @@
             overflow-wrap: break-word;
         }
 
-        span {
+        .link-url {
             color: rgba(0, 0, 0, 0.4);
             font-size: 14px;
             font-weight: 400;
+            display: flex;
+            gap: 4px;
+
+            img {
+                height: 16px;
+                width: 16px;
+            }
         }
 
         img {
