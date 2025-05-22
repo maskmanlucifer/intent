@@ -166,7 +166,7 @@ const SettingsModal = ({
                     className="setting-title"
                     style={{ fontSize: "16px" }}
                   >
-                    Working Hours
+                    Set working hours
                   </Text>
                   <Text
                     type="secondary"
@@ -212,12 +212,33 @@ const SettingsModal = ({
                   </div>
                 </div>
                 <div className="setting-item">
+                  <div className="toggle-container">
+                    <Text style={{ fontSize: "16px" }} strong>
+                      {" "}
+                      Get break reminders
+                    </Text>{" "}
+                    <Switch
+                      size="small"
+                      checked={settings.sendBreakReminder}
+                      onChange={handleBreakReminderChange}
+                    />
+                  </div>
+                  <Text
+                    type="secondary"
+                    className="setting-description"
+                    style={{ fontSize: "14px" }}
+                  >
+                    Enable this to receive break reminder notifications <br />
+                    <b>Note:</b> Your page will be greyed out during break reminders.
+                  </Text>
+                </div>
+                {settings.sendBreakReminder && <div className="setting-item">
                   <Text
                     strong
                     className="setting-title"
                     style={{ fontSize: "16px" }}
                   >
-                    Break Interval
+                    Set break interval
                   </Text>
                   <Text
                     type="secondary"
@@ -240,28 +261,7 @@ const SettingsModal = ({
                       handleBreakIntervalChange(value);
                     }}
                   />
-                </div>
-                <div className="setting-item">
-                  <div className="toggle-container">
-                    <Text style={{ fontSize: "16px" }} strong>
-                      {" "}
-                      Get break reminders
-                    </Text>{" "}
-                    <Switch
-                      size="small"
-                      checked={settings.sendBreakReminder}
-                      onChange={handleBreakReminderChange}
-                    />
-                  </div>
-                  <Text
-                    type="secondary"
-                    className="setting-description"
-                    style={{ fontSize: "14px" }}
-                  >
-                    Enable this to receive break reminder notifications <br />
-                    Note: Your page will be greyed out during break reminders.
-                  </Text>
-                </div>
+                </div>}
               </div>
             </div>
           )}
@@ -275,7 +275,7 @@ const SettingsModal = ({
                     className="setting-title"
                     style={{ fontSize: "16px" }}
                   >
-                    Premium Plan
+                    Premium plan
                   </Text>
                   <Text
                     type="secondary"
@@ -296,34 +296,8 @@ const SettingsModal = ({
                   <div className="toggle-container">
                     <Text style={{ fontSize: "16px" }} strong>
                       {" "}
-                      Event Reminder Notifications
+                      Set time zone
                     </Text>{" "}
-                    <Switch
-                      size="small"
-                      checked={settings.sendEventReminder}
-                      onChange={handleEventReminderChange}
-                    />
-                  </div>
-                  <Text
-                    type="secondary"
-                    className="setting-description"
-                    style={{ fontSize: "14px" }}
-                  >
-                    Enable this to receive reminders for upcoming calendar
-                    events while browsing your current page.
-                  </Text>
-                </div>
-                <div className="setting-item">
-                  <div className="toggle-container">
-                    <Text style={{ fontSize: "16px" }} strong>
-                      {" "}
-                      Set Time Zone
-                    </Text>{" "}
-                    <Switch
-                      size="small"
-                      checked={settings.sendEventReminder}
-                      onChange={handleEventReminderChange}
-                    />
                   </div>
                   <Text
                     type="secondary"
@@ -382,7 +356,7 @@ const SettingsModal = ({
                         );
                       }}
                     >
-                      Import Calendar
+                      Import calendar
                     </Button>
                     <Popconfirm
                       title="Are you sure you want to remove this calendar?"
@@ -412,6 +386,27 @@ const SettingsModal = ({
                     type="info"
                   />
                 </div>
+                <div className="setting-item">
+                  <div className="toggle-container">
+                    <Text style={{ fontSize: "16px" }} strong>
+                      {" "}
+                      Get event reminders
+                    </Text>{" "}
+                    <Switch
+                      size="small"
+                      checked={settings.sendEventReminder}
+                      onChange={handleEventReminderChange}
+                    />
+                  </div>
+                  <Text
+                    type="secondary"
+                    className="setting-description"
+                    style={{ fontSize: "14px" }}
+                  >
+                    Enable this to receive reminders for upcoming calendar
+                    events while browsing your current page.
+                  </Text>
+                </div>
               </div>
             </div>
           )}
@@ -439,13 +434,13 @@ const SettingsModal = ({
                     page.
                   </Text>
                 </div>
-                <div className="setting-item">
+                {showMusicWidget && <div className="setting-item">
                   <Text
                     strong
                     className="setting-title"
                     style={{ fontSize: "16px" }}
                   >
-                    Music Mode
+                    Set music mode
                   </Text>
                   <Text
                     type="secondary"
@@ -479,7 +474,7 @@ const SettingsModal = ({
                       ]}
                     />
                   </div>
-                </div>
+                </div>}
               </div>
             </div>
           )}
