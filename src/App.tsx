@@ -65,7 +65,7 @@ function App() {
           isFeatureIntroSeen: true,
         });
       }
-    }, 5000);
+    }, 3000);
     return () => clearTimeout(timeout);
   }, [settings.isFeatureIntroSeen]);
 
