@@ -22,6 +22,7 @@ import { CloseOutlined, MehOutlined } from "@ant-design/icons";
 import { ReactComponent as CloseIcon } from "./assets/icons/close.svg";
 import Mousetrap from "mousetrap";
 import ReminderNotifications from "./components/reminder-notifications";
+import FeatureIntroModal from "./components/feature-intro";
 
 function App() {
   const activePage = useSelector(selectActivePage);
@@ -31,6 +32,7 @@ function App() {
   const isSidebarCollapsed = useSelector(selectIsSidebarCollapsed);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [isWhatsNewModalOpen, setIsWhatsNewModalOpen] = useState(false);
+  const [isFeatureIntroModalOpen, setIsFeatureIntroModalOpen] = useState(false);
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -51,6 +53,22 @@ function App() {
     });
   };
 
+  useEffect(() => {
+    if (settings.isFeatureIntroSeen) {
+      return;
+    }
+
+    const timeout = setTimeout(() => {
+      if (!settings.isFeatureIntroSeen) {
+        setIsFeatureIntroModalOpen(true);
+        syncSettings({
+          isFeatureIntroSeen: true,
+        });
+      }
+    }, 5000);
+    return () => clearTimeout(timeout);
+  }, [settings.isFeatureIntroSeen]);
+
   return (
     <ConfigProvider
       theme={{
@@ -68,7 +86,7 @@ function App() {
       }}
     >
       <div className="App">
-        <ReminderNotifications />
+        {activePage === PAGES.TODO && <ReminderNotifications />}
         {activePage !== PAGES.BREAK && (
           <Topbar
             isSidebarCollapsed={isSidebarCollapsed}
@@ -188,6 +206,9 @@ function App() {
             </video>
           </div>
         )}
+        <FeatureIntroModal visible={isFeatureIntroModalOpen} onClose={() => {
+          setIsFeatureIntroModalOpen(false);
+        }} />
       </div>
     </ConfigProvider>
   );
