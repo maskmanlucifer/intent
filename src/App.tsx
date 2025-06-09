@@ -21,6 +21,7 @@ import Linkboard from "./components/linkboard";
 import { CloseOutlined, MehOutlined } from "@ant-design/icons";
 import { ReactComponent as CloseIcon } from "./assets/icons/close.svg";
 import Mousetrap from "mousetrap";
+import ReminderNotifications from "./components/reminder-notifications";
 
 function App() {
   const activePage = useSelector(selectActivePage);
@@ -67,6 +68,7 @@ function App() {
       }}
     >
       <div className="App">
+        <ReminderNotifications />
         {activePage !== PAGES.BREAK && (
           <Topbar
             isSidebarCollapsed={isSidebarCollapsed}

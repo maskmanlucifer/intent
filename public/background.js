@@ -1,4 +1,5 @@
 /* eslint-disable no-undef */
+import { addToActiveReminders, putReminderToIDB, removeReminderFromIDB, scheduleReminder, getReminderDataFromIDB, checkDailyEvents } from './reminder-events.js';
 let currentSongIndex = 0;
 
 const SONGS = {
@@ -288,7 +289,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     });
 });
 
-chrome.alarms.onAlarm.addListener(function (alarm) {
+chrome.alarms.onAlarm.addListener((alarm) => {
   if (alarm && alarm.name === "genericAlarm") {
     chrome.storage.local.get("intentSettings", (data) => {
       if (data.intentSettings && data.intentSettings.sendBreakReminder) {
@@ -335,6 +336,30 @@ chrome.alarms.onAlarm.addListener(function (alarm) {
               event: { id: eventId, title: event.title, start: event.start },
             });
           }
+        });
+      }
+    });
+  }
+
+  // Handle reminder notifications
+  if (alarm.name.startsWith('reminder:')) {
+    const reminderId = alarm.name.split(':')[1];
+
+    chrome.storage.local.get('intentSettings', async (data) => {
+      if (data.intentSettings) {
+        const reminder = await getReminderDataFromIDB(reminderId);
+      
+        if(!reminder) {
+          return;
+        }
+
+          // Add to active reminders
+          await addToActiveReminders({
+            id: reminderId,
+            title: reminder.title,
+            description: reminder.description,
+            date: reminder.date,
+            time: reminder.time,
         });
       }
     });
@@ -404,20 +429,59 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     });
   }
 
-  sendResponse({ success: true });
+  if(request.action === "ADD_REMINDER") {
+    const { reminder } = request;
+    try {
+      await putReminderToIDB(reminder);
+      scheduleReminder(reminder);
+    } catch (error) {
+      console.error("Failed to add reminder:", error);
+    }
+  }
+
+  if(request.action === "REMOVE_REMINDER") {
+    const { reminderId } = request;
+    await removeReminderFromIDB(reminderId);
+    chrome.alarms.clear(`reminder:${reminderId}`);
+  }
+
+  if(request.action === "SCHEDULE_REMINDERS") {
+    try {
+      // Clear previous reminders
+      chrome.storage.local.get('intentSettings', async (data) => {
+        if (data.intentSettings) {
+          chrome.storage.local.set({
+            intentSettings: {
+              ...data.intentSettings,
+              activeReminders: [],
+              lastUpdatedAt: Date.now()
+            }
+          });
+        }
+      });
+      await checkDailyEvents();
+    } catch (error) {
+      console.error("Failed to schedule reminders:", error);
+    }
+  }
 });
 
 const openDB = () => {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open("intent", 3);
+    const request = indexedDB.open("intent", 4);
 
     request.onupgradeneeded = (event) => {
       const db = event.target.result;
       if (!db.objectStoreNames.contains("calendarEvents")) {
         db.createObjectStore("calendarEvents", { keyPath: "id" });
       }
+
       if (!db.objectStoreNames.contains("linkboard")) {
         db.createObjectStore("linkboard", { keyPath: "id" });
+      }
+
+      if (!db.objectStoreNames.contains("reminders")) {
+        db.createObjectStore("reminders", { keyPath: "id" });
       }
     };
 

@@ -33,10 +33,10 @@
 
         .delete-card-btn {
             position: absolute;
-            top: 8px;
-            left: 8px;
-            height: 30px;
-            width: 30px;
+            bottom: 8px;
+            right: 8px;
+            height: 24px;
+            width: 24px;
             cursor: pointer;
             border-radius: 50%;
             background: black;
@@ -65,9 +65,23 @@
         .link-details {
             padding: 8px;
             display: flex;
-            flex-direction: column;
-            gap: 4px;
+            gap: 6px;
             overflow-wrap: break-word;
+            align-items: center;
+
+            .link-title {
+                font-size: 16px;
+                max-width: 35%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                font-weight: 500;
+            }
+        }
+
+        .favicon {
+            height: 16px;
+            width: 16px;
         }
 
         .link-url {

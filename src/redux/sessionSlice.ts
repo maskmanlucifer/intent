@@ -61,6 +61,7 @@ const initialState: TUserSettingsData = {
   sendEventReminder: true,
   timezone: null,
   focusedTaskId: null,
+  activeReminders: [],
 };
 
 const sessionSlice = createSlice({
@@ -86,6 +87,8 @@ export const selectShowMusicWidget = (state: RootState) =>
   state.session.showCustomAudioPlayer;
 export const selectTabId = (state: RootState) => state.session.tabId;
 export const selectSettings = (state: RootState) => state.session;
+export const selectActiveReminders = (state: RootState) =>
+  state.session.activeReminders;
 export const selectIsSidebarCollapsed = (state: RootState) =>
   state.session.sidebarCollapsed;
 export const selectSendEventReminder = (state: RootState) =>

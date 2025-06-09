@@ -1,11 +1,12 @@
 {
   "manifest_version": 3,
   "name": "Intent",
-  "version": "2.6",
+  "version": "2.7",
   "description": "Your All-in-One Productivity Hub",
   "permissions": ["storage", "alarms", "offscreen", "tabs", "contextMenus"],
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "type": "module"
   },
   "action": {
     "default_title": "Intent",

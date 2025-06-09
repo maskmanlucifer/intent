@@ -6,6 +6,7 @@ import categoryReducer from "./categorySlice";
 import sessionReducer from "./sessionSlice";
 import eventsReducer from "./eventsSlice";
 import linkboardReducer from "./linkboardSlice";
+import reminderReducer from "./reminderSlice";
 
 const rootReducer = combineReducers({
   todos: todoReducer,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   session: sessionReducer,
   events: eventsReducer,
   linkboard: linkboardReducer,
+  reminders: reminderReducer,
 });
 
 export const store = configureStore({

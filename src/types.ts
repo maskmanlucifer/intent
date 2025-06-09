@@ -44,6 +44,7 @@ export type TUserSettingsData = {
   sendBreakReminder: boolean;
   timezone: string | null;
   focusedTaskId: string | null;
+  activeReminders: TReminderEvent[];
 };
 
 export type TCalendarEvent = {
@@ -53,6 +54,21 @@ export type TCalendarEvent = {
   start: number;
   end: number;
   description: string;
+};
+
+export type TReminderEvent = {
+  id: string;
+  title: string;
+  description?: string;
+  date: string; // e.g., "2025-05-30"
+  time: string; // e.g., "14:30"
+  // Optional timezone info for correct local display
+  timeZone?: string; // e.g., "Asia/Kolkata"
+  // Recurrence config
+  isRecurring: boolean;
+  repeatRule?: string;
+  repeatOn?: number[];
+  updatedAt: number;
 };
 
 export type TLink = {
