@@ -8,17 +8,23 @@ function getDaysInMonth(date) {
 function isReminderDueToday(reminder, now = new Date()) {
   if (!reminder) return false;
 
-  const { date, isRecurring, repeatRule, repeatOn = [] } = reminder;
+  const { date, isRecurring, repeatRule, repeatOn = [], timeZone } = reminder;
 
-  const todayStr = now.toISOString().split("T")[0];
+  // Convert current time to the reminder's timezone
+  const nowInReminderTZ = timeZone ? 
+    new Date(now.toLocaleString("en-US", { timeZone })) : 
+    now;
+
+  // Get today's date string in the reminder's timezone
+  const todayStr = nowInReminderTZ.toISOString().split("T")[0];
   const todayDate = new Date(todayStr);
   const startDate = new Date(date);
 
   // If reminder starts in future, don't trigger
   if (startDate > todayDate) return false;
 
-  const dayOfWeek = now.getDay();
-  const dayOfMonth = now.getDate();
+  const dayOfWeek = nowInReminderTZ.getDay();
+  const dayOfMonth = nowInReminderTZ.getDate();
 
   if (!isRecurring) {
     return date === todayStr;
@@ -35,7 +41,7 @@ function isReminderDueToday(reminder, now = new Date()) {
 
     case "monthly": {
       const scheduledDayOfMonth = startDate.getDate();
-      const daysInMonth = getDaysInMonth(now);
+      const daysInMonth = getDaysInMonth(nowInReminderTZ);
       return (
         scheduledDayOfMonth === dayOfMonth && scheduledDayOfMonth <= daysInMonth
       );
