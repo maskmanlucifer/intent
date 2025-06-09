@@ -69,24 +69,29 @@ const handleBreakPostpone = (minutes) => {
   }
 };
 
-const handleEndBreak = () => {
+const handleEndBreak = async () => {
   chrome.runtime.sendMessage({ action: "resetBreakAlarm" });
-  chrome.storage.local.get("intentSettings", (data) => {
-    if (data.intentSettings) {
-      chrome.storage.local.set({
-        intentSettings: {
-          ...data.intentSettings,
-          activePage: "Todo",
-          lastUpdatedAt: Date.now(),
-        },
-      });
-    }
+
+  const data = await chrome.storage.local.get("intentSettings");
+
+  if (!data || !data.intentSettings) {
+    return;
+  }
+
+  chrome.storage.local.set({
+    intentSettings: {
+      ...data.intentSettings,
+      activePage: "Todo",
+      lastUpdatedAt: Date.now(),
+    },
   });
+
+  const { breakInterval = 90, workingHours = ["09:00", "17:00"] } = data.intentSettings;
 
   const now = new Date();
   const currentEpoch = now.getTime();
-  const breakDuration = data.intentSettings.breakInterval * 60 * 1000;
-  const endHour = data.intentSettings.workingHours[1];
+  const breakDuration = breakInterval * 60 * 1000;
+  const endHour = workingHours[1];
   const endTime = new Date();
 
   endTime.setHours(
