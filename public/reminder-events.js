@@ -10,15 +10,30 @@ function isReminderDueToday(reminder, now = new Date()) {
 
   const { date, isRecurring, repeatRule, repeatOn = [], timeZone } = reminder;
 
-  // Convert current time to the reminder's timezone
-  const nowInReminderTZ = timeZone ? 
-    new Date(now.toLocaleString("en-US", { timeZone })) : 
-    now;
+  // Convert to reminder's timezone properly
+  let nowInReminderTZ;
+  if (timeZone) {
+    // Use Intl.DateTimeFormat to get proper timezone conversion
+    const formatter = new Intl.DateTimeFormat('en-CA', {
+      timeZone: timeZone,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    });
 
-  // Get today's date string in the reminder's timezone
+    const parts = formatter.formatToParts(now);
+    const year = parts.find(p => p.type === 'year').value;
+    const month = parts.find(p => p.type === 'month').value;
+    const day = parts.find(p => p.type === 'day').value;
+    nowInReminderTZ = new Date(`${year}-${month}-${day}T00:00:00`);
+  } else {
+    nowInReminderTZ = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  }
+
+  // Get today's date string in YYYY-MM-DD format
   const todayStr = nowInReminderTZ.toISOString().split("T")[0];
-  const todayDate = new Date(todayStr);
-  const startDate = new Date(date);
+  const todayDate = new Date(todayStr + 'T00:00:00');
+  const startDate = new Date(date + 'T00:00:00');
 
   // If reminder starts in future, don't trigger
   if (startDate > todayDate) return false;
@@ -32,19 +47,26 @@ function isReminderDueToday(reminder, now = new Date()) {
 
   switch (repeatRule) {
     case "daily":
+      // For daily recurring, check if today's day of week is in repeatOn array
       return repeatOn.includes(dayOfWeek);
 
     case "weekly": {
+      // For weekly, repeat on the same day of week as the start date
       const scheduledDay = startDate.getDay();
       return dayOfWeek === scheduledDay;
     }
 
     case "monthly": {
+      // For monthly, repeat on the same day of month as the start date
       const scheduledDayOfMonth = startDate.getDate();
       const daysInMonth = getDaysInMonth(nowInReminderTZ);
-      return (
-        scheduledDayOfMonth === dayOfMonth && scheduledDayOfMonth <= daysInMonth
-      );
+      
+      // Handle end-of-month edge cases (e.g., Jan 31 -> Feb 28/29)
+      if (scheduledDayOfMonth > daysInMonth) {
+        return dayOfMonth === daysInMonth; // Use last day of current month
+      }
+      
+      return scheduledDayOfMonth === dayOfMonth;
     }
 
     default:
@@ -53,16 +75,33 @@ function isReminderDueToday(reminder, now = new Date()) {
 }
 
 function getMinutesUntilReminder(reminder, now = new Date()) {
-  if (!reminder) return null;
+  if (!reminder || !reminder.time) return null;
 
-  const reminderTimeStr = reminder.time || "00:00";
+  const { time, timeZone } = reminder;
 
-  const todayStr = now.toISOString().split("T")[0];
-  const triggerDate = new Date(`${todayStr}T${reminderTimeStr}:00`);
+  let triggerDate;
+  
+  if (timeZone) {
+    // Convert current time to reminder's timezone
+    const nowInReminderTZ = new Date(now.toLocaleString("en-US", { timeZone }));
+    const todayInReminderTZ = nowInReminderTZ.toISOString().split("T")[0];
+    
+    // Create the trigger time in reminder's timezone
+    const triggerInReminderTZ = new Date(`${todayInReminderTZ}T${time}:00`);
+    
+    // Convert back to current system time for comparison
+    const currentSystemTZ = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    triggerDate = new Date(triggerInReminderTZ.toLocaleString("en-US", { timeZone: currentSystemTZ }));
+  } else {
+    // No timezone specified, use local time
+    const todayStr = now.toISOString().split("T")[0];
+    triggerDate = new Date(`${todayStr}T${time}:00`);
+  }
 
   const diffMs = triggerDate - now;
-
-  return Math.floor(Math.max(diffMs, 0) / 60000);
+  
+  // Return minutes until trigger (can be negative if time has passed)
+  return Math.floor(diffMs / 60000);
 }
 
 function checkReminderStatus(reminder, now = new Date()) {

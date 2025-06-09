@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Input, DatePicker, TimePicker, Switch, Form, Select } from "antd";
 import { TReminderEvent } from "../../types";
 import { useSelector } from "react-redux";
@@ -24,18 +24,53 @@ const ReminderForm = ({ onCancel, isEditing, initialData, onSave }: ReminderForm
   const [repeatEvery, setRepeatEvery] = useState(initialData?.repeatRule || "daily");
   const timeZone = useSelector(selectTimezone);
 
+  // Update form when initial data changes
+  useEffect(() => {
+    if (initialData) {
+      setIsRecurring(initialData.isRecurring || false);
+      setRepeatEvery(initialData.repeatRule || "daily");
+      
+      form.setFieldsValue({
+        ...initialData,
+        date: getInitialDateValue(),
+        time: getInitialTimeValue(),
+        isRecurring: initialData.isRecurring || false,
+        repeatRule: initialData.repeatRule || "daily",
+        repeatOn: initialData.repeatOn || (initialData.repeatRule === "daily" ? [0, 1, 2, 3, 4, 5, 6] : undefined)
+      });
+    }
+  }, [initialData, form]);
+
   const handleFinish = (values: any) => {
+    const timezone = timeZone || dayjs.tz.guess();
+
+    // Create date and time strings properly
+    let formattedDate = "";
+    let formattedTime = "";
+
+    if (values.date && dayjs(values.date).isValid()) {
+      // The date picker gives us a local time, convert it to UTC for storage
+      const localDate = dayjs(values.date).tz(timezone);
+      formattedDate = localDate.utc().format("YYYY-MM-DD");
+    }
+
+    if (values.time && dayjs(values.time).isValid()) {
+      // The time picker gives us a local time, convert it to UTC for storage
+      const localTime = dayjs(values.time).tz(timezone);
+      formattedTime = localTime.utc().format("HH:mm");
+    }
+
     const formattedValues: TReminderEvent = {
       title: values.title,
       description: values.description,
-      date: values.date && dayjs(values.date).isValid() ? dayjs(values.date).format("YYYY-MM-DD") : "",
-      time: values.time && dayjs(values.time).isValid() ? dayjs(values.time).format("HH:mm") : "",
+      date: formattedDate,
+      time: formattedTime,
       repeatRule: isRecurring ? values.repeatRule : undefined,
       updatedAt: Date.now(),
       isRecurring: isRecurring,
       id: initialData?.id || crypto.randomUUID(),
-      timeZone: timeZone || dayjs.tz.guess(),
-      repeatOn: isRecurring ? values.repeatOn : undefined
+      timeZone: timezone,
+      repeatOn: isRecurring && values.repeatRule === "daily" ? values.repeatOn : undefined
     };
 
     if (chrome.runtime) {
@@ -48,14 +83,58 @@ const ReminderForm = ({ onCancel, isEditing, initialData, onSave }: ReminderForm
   // Helper function to safely parse initial values
   const getInitialDateValue = () => {
     if (!initialData?.date) return null;
-    const parsed = dayjs(initialData.date, "YYYY-MM-DD");
-    return parsed.isValid() ? parsed : null;
+    const timezone = timeZone || dayjs.tz.guess();
+    
+    // If we have stored UTC date and time, combine them and convert to user's timezone
+    if (initialData.time) {
+      const utcDateTime = dayjs.utc(`${initialData.date} ${initialData.time}`);
+      const localDateTime = utcDateTime.tz(timezone);
+      return localDateTime.isValid() ? localDateTime : null;
+    } else {
+      // If no time, just parse the date in the user's timezone to avoid date shifting
+      const localDate = dayjs.tz(initialData.date, timezone);
+      return localDate.isValid() ? localDate : null;
+    }
   };
 
   const getInitialTimeValue = () => {
     if (!initialData?.time) return null;
-    const parsed = dayjs(initialData.time, "HH:mm");
-    return parsed.isValid() ? parsed : null;
+    const timezone = timeZone || dayjs.tz.guess();
+    
+    // If we have stored UTC time, convert it to user's timezone for display
+    // Combine with a dummy date to handle time conversion properly
+    const utcDateTime = dayjs.utc(`${initialData.date || '2023-01-01'} ${initialData.time}`);
+    const localDateTime = utcDateTime.tz(timezone);
+    
+    return localDateTime.isValid() ? localDateTime : null;
+  };
+
+  const handleRecurringChange = (checked: boolean) => {
+    setIsRecurring(checked);
+    if (!checked) {
+      // Clear recurring-related fields when disabled
+      form.setFieldsValue({
+        repeatRule: undefined,
+        repeatOn: undefined
+      });
+    } else {
+      // Set default values when enabled
+      form.setFieldsValue({
+        repeatRule: "daily",
+        repeatOn: [0, 1, 2, 3, 4, 5, 6]
+      });
+      setRepeatEvery("daily");
+    }
+  };
+
+  const handleRepeatRuleChange = (value: string) => {
+    setRepeatEvery(value);
+    // Clear repeatOn when not daily
+    if (value !== "daily") {
+      form.setFieldsValue({ repeatOn: undefined });
+    } else {
+      form.setFieldsValue({ repeatOn: [0, 1, 2, 3, 4, 5, 6] });
+    }
   };
 
   return (
@@ -66,6 +145,9 @@ const ReminderForm = ({ onCancel, isEditing, initialData, onSave }: ReminderForm
         ...initialData,
         date: getInitialDateValue(),
         time: getInitialTimeValue(),
+        isRecurring: initialData?.isRecurring || false,
+        repeatRule: initialData?.repeatRule || "daily",
+        repeatOn: initialData?.repeatOn || [0, 1, 2, 3, 4, 5, 6]
       }}
       onFinish={handleFinish}
     >
@@ -99,7 +181,7 @@ const ReminderForm = ({ onCancel, isEditing, initialData, onSave }: ReminderForm
       </Form.Item>
       <Form.Item label="Recurring" style={{ display: 'flex', alignItems: 'center' }}>
         <Form.Item name="isRecurring" valuePropName="checked" noStyle>
-          <Switch onChange={setIsRecurring} size="small" />
+          <Switch onChange={handleRecurringChange} size="small" />
         </Form.Item>
         <span style={{ marginLeft: '8px' }}>Recurring</span>
       </Form.Item>
@@ -108,11 +190,12 @@ const ReminderForm = ({ onCancel, isEditing, initialData, onSave }: ReminderForm
           name="repeatRule"
           label="Repeat Every"
           rules={[{ required: true, message: "Please specify repeat interval" }]}
-          initialValue="daily"
         >
-          <Select placeholder="Select interval" value={repeatEvery} onChange={(value) => {
-            setRepeatEvery(value);
-          }}>
+          <Select 
+            placeholder="Select interval" 
+            value={repeatEvery} 
+            onChange={handleRepeatRuleChange}
+          >
             <Select.Option value="daily">Daily</Select.Option>
             <Select.Option value="weekly">Weekly</Select.Option>
             <Select.Option value="monthly">Monthly</Select.Option>
@@ -124,7 +207,6 @@ const ReminderForm = ({ onCancel, isEditing, initialData, onSave }: ReminderForm
           name="repeatOn"
           label="Repeat On"
           rules={[{ required: true, message: "Please specify repeat days" }]}
-          initialValue={[0, 1, 2, 3, 4, 5, 6]}
         >
           <Select
             placeholder="Select days"
