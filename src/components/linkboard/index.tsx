@@ -55,7 +55,7 @@ const Linkboard = () => {
         )}
         {filteredLinks.length > 0 &&
           filteredLinks.map((link) => (
-            <Tooltip title={link.url} mouseEnterDelay={0} mouseLeaveDelay={0} arrow={false}>
+            <Tooltip title={link.url} mouseEnterDelay={0} mouseLeaveDelay={0} arrow={false} placement="left">
             <div
               key={link.id}
               className="link-item"
