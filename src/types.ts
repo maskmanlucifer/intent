@@ -45,6 +45,7 @@ export type TUserSettingsData = {
   timezone: string | null;
   focusedTaskId: string | null;
   activeReminders: TReminderEvent[];
+  isFeatureIntroSeen?: boolean;
 };
 
 export type TCalendarEvent = {

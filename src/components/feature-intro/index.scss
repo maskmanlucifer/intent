@@ -1,0 +1,92 @@
+.feature-intro-modal {
+  .ant-modal-content {
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .modal-header {
+    padding: 16px 24px 0;
+    font-size: 16px;
+    color: var(--primary-color);
+    display: flex;
+    justify-content: center;
+  }
+
+  .modal-body {
+    padding: 0px;
+    padding-top: 24px;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    h2 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: #1f1f1f;
+      margin: 0px;
+    }
+
+    p {
+      font-size: 16px;
+      color: #666;
+      margin-bottom: 24px;
+      max-width: 400px;
+      line-height: 1.5;
+    }
+
+    .media-container {
+      width: 100%;
+      margin: 0 auto;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      img, video {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+    }
+
+    .ant-form {
+      width: 100%;
+      max-width: 400px;
+      text-align: left;
+
+      .ant-form-item-label {
+        font-weight: 500;
+      }
+
+      .ant-input-textarea {
+        min-height: 100px;
+      }
+
+      .ant-checkbox-wrapper {
+        color: #666;
+      }
+    }
+  }
+
+  .modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid #f0f0f0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .last-btn {
+      margin-left: auto;
+    }
+  }
+
+  .shortcuts-icon {
+    width: 100px;
+    height: 100px;
+  }
+}
