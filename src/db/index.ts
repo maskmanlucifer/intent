@@ -9,6 +9,7 @@ import { handleImportCalendar } from "../helpers/events.helper";
 import { handleBreakSchedule } from "../helpers/break.helper";
 import { fetchAndUpdateSession } from "../helpers/session.helper";
 import { fetchLinks } from "../redux/linkboardSlice";
+import { handleReminderSchedule } from "../helpers/reminder.helper";
 
 const dbName = DB_CONFIG.name;
 const dbVersion = DB_CONFIG.version;
@@ -51,6 +52,12 @@ export function initDatabase() {
 
       if (!db.objectStoreNames.contains(DB_CONFIG.stores.linkboard.name)) {
         db.createObjectStore(DB_CONFIG.stores.linkboard.name, {
+          keyPath: "id",
+        });
+      }
+
+      if (!db.objectStoreNames.contains(DB_CONFIG.stores.reminders.name)) {
+        db.createObjectStore(DB_CONFIG.stores.reminders.name, {
           keyPath: "id",
         });
       }
@@ -131,6 +138,31 @@ export const getLinks = () => {
       "readonly",
     );
     const store = transaction.objectStore(DB_CONFIG.stores.linkboard.name);
+    const request = store.getAll();
+
+    request.onsuccess = function (event) {
+      const target = event.target as IDBRequest;
+      resolve(target.result);
+    };
+
+    request.onerror = function (event) {
+      const target = event.target as IDBRequest;
+      reject(target.error);
+    };
+  });
+};
+
+export const getReminders = () => {
+  return new Promise((resolve, reject) => {
+    if (!db) {
+      throw new Error("Database not initialized");
+    }
+
+    const transaction = db.transaction(
+      [DB_CONFIG.stores.reminders.name],
+      "readonly",
+    );
+    const store = transaction.objectStore(DB_CONFIG.stores.reminders.name);
     const request = store.getAll();
 
     request.onsuccess = function (event) {
@@ -257,6 +289,7 @@ async function init() {
     store.dispatch(fetchLinks());
     handleImportCalendar();
     handleBreakSchedule();
+    handleReminderSchedule();
   } catch (error) {
     console.error("Database error:", error);
   }

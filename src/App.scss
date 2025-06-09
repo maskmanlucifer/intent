@@ -153,3 +153,17 @@ body {
   }
   
   
+
+  .ant-notification-notice {
+    padding: 10px 12px !important;
+    padding-left: 16px !important;
+
+    .ant-notification-notice-message {
+        margin-bottom: 0px !important;
+    }
+
+    .ant-notification-notice-close {
+        top: 6px !important;
+        right: 10px !important;
+    }
+  }

@@ -92,9 +92,10 @@ const todoSlice = createSlice({
       const { categoryId } = action.payload;
       const categoryTasks = state.itemsByCategory[categoryId] || [];
       const updatedTasks = categoryTasks.filter((todo) => !todo.isCompleted);
+      const completedTasks = categoryTasks.filter((task) => task.isCompleted);
       state.itemsByCategory[categoryId] = reorderTasksInCategory(updatedTasks);
 
-      dbHelper.deleteAllCompletedTasks(categoryTasks.map((task) => task.id));
+      dbHelper.deleteAllCompletedTasks(completedTasks.map((task) => task.id));
     },
     deleteSubtask: (state, action) => {
       const { id, parentId, categoryId } = action.payload;

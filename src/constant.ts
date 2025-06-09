@@ -33,7 +33,7 @@ export const LINKBOARD_FILTER_OPTIONS = [
 
 export const DB_CONFIG = {
   name: "intent",
-  version: 3,
+  version: 4,
   stores: {
     todos: {
       name: "todos",
@@ -61,6 +61,10 @@ export const DB_CONFIG = {
     },
     linkboard: {
       name: "linkboard",
+      keyPath: "id",
+    },
+    reminders: {
+      name: "reminders",
       keyPath: "id",
     },
   },
@@ -96,9 +100,9 @@ export const KEYBOARD_SHORTCUTS = {
     binding: isMac ? "command+k" : "ctrl+k",
   },
   linkboard: {
-    key: isMac ? "⌘ + l" : "Ctrl + l",
+    key: isMac ? "⌘ + m" : "Ctrl + m",
     description: "Open linkboard",
-    binding: isMac ? "command+l" : "ctrl+l",
+    binding: isMac ? "command+m" : "ctrl+m",
   },
   completeTask: {
     key: isMac ? "⌘ + Enter" : "Ctrl + Enter",

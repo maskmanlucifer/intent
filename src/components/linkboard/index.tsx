@@ -2,7 +2,7 @@ import React from "react";
 import "./index.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { removeLink, selectLinks } from "../../redux/linkboardSlice";
-import { Empty, message, Popconfirm, Select, Space } from "antd";
+import { Empty, message, Popconfirm, Select, Space, Tooltip } from "antd";
 import { ReactComponent as RemoveIcon } from "../../assets/icons/remove.svg";
 import { InfoCircleOutlined } from "@ant-design/icons";
 import { AppDispatch } from "../../redux/store";
@@ -55,36 +55,35 @@ const Linkboard = () => {
         )}
         {filteredLinks.length > 0 &&
           filteredLinks.map((link) => (
+            <Tooltip title={link.url} mouseEnterDelay={0} mouseLeaveDelay={0} arrow={false}>
             <div
               key={link.id}
               className="link-item"
               onClick={() => window.open(link.url, "_blank")}
             >
-              {
+              { link.imageUrl && (
                 <img
                   src={
-                    link.imageUrl ||
-                    "https://ik.imagekit.io/dnz8iqrsyc/Group%2040.png"
+                    link.imageUrl
                   }
                   alt="link"
                 />
-              }
+              )}
               <div className="link-details">
-                {link.title && <h2>{link.title}</h2>}
-                {link.url && (
-                  <div className="link-url">
-                    <img
-                      src={`https://www.google.com/s2/favicons?domain=${new URL(link.url).hostname}`}
-                      alt="favicon"
-                    />{" "}
-                    {link.url}
-                  </div>
-                )}
+              {link.url && (
+                <img
+                  src={`https://www.google.com/s2/favicons?domain=${new URL(link.url).hostname}`}
+                  alt="favicon"
+                  className="favicon"
+                />
+              )}
+              {link.title && <h2 className="link-title">{link.title}</h2>}
+              {link.url && <span className="link-url">{new URL(link.url).hostname}</span>}
                 <Popconfirm
                   icon={<InfoCircleOutlined style={{ color: "#155dfc" }} />}
                   title="Remove url from linkboard"
                   okText="Remove"
-                  placement="bottomLeft"
+                  placement="left"
                   style={{ width: "40px" }}
                   onCancel={(e?: React.MouseEvent<HTMLElement, MouseEvent>) => {
                     e?.stopPropagation();
@@ -112,6 +111,7 @@ const Linkboard = () => {
                 </Popconfirm>
               </div>
             </div>
+            </Tooltip>
           ))}
       </div>
     </div>

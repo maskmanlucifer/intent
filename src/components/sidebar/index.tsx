@@ -6,22 +6,34 @@ import { ReactComponent as CompletedIcon } from "../../assets/icons/completed.sv
 import { ReactComponent as AddSquareIcon } from "../../assets/icons/add-square.svg";
 
 import classNames from "classnames";
-import { Button, Dropdown, message, Modal, Tooltip } from "antd";
+import { Button, Drawer, Dropdown, Empty, message, Modal, Popconfirm, Spin, Tooltip } from "antd";
 import {
+  CalendarOutlined,
+  CloseOutlined,
   DeleteOutlined,
   EditOutlined,
   EllipsisOutlined,
+  LoadingOutlined,
+  SyncOutlined,
 } from "@ant-design/icons";
-import { Category } from "../../types";
+
+import { ReactComponent as ReminderIcon } from "../../assets/icons/reminder.svg";
+import { ReactComponent as AddCircleIcon } from "../../assets/icons/add-circle.svg";
+
+import { Category, TReminderEvent } from "../../types";
 import {
   addCategory,
   deleteCategory,
   updateCategory,
 } from "../../redux/categorySlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ReactComponent as TickIcon } from "../../assets/icons/tick-icon.svg";
 import { ReactComponent as ClearInputIcon } from "../../assets/icons/clean-input-icon.svg";
 import { MessageInstance } from "antd/es/message/interface";
+import ReminderForm from "../reminder-form";
+import { fetchReminders, selectIsLoading, selectReminders } from "../../redux/reminderSlice";
+import { AppDispatch } from "../../redux/store";
+import { getDateAndTime } from "../../utils";
 
 interface SidebarProps {
   folders: Category[];
@@ -31,10 +43,37 @@ interface SidebarProps {
   setIsSidebarCollapsed: (isSidebarCollapsed: boolean) => void;
 }
 
+const withTextTooltip = (
+  text: string,
+  isSidebarCollapsed: boolean,
+  icon: React.ReactNode,
+  onClick?: () => void
+) => {
+  if (isSidebarCollapsed) {
+    return (
+      <Tooltip
+        title={text}
+        placement="right"
+        arrow={false}
+        mouseEnterDelay={0}
+        mouseLeaveDelay={0}
+      >
+        <div className="sidebar-footer-text" onClick={onClick}>{icon}</div>
+      </Tooltip>
+    );
+  }
+  return (
+    <div className="sidebar-footer-text" onClick={onClick}>
+      {icon}
+      <span className="sidebar-footer-text-text">{text}</span>
+    </div>
+  );
+};
+
 const withTooltip = (
   component: React.ReactNode,
   tooltip: string,
-  isSidebarCollapsed: boolean,
+  isSidebarCollapsed: boolean
 ) => {
   if (isSidebarCollapsed) {
     return (
@@ -66,7 +105,7 @@ const EditCategoryBtn = ({
   const dispatch = useDispatch();
 
   const [updatedFolderName, setUpdatedFolderName] = useState(
-    folder?.name || "",
+    folder?.name || ""
   );
 
   const editInputRef = useRef<HTMLInputElement>(null);
@@ -124,6 +163,8 @@ const EditCategoryBtn = ({
   );
 };
 
+
+
 const Sidebar = ({
   folders,
   selectedFolder,
@@ -134,14 +175,20 @@ const Sidebar = ({
   const todayFolder = folders.find((folder) => folder.name === "Today");
 
   const restFolders = folders.filter(
-    (folder) => folder.name !== "Today" && folder.name !== "Trash",
+    (folder) => folder.name !== "Today" && folder.name !== "Trash"
   );
 
   const completedFolder = { id: "completed", name: "Completed" };
   const [isEditing, setIsEditing] = useState<Boolean | string>(false);
   const [isDeleting, setIsDeleting] = useState<Boolean | string>(false);
   const [messageApi, contextHolder] = message.useMessage();
-  const dispatch = useDispatch();
+  const [isReminderFormOpen, setIsReminderFormOpen] = useState(false);
+  const [isReminderFormDrawerOpen, setIsReminderFormDrawerOpen] = useState(false);
+  const [reminderFormData, setReminderFormData] = useState<TReminderEvent | undefined>(undefined);
+  const reminders = useSelector(selectReminders);
+  const isRemindersLoading = useSelector(selectIsLoading);
+
+  const dispatch = useDispatch<AppDispatch>();
 
   const onDelete = () => {
     if (!isDeleting || typeof isDeleting === "boolean") {
@@ -204,7 +251,7 @@ const Sidebar = ({
               <span>{todayFolder.name}</span>
             </div>,
             "Today",
-            isSidebarCollapsed,
+            isSidebarCollapsed
           )}
         {restFolders.map((folder: Category) =>
           withTooltip(
@@ -247,7 +294,7 @@ const Sidebar = ({
                           "folder-item-action ellipsis-icon",
                           {
                             expanded: !isSidebarCollapsed,
-                          },
+                          }
                         )}
                         onClick={(e) => e.stopPropagation()}
                       >
@@ -259,8 +306,8 @@ const Sidebar = ({
               )}
             </div>,
             folder.name,
-            isSidebarCollapsed,
-          ),
+            isSidebarCollapsed
+          )
         )}
         {completedFolder &&
           withTooltip(
@@ -278,7 +325,7 @@ const Sidebar = ({
               <span>{completedFolder.name}</span>
             </div>,
             "Completed",
-            isSidebarCollapsed,
+            isSidebarCollapsed
           )}
         {isEditing !== true &&
           withTooltip(
@@ -295,7 +342,7 @@ const Sidebar = ({
               <span>Add Folder</span>
             </div>,
             "Add Folder",
-            isSidebarCollapsed,
+            isSidebarCollapsed
           )}
         {isEditing === true && (
           <div className="folder-item">
@@ -332,6 +379,136 @@ const Sidebar = ({
             Are you sure you want to delete this note?
           </p>
         </Modal>
+      </div>
+      <div className="sidebar-footer">
+        {withTextTooltip(
+          "Add Reminder",
+          isSidebarCollapsed,
+          <AddCircleIcon />,
+          () => setIsReminderFormOpen(true)
+        )}
+
+        {withTextTooltip(
+          "Manage Reminders",
+          isSidebarCollapsed,
+          <ReminderIcon />,
+          () => {
+            if (isRemindersLoading === null) {
+              dispatch(fetchReminders());
+            }
+            setIsReminderFormDrawerOpen(!isReminderFormDrawerOpen)
+          }
+        )}
+        <Modal
+          title={!reminderFormData ? "Add Reminder" : "Edit Reminder"}
+          open={isReminderFormOpen}
+          onCancel={() => {
+            setIsReminderFormOpen(false);
+            setReminderFormData(undefined);
+          }}
+          centered={true}
+          maskClosable={false}
+          destroyOnClose={true}
+          footer={null}
+        >
+          <ReminderForm
+            onCancel={() => {
+              setIsReminderFormOpen(false);
+              setReminderFormData(undefined);
+            }}
+            onSave={() => {
+              setIsReminderFormOpen(false);
+              setReminderFormData(undefined);
+              messageApi.open({
+                type: "success",
+                content: "Reminder saved successfully!",
+              });
+            }}
+            isEditing={!!reminderFormData}
+            initialData={reminderFormData}
+          />
+        </Modal>
+        <Drawer
+          title={
+            <div className="drawer-title-reminder-form">
+              MANAGE REMINDERS{" "}
+              <Button
+                icon={<CloseOutlined />}
+                type="default"
+                onClick={() => setIsReminderFormDrawerOpen(false)}
+                size="small"
+                style={{ marginLeft: "auto" }}
+              />
+            </div>
+          }
+          open={isReminderFormDrawerOpen}
+          onClose={() => setIsReminderFormDrawerOpen(false)}
+          placement="top"
+          closable={false}
+          height={280}
+        >
+          <div className="reminder-list">
+            {isRemindersLoading && (
+              <div className="reminder-loading">
+                <Spin indicator={<LoadingOutlined spin />} />
+              </div>
+            )}
+            {!isRemindersLoading && reminders.length !== 0 && [...reminders].map((reminder) => (
+              <div key={reminder.id} className="reminder-item">
+                <div className="reminder-details">
+                  <div className="reminder-title">{reminder.title}</div>
+                  <div className="reminder-description">{reminder.description}</div>
+                  <div className="reminder-scheduled">
+                    Created for <CalendarOutlined style={{ marginLeft: 4 }} /> <span className="reminder-scheduled-date">{getDateAndTime(reminder.date, reminder.time).formattedDate}</span> at <span className="reminder-scheduled-time">{getDateAndTime(reminder.date, reminder.time).formattedTime}</span>
+                  </div>
+                  {reminder.isRecurring && reminder.repeatRule && <div className="reminder-repeated">
+                    Repeats <SyncOutlined  style={{ marginLeft: 4 }}/> <span  style={{ marginLeft: 37, }}className="reminder-repeated-icon">{reminder.repeatRule.charAt(0)?.toUpperCase() + reminder.repeatRule.slice(1)}</span>
+                  </div>}
+                </div>
+                <div className="reminder-actions">
+                  <Popconfirm
+                    title="Are you sure you want to delete this reminder?"
+                    onConfirm={() => {
+                      if (chrome.runtime) {
+                        chrome.runtime.sendMessage({ action: "REMOVE_REMINDER", reminderId: reminder.id });
+                      }
+                    }}
+                    okText="Yes"
+                    cancelText="No"
+                  >
+                    <Button type="default" danger icon={<DeleteOutlined />} size="small"/>
+                  </Popconfirm>
+                  <Button
+                    type="primary"
+                    onClick={() => {
+                      setReminderFormData(reminder);
+                      setIsReminderFormOpen(true);
+                    }}
+                    icon={<EditOutlined />}
+                    size="small"
+                  />
+                </div>
+                <hr />
+              </div>
+            ))}
+            {!isRemindersLoading && reminders.length === 0 && (
+              <div className="reminder-empty">
+                <Empty description="No reminders found" />
+                <Button
+                  type="primary"
+                  size="small"
+                  onClick={() => {
+                    setIsReminderFormOpen(true);
+                    setIsReminderFormDrawerOpen(false);
+                  }}
+                  className="reminder-empty-button"
+                >
+                  Add Reminder
+                </Button>
+              </div>
+            )}
+          </div>
+        </Drawer>
       </div>
     </div>
   );

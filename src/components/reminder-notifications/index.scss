@@ -1,0 +1,81 @@
+.reminder-notifications {
+  position: absolute;
+  top: 64px;
+  right: 24px;
+  display: grid;
+  gap: 4px;
+  background-color: #f5f5f5;
+  padding: 4px;
+  border-radius: 6px;
+  z-index: 2;
+  min-width: 400px;
+  border: 1px solid #e0e0e0;
+
+  .reminder-notifications-header {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-family: var(--secondary-font);
+  }
+
+  .reminder-notification {
+    background-color: white;
+    border-radius: 4px;
+    padding: 2px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+    padding: 8px 12px;
+
+    .reminder-notification-title {
+      font-weight: 500;
+      margin-bottom: 4px;
+      font-size: 16px;
+    }
+
+    .reminder-notification-description {
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .anticon-close {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      cursor: pointer;
+      
+      svg {
+        height: 12px;
+        width: 12px;
+      }
+    }
+  }
+}
+
+
+.reminder-scheduled.reminder-scheduled-timing {
+    font-size: 14px;
+    margin-top: 16px;
+    color: #888;
+}
+
+.reminder-scheduled-date {
+    margin-left: 16px;
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background-color: var(--primary-color);
+    color: white;
+    font-size: 12px;
+}
+
+.reminder-scheduled-time {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background-color: var(--primary-color);
+    color: white;
+    font-size: 12px;
+    margin-left: 4px;
+}

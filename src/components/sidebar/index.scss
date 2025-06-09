@@ -6,16 +6,16 @@
     background-color: #F2F2F2;
 
     .folder-items-group {
-       margin-top: 16px;
-       display: flex;
-       flex-direction: column;
-       gap: 4px;
+        margin-top: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
 
-       &.collapsed {
-        .folder-item span {
-            display: none;
+        &.collapsed {
+            .folder-item span {
+                display: none;
+            }
         }
-       }
     }
 
     .folder-item {
@@ -29,7 +29,8 @@
         position: relative;
         height: 24px;
 
-        &:hover, &.selected  {
+        &:hover,
+        &.selected {
             .folder-item-content {
                 svg {
                     color: var(--primary-color);
@@ -38,7 +39,7 @@
 
             color: var(--primary-color);
 
-            > svg {
+            >svg {
                 path {
                     fill: var(--primary-color);
                 }
@@ -79,15 +80,15 @@
             }
         }
 
-         > svg {
+        >svg {
             width: 18px;
             height: 18px;
         }
 
         &.selected {
-            color:var(--primary-color);
+            color: var(--primary-color);
 
-            > svg {
+            >svg {
                 color: var(--primary-color);
             }
 
@@ -148,7 +149,7 @@
 
             input {
                 height: 24px;
-                border-radius:  4px 0 0 4px;
+                border-radius: 4px 0 0 4px;
                 outline: none;
                 border-color: transparent;
                 border: 1px solid var(--primary-color);
@@ -182,7 +183,7 @@
 
             .confirm-text {
                 height: 24px;
-                border-radius:  4px 0 0 4px;
+                border-radius: 4px 0 0 4px;
                 outline: none;
                 border-color: transparent;
                 border: 1px solid var(--red-500);
@@ -222,12 +223,12 @@
 }
 
 .ant-tooltip-inner {
-    min-height: 0px!important;
-    padding: 2px 6px!important;
-    background-color: #000!important;
-    background: #000!important;
-    font-size: 12px!important;
-    border-radius: 4px!important;
+    min-height: 0px !important;
+    padding: 2px 6px !important;
+    background-color: #000 !important;
+    background: #000 !important;
+    font-size: 12px !important;
+    border-radius: 4px !important;
 }
 
 .ant-popover-inner {
@@ -291,4 +292,168 @@
             fill: var(--primary-color);
         }
     }
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    display: flex;
+    gap: 4px;
+
+    flex-direction: column;
+    margin-left: 16px;
+
+    .sidebar-footer-text {
+        display: flex;
+        align-items: center;
+        padding: 4px;
+        border-radius: 4px;
+        color: #28303F;
+        width: fit-content;
+
+        &:hover {
+            cursor: pointer;
+            color: var(--primary-color);
+
+            svg {
+                path {
+                    fill: var(--primary-color);
+                }
+            }
+        }
+
+        .sidebar-footer-text-text {
+            margin-left: 4px;
+        }
+
+        svg {
+            width: 20px;
+            height: 20px;
+
+            path {
+                fill: #333333
+            }
+        }
+    }
+}
+
+.reminder-list {
+    display: flex;
+    height: calc(100% - 32px);
+    gap: 16px;
+    padding: 16px;
+    overflow-x: auto; // Changed from scroll to auto
+    scrollbar-width: thin; // For Firefox
+    scrollbar-color: #d1d1d1 #f1f1f1; // Scrollbar color
+
+    // Webkit (Chrome, Safari) scrollbar styling
+    &::-webkit-scrollbar {
+        width: 8px;
+    }
+    &::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: #d1d1d1;
+        border-radius: 4px;
+    }
+
+    .reminder-item {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        height: calc(100% - 32px);
+        min-width: 360px;
+        border: 1px solid #D9D9D9;
+        border-radius: 4px;
+        padding: 16px;
+        position: relative;
+        background-color: #F7F9FB;
+
+        .reminder-details {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+
+            .reminder-title {
+                font-size: 16px;
+                font-weight: 500;
+            }
+
+            .reminder-description {
+                font-size: 14px;
+                color: #28303F;
+            }
+
+            .reminder-scheduled {
+                font-size: 14px;
+                margin-top: 16px;
+            }
+
+            .reminder-scheduled-date {
+                margin-left: 16px;
+                display: inline-block;
+                padding: 4px 8px;
+                border-radius: 4px;
+                background-color: var(--primary-color);
+                color: white;
+                font-size: 12px;
+            }
+
+            .reminder-scheduled-time {
+                display: inline-block;
+                padding: 4px 8px;
+                border-radius: 4px;
+                background-color: var(--primary-color);
+                color: white;
+                font-size: 12px;
+            }
+
+            .reminder-repeated {
+                font-size: 14px;
+
+                .reminder-repeated-icon {
+                    font-size: 14px;
+                    color: var(--primary-color);
+                    background-color: var(--primary-color);
+                    color: white;
+                    padding: 4px 8px;
+                    border-radius: 4px;
+                    margin-left: 8px;
+                    display: inline-block;
+                    font-size: 12px;
+                }
+            }
+        }
+
+        .reminder-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: auto;
+            position: absolute;
+            top: 16px;
+            right: 16px;
+        }
+    }
+}
+
+.reminder-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.reminder-empty-button {
+    margin-bottom: 24px;
+}
+
+.reminder-loading{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
 }
