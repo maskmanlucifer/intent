@@ -1,73 +1,106 @@
 /* eslint-disable no-undef */
 
-function getDaysInMonth(date) {
-  return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+/**
+ * Checks if a reminder is due today based on the user's timezone
+ * @param {Object} reminder - The reminder object
+ * @param {Date} now - Current date/time (optional, defaults to new Date())
+ * @returns {boolean} - True if reminder is due today
+ */
+function isReminderDueToday(reminder, now = new Date()) {
+  if (!reminder || !reminder.date || !reminder.time) {
+    return false;
+  }
+
+  const { date, time, isRecurring, repeatRule, repeatOn = [], timeZone } = reminder;
+  
+  // Use user's timezone or system default
+  const tz = timeZone || Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+  // STEP 1: Get today's date in user's timezone
+  const todayInUserTZ = new Intl.DateTimeFormat('en-CA', {
+    timeZone: tz,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  }).format(now);
+
+  // STEP 2: Convert stored UTC date/time back to user's timezone for comparison
+  const storedUTCDateTime = new Date(`${date}T${time}:00.000Z`);
+  const reminderDateInUserTZ = new Intl.DateTimeFormat('en-CA', {
+    timeZone: tz,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  }).format(storedUTCDateTime);
+
+  // STEP 3: Top-level check - if reminder start date is in future, don't trigger
+  const todayDate = new Date(todayInUserTZ + 'T00:00:00.000');
+  const reminderStartDate = new Date(reminderDateInUserTZ + 'T00:00:00.000');
+  
+  if (reminderStartDate > todayDate) {
+    return false;
+  }
+
+  // STEP 4: Handle non-recurring reminders
+  if (!isRecurring) {
+    return reminderDateInUserTZ === todayInUserTZ;
+  }
+
+  // STEP 5: Handle recurring reminders
+  return checkRecurringReminder(
+    storedUTCDateTime,
+    repeatRule,
+    repeatOn,
+    tz
+  );
 }
 
-// Check if reminder is due today (from previous logic)
-function isReminderDueToday(reminder, now = new Date()) {
-  if (!reminder) return false;
-
-  const { date, isRecurring, repeatRule, repeatOn = [], timeZone } = reminder;
-
-  // Convert to reminder's timezone properly
-  let nowInReminderTZ;
-  if (timeZone) {
-    // Use Intl.DateTimeFormat to get proper timezone conversion
-    const formatter = new Intl.DateTimeFormat('en-CA', {
-      timeZone: timeZone,
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit'
-    });
-
-    const parts = formatter.formatToParts(now);
-    const year = parts.find(p => p.type === 'year').value;
-    const month = parts.find(p => p.type === 'month').value;
-    const day = parts.find(p => p.type === 'day').value;
-    nowInReminderTZ = new Date(`${year}-${month}-${day}T00:00:00`);
-  } else {
-    nowInReminderTZ = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  }
-
-  // Get today's date string in YYYY-MM-DD format
-  const todayStr = nowInReminderTZ.toISOString().split("T")[0];
-  const todayDate = new Date(todayStr + 'T00:00:00');
-  const startDate = new Date(date + 'T00:00:00');
-
-  // If reminder starts in future, don't trigger
-  if (startDate > todayDate) return false;
-
-  const dayOfWeek = nowInReminderTZ.getDay();
-  const dayOfMonth = nowInReminderTZ.getDate();
-
-  if (!isRecurring) {
-    return date === todayStr;
-  }
-
+/**
+ * Helper function to check recurring reminder logic
+ */
+function checkRecurringReminder(storedUTCDateTime, repeatRule, repeatOn, timeZone) {
+  
+  // Get current date/time in user's timezone for day calculations
+  const nowInUserTZ = new Date().toLocaleString('en-US', { timeZone });
+  const currentDateInUserTZ = new Date(nowInUserTZ);
+  
   switch (repeatRule) {
     case "daily":
-      // For daily recurring, check if today's day of week is in repeatOn array
-      return repeatOn.includes(dayOfWeek);
+      // For daily reminders, check if current day of week is in enabled days
+      const currentDayOfWeek = currentDateInUserTZ.getDay();
+      return Array.isArray(repeatOn) && repeatOn.length > 0 
+        ? repeatOn.includes(currentDayOfWeek)
+        : true; // If no specific days, assume every day
 
-    case "weekly": {
-      // For weekly, repeat on the same day of week as the start date
-      const scheduledDay = startDate.getDay();
-      return dayOfWeek === scheduledDay;
-    }
+    case "weekly":
+      // For weekly, check if today's day of week matches the original reminder's day
+      const todayDayOfWeek = currentDateInUserTZ.getDay();
+      
+      // Get the original day of week when reminder was created (in user's timezone)
+      const originalReminderInUserTZone = new Date(storedUTCDateTime.toLocaleString('en-US', { timeZone }));
+      const originalDayOfWeek = originalReminderInUserTZone.getDay();
+      
+      return todayDayOfWeek === originalDayOfWeek;
 
-    case "monthly": {
-      // For monthly, repeat on the same day of month as the start date
-      const scheduledDayOfMonth = startDate.getDate();
-      const daysInMonth = getDaysInMonth(nowInReminderTZ);
+    case "monthly":
+      // For monthly, check if today's day of month matches the original reminder's day
+      const todayDayOfMonth = currentDateInUserTZ.getDate();
+      
+      // Get the original day of month when reminder was created (in user's timezone)
+      const originalReminderInUserTZ = new Date(storedUTCDateTime.toLocaleString('en-US', { timeZone }));
+      const originalDayOfMonth = originalReminderInUserTZ.getDate();
       
       // Handle end-of-month edge cases (e.g., Jan 31 -> Feb 28/29)
-      if (scheduledDayOfMonth > daysInMonth) {
-        return dayOfMonth === daysInMonth; // Use last day of current month
+      const currentYear = currentDateInUserTZ.getFullYear();
+      const currentMonth = currentDateInUserTZ.getMonth();
+      const daysInCurrentMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+      
+      if (originalDayOfMonth > daysInCurrentMonth) {
+        // If original day doesn't exist in current month, use last day of month
+        return todayDayOfMonth === daysInCurrentMonth;
       }
       
-      return scheduledDayOfMonth === dayOfMonth;
-    }
+      return todayDayOfMonth === originalDayOfMonth;
 
     default:
       return false;
@@ -75,33 +108,46 @@ function isReminderDueToday(reminder, now = new Date()) {
 }
 
 function getMinutesUntilReminder(reminder, now = new Date()) {
-  if (!reminder || !reminder.time) return null;
+  const { time: reminderTime } = reminder;
+  if (!reminderTime) return null;
 
-  const { time, timeZone } = reminder;
+  // Convert current time to UTC time string (HH:mm format)
+  const currentTimeUTC = now.toISOString().substring(11, 16); // Extract HH:mm
 
-  let triggerDate;
-  
-  if (timeZone) {
-    // Convert current time to reminder's timezone
-    const nowInReminderTZ = new Date(now.toLocaleString("en-US", { timeZone }));
-    const todayInReminderTZ = nowInReminderTZ.toISOString().split("T")[0];
-    
-    // Create the trigger time in reminder's timezone
-    const triggerInReminderTZ = new Date(`${todayInReminderTZ}T${time}:00`);
-    
-    // Convert back to current system time for comparison
-    const currentSystemTZ = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    triggerDate = new Date(triggerInReminderTZ.toLocaleString("en-US", { timeZone: currentSystemTZ }));
-  } else {
-    // No timezone specified, use local time
-    const todayStr = now.toISOString().split("T")[0];
-    triggerDate = new Date(`${todayStr}T${time}:00`);
+  // Parse both times as minutes from midnight
+  const reminderMinutes = parseTimeToMinutes(reminderTime);
+  const currentMinutes = parseTimeToMinutes(currentTimeUTC);
+
+  if (reminderMinutes === null || currentMinutes === null) return null;
+
+  // Calculate the difference
+  let diffMinutes = reminderMinutes - currentMinutes;
+
+  // Handle day boundary crossings
+  if (diffMinutes < -720) { // More than 12 hours behind, likely next day
+    diffMinutes += 1440; // Add 24 hours worth of minutes
+  } else if (diffMinutes > 720) { // More than 12 hours ahead, likely previous day
+    diffMinutes -= 1440; // Subtract 24 hours worth of minutes
   }
 
-  const diffMs = triggerDate - now;
+  return diffMinutes;
+}
+
+// Helper function to convert time string (HH:mm) to minutes from midnight
+function parseTimeToMinutes(timeString) {
+  if (!timeString || typeof timeString !== 'string') return null;
   
-  // Return minutes until trigger (can be negative if time has passed)
-  return Math.floor(diffMs / 60000);
+  const parts = timeString.split(':');
+  if (parts.length !== 2) return null;
+  
+  const hours = parseInt(parts[0], 10);
+  const minutes = parseInt(parts[1], 10);
+  
+  if (isNaN(hours) || isNaN(minutes) || hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
+    return null;
+  }
+  
+  return hours * 60 + minutes;
 }
 
 function checkReminderStatus(reminder, now = new Date()) {

@@ -43,28 +43,34 @@ const ReminderForm = ({ onCancel, isEditing, initialData, onSave }: ReminderForm
 
   const handleFinish = (values: any) => {
     const timezone = timeZone || dayjs.tz.guess();
-
-    // Create date and time strings properly
-    let formattedDate = "";
-    let formattedTime = "";
-
-    if (values.date && dayjs(values.date).isValid()) {
-      // The date picker gives us a local time, convert it to UTC for storage
-      const localDate = dayjs(values.date).tz(timezone);
-      formattedDate = localDate.utc().format("YYYY-MM-DD");
+  
+    // Combine date and time FIRST, then convert to UTC
+    let utcDate = "";
+    let utcTime = "";
+  
+    if (values.date && values.time && dayjs(values.date).isValid() && dayjs(values.time).isValid()) {
+      // Extract date components from date picker
+      const selectedDate = dayjs(values.date);
+      const dateStr = selectedDate.format("YYYY-MM-DD");
+      
+      // Extract time components from time picker  
+      const selectedTime = dayjs(values.time);
+      const timeStr = selectedTime.format("HH:mm");
+      
+      // Combine date and time in user's timezone
+      const localDateTime = dayjs.tz(`${dateStr} ${timeStr}`, timezone);
+      
+      // Convert the combined datetime to UTC and split
+      const utcDateTime = localDateTime.utc();
+      utcDate = utcDateTime.format("YYYY-MM-DD");
+      utcTime = utcDateTime.format("HH:mm");
     }
-
-    if (values.time && dayjs(values.time).isValid()) {
-      // The time picker gives us a local time, convert it to UTC for storage
-      const localTime = dayjs(values.time).tz(timezone);
-      formattedTime = localTime.utc().format("HH:mm");
-    }
-
+  
     const formattedValues: TReminderEvent = {
       title: values.title,
       description: values.description,
-      date: formattedDate,
-      time: formattedTime,
+      date: utcDate,
+      time: utcTime,
       repeatRule: isRecurring ? values.repeatRule : undefined,
       updatedAt: Date.now(),
       isRecurring: isRecurring,
@@ -72,11 +78,11 @@ const ReminderForm = ({ onCancel, isEditing, initialData, onSave }: ReminderForm
       timeZone: timezone,
       repeatOn: isRecurring && values.repeatRule === "daily" ? values.repeatOn : undefined
     };
-
+  
     if (chrome.runtime) {
       chrome.runtime.sendMessage({ action: "ADD_REMINDER", reminder: formattedValues });
     }
-
+  
     onSave();
   };
 

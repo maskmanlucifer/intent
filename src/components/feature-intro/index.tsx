@@ -12,7 +12,7 @@ const FeatureIntroModal = ({ visible, onClose }: { visible: boolean, onClose: ()
     {
       title: "Linkboard",
       description: "Access your favorite links quickly with Linkboard.",
-      media: <video controls width="860" height="500" id="linkboard-video">
+      media: <video controls width="860" height="480" id="linkboard-video">
       <source
         src="https://ik.imagekit.io/dnz8iqrsyc/linkboard-intro.mp4"
         type="video/mp4"
@@ -22,8 +22,8 @@ const FeatureIntroModal = ({ visible, onClose }: { visible: boolean, onClose: ()
     },
     {
       title: "Reminder",
-      description: "Stay on top of your tasks with our reminder notifications.",
-      media: <video controls width="860" height="500" id="reminder-video">
+      description: "Keep track of your tasks using our reminders.",
+      media: <video controls width="860" height="480" id="reminder-video">
       <source
         src="https://ik.imagekit.io/dnz8iqrsyc/reminder.mp4"
         type="video/mp4"
@@ -33,13 +33,13 @@ const FeatureIntroModal = ({ visible, onClose }: { visible: boolean, onClose: ()
     },
     {
         title: "Drag and Drop",
-        description: "Easily organize your tasks with our drag and drop feature.",
-        media: <img src="https://ik.imagekit.io/dnz8iqrsyc/drag-and-drop.gif" alt="Drag and Drop" />,
+        description: "Organize your tasks with our drag and drop feature.",
+        media: <img src="https://ik.imagekit.io/dnz8iqrsyc/drag-and-drop.gif" style={{height:'480px', width:'860px', objectFit: 'contain'}} alt="Drag and Drop" />,
     },
     {
       title: "Shortcuts",
-      description: "Access your favorite features with our keyboard shortcuts.",
-      media: <img src="https://ik.imagekit.io/dnz8iqrsyc/Screenshot%202025-06-09%20at%2011.56.00%E2%80%AFPM.png" alt="Shortcuts" />,
+      description: "Access features with keyboard shortcuts.",
+      media: <img style={{height:'480px', width:'860px', objectFit: 'contain'}} src="https://ik.imagekit.io/dnz8iqrsyc/Screenshot%202025-06-09%20at%2011.56.00%E2%80%AFPM.png" alt="Shortcuts" />,
     },
   ];
 
@@ -61,8 +61,8 @@ const FeatureIntroModal = ({ visible, onClose }: { visible: boolean, onClose: ()
   const handlePrev = () => {
     if (currentPage > 0) {
       setCurrentPage(currentPage - 1);
-      const currentMedia = features[currentPage].media;
-      if (currentMedia.type === 'video') {
+      const currentMedia = features[currentPage]?.media;
+      if (currentMedia && currentMedia.type === 'video') {
         const videoElement = document.getElementById('linkboard-video') as HTMLVideoElement;
         if (videoElement) {
           videoElement.pause();
@@ -116,7 +116,7 @@ const FeatureIntroModal = ({ visible, onClose }: { visible: boolean, onClose: ()
             <div className="media-container" key={currentPage}>{features[currentPage].media}</div>
           </>
         ) : (
-          <Form form={form} onFinish={handleSubmit} layout="vertical">
+          <Form form={form} onFinish={handleSubmit} layout="vertical" style={{height: '558px'}}> 
             <Form.Item
               label={<span style={{ fontSize: '16px' }}>How useful is this feature day to day for you?</span>}
               name="usefulness"
@@ -135,7 +135,7 @@ const FeatureIntroModal = ({ visible, onClose }: { visible: boolean, onClose: ()
               <Input placeholder="your@email.com" />
             </Form.Item>
             <Form.Item name="updates" valuePropName="checked">
-              <Checkbox>Send me feature updates (I promise no spam!)</Checkbox>
+              <Checkbox>Receive feature updates (We promise no spam!)</Checkbox>
             </Form.Item>
           </Form>
         )}

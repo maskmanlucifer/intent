@@ -14,6 +14,7 @@ import {
   EditOutlined,
   EllipsisOutlined,
   LoadingOutlined,
+  MehOutlined,
   SyncOutlined,
 } from "@ant-design/icons";
 
@@ -41,6 +42,12 @@ interface SidebarProps {
   setSelectedFolder: (id: string) => void;
   isSidebarCollapsed: boolean;
   setIsSidebarCollapsed: (isSidebarCollapsed: boolean) => void;
+  setIsWhatsNewModalData: (isWhatsNewModalData: {
+    isOpen: boolean;
+    feature: string;
+    title: string;
+    media: string;
+  }) => void;
 }
 
 const withTextTooltip = (
@@ -171,6 +178,7 @@ const Sidebar = ({
   setSelectedFolder,
   isSidebarCollapsed,
   setIsSidebarCollapsed,
+  setIsWhatsNewModalData,
 }: SidebarProps) => {
   const todayFolder = folders.find((folder) => folder.name === "Today");
 
@@ -431,7 +439,35 @@ const Sidebar = ({
         <Drawer
           title={
             <div className="drawer-title-reminder-form">
-              MANAGE REMINDERS{" "}
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row-reverse",
+                  justifyContent: "flex-end",
+                  alignItems: "center",
+                  fontFamily: "var(--secondary-font)",
+                  fontSize: "20px",
+                }}
+              >
+                {" "}
+                <Button
+                  icon={<MehOutlined />}
+                  type="link"
+                  className="watch-demo-btn"
+                  onClick={() => {
+                    setIsWhatsNewModalData({
+                      isOpen: true,
+                      feature: 'reminder',
+                      title: 'REMINDER',
+                      media: 'https://ik.imagekit.io/dnz8iqrsyc/reminder.mp4',
+                    });
+                    setIsReminderFormDrawerOpen(false);
+                  }}
+                >
+                  Watch demo
+                </Button>
+                MANAGE REMINDERS{" "}
+              </div> 
               <Button
                 icon={<CloseOutlined />}
                 type="default"
