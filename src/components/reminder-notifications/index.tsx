@@ -5,6 +5,7 @@ import { TReminderEvent } from '../../types';
 import { CloseOutlined } from '@ant-design/icons';
 import './index.scss';
 import { getDateAndTime } from '../../utils';
+import { Popconfirm } from 'antd';
 
 const ReminderNotifications = () => {
   const activeReminders = useSelector(selectActiveReminders);
@@ -21,7 +22,7 @@ const ReminderNotifications = () => {
 
   return (
     <div className="reminder-notifications">
-      <div className="reminder-notifications-header">Today's Reminders</div>
+      <div className="reminder-notifications-header">Today's Reminders 🕰</div>
       {[...activeReminders].map((reminder: TReminderEvent) => (
         <div key={reminder.id} className="reminder-notification">
           <div className="reminder-notification-title">{reminder.title}</div>
@@ -29,7 +30,9 @@ const ReminderNotifications = () => {
           <div className="reminder-scheduled reminder-scheduled-timing">
           You meant to do this at <span className="reminder-scheduled-time">{getDateAndTime(reminder.date, reminder.time).formattedTime}</span>
           </div>
-          <CloseOutlined onClick={() => dismissReminder(reminder)} />
+          <Popconfirm title="Are you sure you want to dismiss this reminder?" onConfirm={() => dismissReminder(reminder)} placement='left' arrow={false}>
+            <CloseOutlined style={{cursor: 'pointer'}} />
+          </Popconfirm>
         </div>
       ))}
     </div>

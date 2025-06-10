@@ -31,7 +31,12 @@ function App() {
   const settings = useSelector(selectSettings);
   const isSidebarCollapsed = useSelector(selectIsSidebarCollapsed);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
-  const [isWhatsNewModalOpen, setIsWhatsNewModalOpen] = useState(false);
+  const [isWhatsNewModalData, setIsWhatsNewModalData] = useState({
+    isOpen: false,
+    feature: 'linkboard',
+    title: 'Linkboard',
+    media: 'https://ik.imagekit.io/dnz8iqrsyc/linkboard-intro.mp4',
+  });
   const [isFeatureIntroModalOpen, setIsFeatureIntroModalOpen] = useState(false);
 
   useEffect(() => {
@@ -102,6 +107,7 @@ function App() {
           <Todo
             isSidebarCollapsed={isSidebarCollapsed}
             setIsSidebarCollapsed={handleSidebarCollapsed}
+            setIsWhatsNewModalData={setIsWhatsNewModalData}
           />
         )}
         {activePage !== PAGES.BREAK && (
@@ -131,7 +137,12 @@ function App() {
                   type="link"
                   className="watch-demo-btn"
                   onClick={() => {
-                    setIsWhatsNewModalOpen(true);
+                    setIsWhatsNewModalData({
+                      isOpen: true,
+                      feature: 'linkboard',
+                      title: 'LINKBOARD',
+                      media: 'https://ik.imagekit.io/dnz8iqrsyc/linkboard-intro.mp4',
+                    });
                     setIsLinkBoardOpen(false);
                   }}
                 >
@@ -189,17 +200,17 @@ function App() {
             <TimeBlock />
           </Drawer>
         )}
-        {isWhatsNewModalOpen && (
+        {isWhatsNewModalData.isOpen && (
           <div className="iframe-container">
             <div className="iframe-header">
-              <span>LINKBOARD</span>
+              <span>{isWhatsNewModalData.title}</span>
               <div className="close-icon">
-                <CloseIcon onClick={() => setIsWhatsNewModalOpen(false)} />
+                <CloseIcon onClick={() => setIsWhatsNewModalData({ isOpen: false, feature: '', title: '', media: '' })} />
               </div>
             </div>
             <video width="1200" height="560" controls>
               <source
-                src="https://ik.imagekit.io/dnz8iqrsyc/linkboard-intro.mp4"
+                src={isWhatsNewModalData.media}
                 type="video/mp4"
               />
               Your browser does not support the video tag.

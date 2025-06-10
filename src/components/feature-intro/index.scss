@@ -10,12 +10,20 @@
     color: var(--primary-color);
     display: flex;
     justify-content: center;
+
+    span {
+      display: inline-block;
+      padding: 4px 16px;
+      background-color: var(--green-700);
+      color: white;
+      border-radius: 8px;
+    }
   }
 
   .modal-body {
     padding: 0px;
     padding-top: 24px;
-    min-height: 400px;
+    min-height: 300px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -35,6 +43,8 @@
       margin-bottom: 24px;
       max-width: 400px;
       line-height: 1.5;
+      margin: 0px;
+      margin-bottom: 16px;
     }
 
     .media-container {
@@ -46,12 +56,6 @@
       display: flex;
       justify-content: center;
       align-items: center;
-
-      img, video {
-        width: 100%;
-        height: auto;
-        display: block;
-      }
     }
 
     .ant-form {

@@ -30,9 +30,16 @@ const siderStyle: React.CSSProperties = {
 const Todo = ({
   isSidebarCollapsed,
   setIsSidebarCollapsed,
+  setIsWhatsNewModalData,
 }: {
   isSidebarCollapsed: boolean;
   setIsSidebarCollapsed: (isSidebarCollapsed: boolean) => void;
+  setIsWhatsNewModalData: (isWhatsNewModalData: {
+    isOpen: boolean;
+    feature: string;
+    title: string;
+    media: string;
+  }) => void;
 }) => {
   const folders = useSelector(selectCategories);
   const settings = useSelector(selectSettings);
@@ -91,6 +98,7 @@ const Todo = ({
             setSelectedFolder={handleFolderChange}
             isSidebarCollapsed={isSidebarCollapsed}
             setIsSidebarCollapsed={setIsSidebarCollapsed}
+            setIsWhatsNewModalData={setIsWhatsNewModalData}
           />
         </Sider>
         <div className="todo-items">

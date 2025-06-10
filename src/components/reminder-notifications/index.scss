@@ -10,6 +10,7 @@
   z-index: 2;
   min-width: 400px;
   border: 1px solid #e0e0e0;
+  animation: pulsate 3s ease-in-out infinite;
 
   .reminder-notifications-header {
     width: 100%;
@@ -53,6 +54,17 @@
   }
 }
 
+@keyframes pulsate {
+  0% {
+    background-color: #f5f5f5;
+  }
+  50% {
+    background-color: #d1d1d1; // Darker shade for more contrast
+  }
+  100% {
+    background-color: #f5f5f5;
+  }
+}
 
 .reminder-scheduled.reminder-scheduled-timing {
     font-size: 14px;
