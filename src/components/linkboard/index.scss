@@ -1,8 +1,7 @@
-
 .link-list {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 16px;
     padding: 16px;
     margin: 0 auto;
     font-family: var(--quaternary-font);
@@ -19,7 +18,7 @@
 
     .link-item {
         width: 100%;
-        background:#f5f5f5;
+        background: #f5f5f5;
         border-radius: 8px;
         display: flex;
         flex-direction: column;
@@ -38,23 +37,58 @@
             height: 24px;
             width: 24px;
             cursor: pointer;
-            border-radius: 50%;
-            background: black;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-color: transparent;
+            border-radius: 4px;
+            border: 1px solid transparent;
 
             svg {
-                width: 8px;
-                height: 8px;
-                color: #ffffff;
+                width: 16px;
+                height: 16px;
+                color: rgba(0, 0, 0, 0.45);
+            }
+
+            &:hover {
+                background: #e0e0e0;
+                border-color: #e0e0e0;
+
+                svg {
+                    color: rgba(0, 0, 0, 0.85);
+                }
+            }
+        }
+
+        .link-item-select {
+            position: absolute;
+            top: -12px;
+            left: -12px;
+            height: 24px;
+            width: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            display: none;
+
+            .ant-checkbox-inner {
+                border-radius: 50%;
+                height: 20px;
+                width: 20px;
+            }
+
+            &.selected {
+                display: flex;
             }
         }
 
         &:hover {
             box-shadow: 0 0px 4px rgba(0, 0, 0, 0.1);
             transition: background 0.2s ease-in-out;
+
+            .link-item-select {
+                display: flex;
+            }
         }
 
         h2 {
@@ -102,6 +136,94 @@
             height: auto;
             width: 100%;
             border-radius: 8px 8px 0 0;
+        }
+    }
+}
+
+.linkboard {
+    position: relative;
+
+    .selected-links {
+        min-width: 448px;
+        background-color: #ffffff;
+        position: fixed;
+        left: 30%;
+        top: 50%;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        border-radius: 8px;
+        z-index: 1000000000;
+        transform: translateY(-50%);
+
+        .selected-links-count {
+            color: var(--primary-color);
+        }
+
+        .selected-links-header {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+
+            h1 {
+                margin: 0;
+                font-size: 40px;
+                font-weight: 400;
+            }
+        }
+
+        .selected-links-body {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .selected-links-footer {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 4px;
+            width: 100%;
+        }
+
+        .selected-link {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 4px 8px;
+            width: fit-content;
+            width: 200px;
+            height: 20px;
+            background-color: #f5f5f5;
+
+            .favicon {
+                height: 16px;
+            }
+
+            .link-host {
+                font-size: 14px;
+                color: #333333;
+                max-width: 40%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .link-url {
+                font-size: 12px;
+                color: #666666;
+                width: 40%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .remove-icon-bucket {
+                cursor: pointer;
+            }
         }
     }
 }
