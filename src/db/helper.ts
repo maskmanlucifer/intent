@@ -71,6 +71,19 @@ class DBHelper {
     await store.delete(id);
   }
 
+  async deleteLinks(ids: string[]) {
+    if (!this.db) {
+      return;
+    }
+    
+    const transaction = this.db.transaction(
+      DB_CONFIG.stores.linkboard.name,
+      "readwrite",
+    );
+    const store = transaction.objectStore(DB_CONFIG.stores.linkboard.name);
+    await Promise.all(ids.map((id) => store.delete(id)));
+  }
+
   async addTodo(todo: Task) {
     if (!this.db) {
       return;

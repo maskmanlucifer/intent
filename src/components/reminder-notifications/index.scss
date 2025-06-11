@@ -8,9 +8,8 @@
   padding: 4px;
   border-radius: 6px;
   z-index: 2;
-  min-width: 400px;
+  width: 272px;
   border: 1px solid #e0e0e0;
-  animation: pulsate 3s ease-in-out infinite;
 
   .reminder-notifications-header {
     width: 100%;
@@ -19,6 +18,17 @@
     align-items: center;
     font-size: 24px;
     font-family: var(--secondary-font);
+    position: relative;
+
+    .reminder-notifications-badge {
+      position: absolute;
+      top: -10px;
+      left: -10px;
+
+      .ant-badge-count {
+        box-shadow: none;
+      }
+    }
   }
 
   .reminder-notification {
@@ -33,11 +43,13 @@
       font-weight: 500;
       margin-bottom: 4px;
       font-size: 16px;
+      margin-right: 16px;
     }
 
     .reminder-notification-description {
       margin-bottom: 8px;
       font-size: 14px;
+      margin-right: 16px;
     }
 
     .anticon-close {
@@ -51,18 +63,6 @@
         width: 12px;
       }
     }
-  }
-}
-
-@keyframes pulsate {
-  0% {
-    background-color: #f5f5f5;
-  }
-  50% {
-    background-color: #d1d1d1; // Darker shade for more contrast
-  }
-  100% {
-    background-color: #f5f5f5;
   }
 }
 

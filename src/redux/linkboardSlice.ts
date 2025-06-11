@@ -36,6 +36,10 @@ const notesSlice = createSlice({
       state.links = state.links.filter((link) => link.id !== action.payload);
       dbHelper.deleteLink(action.payload);
     },
+    removeLinks: (state, action) => {
+      state.links = state.links.filter((link) => !action.payload.includes(link.id));
+      dbHelper.deleteLinks(action.payload);
+    },
     updateLink: (state, action) => {
       const index = state.links.findIndex(
         (link) => link.id === action.payload.id,
@@ -53,7 +57,7 @@ const notesSlice = createSlice({
   },
 });
 
-export const { addLink, removeLink, updateLink, addLinks } = notesSlice.actions;
+export const { addLink, removeLink, updateLink, addLinks, removeLinks } = notesSlice.actions;
 
 export const selectLinks = (state: RootState) =>
   [...state.linkboard.links].sort((a, b) => {

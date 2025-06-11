@@ -5,7 +5,7 @@ import { TReminderEvent } from '../../types';
 import { CloseOutlined } from '@ant-design/icons';
 import './index.scss';
 import { getDateAndTime } from '../../utils';
-import { Popconfirm } from 'antd';
+import { Badge, Popconfirm } from 'antd';
 
 const ReminderNotifications = () => {
   const activeReminders = useSelector(selectActiveReminders);
@@ -22,7 +22,7 @@ const ReminderNotifications = () => {
 
   return (
     <div className="reminder-notifications">
-      <div className="reminder-notifications-header">Today's Reminders 🕰</div>
+      <div className="reminder-notifications-header">Today's Reminders 🕰 <Badge count={activeReminders.length} className='reminder-notifications-badge'/></div>
       {[...activeReminders].map((reminder: TReminderEvent) => (
         <div key={reminder.id} className="reminder-notification">
           <div className="reminder-notification-title">{reminder.title}</div>

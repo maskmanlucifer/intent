@@ -481,7 +481,7 @@ const Sidebar = ({
           onClose={() => setIsReminderFormDrawerOpen(false)}
           placement="top"
           closable={false}
-          height={280}
+          height={254}
         >
           <div className="reminder-list">
             {isRemindersLoading && (
@@ -524,7 +524,6 @@ const Sidebar = ({
                     size="small"
                   />
                 </div>
-                <hr />
               </div>
             ))}
             {!isRemindersLoading && reminders.length === 0 && (
