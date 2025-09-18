@@ -47,6 +47,10 @@
       gap: 8px;
       align-items: center;
       height: 22px;
+      border: 1px solid rgba(0, 0, 0, 0.09);
+      background-color: rgba(0, 0, 0, 0.04);
+      padding: 4px;
+      border-radius: 4px;
 
       span {
          cursor: pointer;
@@ -62,4 +66,17 @@
          }
       }
    }
+}
+
+.ant-collapse-extra {
+   margin-top: -2px;
+}
+
+.subtasks {
+   margin-left: 35px;
+   position: relative;
+}
+
+.ant-collapse .ant-collapse-content>.ant-collapse-content-box {
+   padding: 8px;
 }

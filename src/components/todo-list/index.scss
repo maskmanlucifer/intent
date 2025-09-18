@@ -1,7 +1,7 @@
 .todo-list {
    width: 700px;
    margin: auto;
-   margin-top: 8%;
+   margin-top: 100px;
    margin-bottom: 100px;
    position: relative;
 
@@ -16,7 +16,7 @@
       align-items: center;
 
       .focus-mode-header {
-         font-size: 36px;         
+         font-size: 36px;
          font-weight: 500;
       }
 
@@ -48,7 +48,7 @@
       }
    }
 
-   .ant-collapse-content > .ant-collapse-content-box {
+   .ant-collapse-content>.ant-collapse-content-box {
       padding: 8px;
    }
 
@@ -58,19 +58,28 @@
    }
 
    .ant-collapse-header-text {
-      width: calc(100% - 150px);
+      width: calc(100% - 90px);
+   }
+
+   .ant-collapse-item .ant-collapse-header {
+      padding-top: 6px;
+      padding-bottom: 6px;
    }
 
    .ant-collapse-header {
       &:hover {
          .todo-actions {
             display: flex;
+            border: 1px solid rgba(0, 0, 0, 0.09);
+            background-color: rgba(0, 0, 0, 0.04);
          }
       }
 
       &:focus-within {
          .todo-actions {
             display: flex;
+            border: 1px solid rgba(0, 0, 0, 0.09);
+            background-color: rgba(0, 0, 0, 0.04);
          }
       }
    }
@@ -78,11 +87,11 @@
    .ant-collapse-content-active .ant-collapse-content-box:hover {
       .add-subtask-button.haveSubtasks {
          display: flex;
-      } 
+      }
    }
 
    .subtasks {
-      margin-left: 57px;
+      margin-left: 35px;
       position: relative;
    }
 
@@ -111,6 +120,8 @@
       align-items: center;
       height: 22px;
       cursor: pointer;
+      padding: 8px;
+      border-radius: 4px;
 
       span {
          cursor: pointer;
@@ -130,9 +141,8 @@
          height: 18px;
          width: 18px;
 
-
-
-         &.focused, &:hover {
+         &.focused,
+         &:hover {
             path {
                stroke: var(--green-500);
                fill: var(--green-500);
@@ -147,19 +157,27 @@
 }
 
 .folder-move-item {
-      .ant-dropdown-menu-title-content {
-         display: flex;
-         gap: 8px;
-         align-items: center;
-         svg {
-            height: 18px;
-            width: 18px;
-         }
+   .ant-dropdown-menu-title-content {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+
+      svg {
+         height: 18px;
+         width: 18px;
+      }
    }
 }
+
 .folder-move-item-to .ant-dropdown-menu-title-content {
    color: var(--primary-color);
 }
+
+// .todo-list-collapse:focus {
+//    .drag-selected {
+//       background-color: transparent;
+//    }
+// }
 
 .todo-list-collapse.dragging {
    cursor: all-scroll;
@@ -169,29 +187,29 @@
    }
 }
 
+.drag-selected {
+   background-color: var(--blue-10);
+}
+
 .drag-handle {
    .drag-icon {
       height: 16px;
       width: 16px;
       position: absolute;
       top: 3px;
-      left: -38px;
+      left: -24px;
       display: none;
    }
 
    &:hover {
       .ant-collapse-header-text {
          position: relative;
-      
+
          .drag-icon {
             display: block;
          }
       }
    }
-}
-
-.drag-selected {
-   background-color: var(--blue-10);
 }
 
 

@@ -10,18 +10,13 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 16px;   
+        gap: 16px;
         font-family: var(--secondary-font);
         width: 259px;
         transition: width 0.2s ease-in-out;
 
-        &.notes {
-            width: 100px;
-            transition: width 0.2s ease-in-out;
-        }
-
         &.topbar-left-collapsed {
-            width: 79px;
+            width: 39px;
 
             .topbar-left-title {
                 justify-content: center;
@@ -45,7 +40,7 @@
             }
         }
     }
-    
+
     .topbar-right {
         display: flex;
         align-items: center;
@@ -55,42 +50,7 @@
         flex: 1;
         border-left: 1px solid #e0e0e0;
 
-        .contextual-info {
-            display: flex;
-            align-items: center;
-            font-size: 14px;
-            color: #aaaaaa;
-            margin-left: 16px;
-        }
-
-        .feedback {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            
-            svg {
-                path {
-                    fill: var(--primary-color);
-                }
-            }
-        }
-
-
-        .settings-btn {
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-
-            svg {
-                color: var(--primary-color);
-                
-                path {
-                    fill: var(--primary-color);
-                }
-            }
-        }
-
-        .check-schedule-button {
+        .link-board-button {
             margin-left: auto;
         }
     }

@@ -3,7 +3,7 @@
   "name": "Intent",
   "version": "3.1",
   "description": "Your All-in-One Productivity Hub",
-  "permissions": ["storage", "alarms", "offscreen", "tabs", "contextMenus"],
+  "permissions": ["storage", "alarms", "tabs", "contextMenus"],
   "background": {
     "service_worker": "background.js",
     "type": "module"
@@ -17,13 +17,6 @@
       "128": "add.png"
     }
   },
-  "content_scripts": [
-    {
-      "matches": ["http://*/*", "https://*/*"],
-      "js": ["content-script.js"]
-    }
-  ],
-  "host_permissions": ["https://res.cloudinary.com/*"],
   "icons": {
     "16": "logo32.png",
     "32": "logo32.png",

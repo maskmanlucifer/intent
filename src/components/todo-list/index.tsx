@@ -59,7 +59,24 @@ const TodoList = ({
       <div className="todo-actions">
         <Tooltip
           arrow={false}
-          title="Focus on task"
+          title="Add subtask"
+          mouseEnterDelay={0}
+          mouseLeaveDelay={0}
+        >
+          <PlusOutlined
+            className="add-subtask-icon"
+            onClick={() => {
+              dispatch(addNewSubtask({
+                parentId: task.id,
+                index: task.subtasks.length,
+                categoryId: task.categoryId,
+              }));
+            }}
+          />
+        </Tooltip>
+        <Tooltip
+          arrow={false}
+          title="Focus task"
           mouseEnterDelay={0}
           mouseLeaveDelay={0}
         >
@@ -128,6 +145,12 @@ const TodoList = ({
             </Dropdown>
           </Tooltip>
         )}
+        <Tooltip
+          arrow={false}
+          title="Delete task"
+          mouseEnterDelay={0}
+          mouseLeaveDelay={0}
+        >
         <Popconfirm
           title="Are you sure you want to delete this task?"
           okText="Yes, delete"
@@ -144,13 +167,8 @@ const TodoList = ({
         >
           <DeleteOutlined className="delete-icon" />
         </Popconfirm>
+        </Tooltip>
       </div>
-    );
-  };
-
-  const handleAddSubtask = (id: string, index: number) => {
-    dispatch(
-      addNewSubtask({ parentId: id, index, categoryId: selectedFolder }),
     );
   };
 
@@ -247,7 +265,7 @@ const TodoList = ({
       )}{" "}
       {finalTodos.length > 0 && (
         <Collapse
-          defaultActiveKey={focusedTaskId ? [focusedTaskId + "-" + selectedFolder] : []}
+          activeKey={focusedTaskId ? [focusedTaskId + "-" + selectedFolder] : finalTodos.filter((task) => task.subtasks.length > 0).map((task) => `${task.id}-${selectedFolder}`)}
           expandIconPosition={"start"}
           className={classNames("todo-list-collapse", {
             dragging: isDragging,
@@ -257,8 +275,10 @@ const TodoList = ({
             <Collapse.Panel
               header={
                 <>
-                  <DragIcon className="drag-icon" />
-                  <TodoItem todoItem={task} index={index} />
+                  <DragIcon className={classNames("drag-icon", {
+                    "no-subtasks": task.subtasks.length === 0,
+                  })} />
+                  <TodoItem todoItem={task} index={index} key={`${task.id}-${selectedFolder}-${task.subtasks.length}`} />
                 </>
               }
               key={`${task.id}-${selectedFolder}`}
@@ -266,8 +286,9 @@ const TodoList = ({
               collapsible="header"
               data-allow-drop={true}
               className="drag-handle"
+              showArrow={false}
             >
-              <div className="subtasks">
+              {task.subtasks.length > 0 && <div className="subtasks">
                 {task.subtasks.map((subtask: Subtask, index: number) => (
                   <TodoItem
                     todoItem={subtask}
@@ -275,20 +296,7 @@ const TodoList = ({
                     index={index}
                   />
                 ))}
-                <Button
-                  type="primary"
-                  onClick={() =>
-                    handleAddSubtask(task.id, task.subtasks.length)
-                  }
-                  className={classNames("add-subtask-button", {
-                    haveSubtasks: task.subtasks.length > 0,
-                  })}
-                  icon={<PlusOutlined />}
-                  size="small"
-                >
-                  {task.subtasks.length > 0 ? "" : "Add new subtask"}
-                </Button>
-              </div>
+              </div>}
             </Collapse.Panel>
           ))}
         </Collapse>

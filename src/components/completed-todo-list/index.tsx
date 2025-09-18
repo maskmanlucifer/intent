@@ -1,4 +1,3 @@
-import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   clearCompletedTasks,
@@ -96,13 +95,13 @@ const CompletedTodoList = () => {
                   <div className="completed-todo-items-group-header">
                     {folderIdToName[folder]}
                   </div>
-                  <Collapse expandIconPosition={"start"}>
+                  <Collapse expandIconPosition={"start"} activeKey={todos.filter((task) => task.subtasks.length > 0).map((task) => `${task.id}-${folder}`)}>
                     {todos.map((task, index) => (
                       <Collapse.Panel
                         header={<TodoItem todoItem={task} index={index} />}
                         key={`${task.id}-${folder}`}
-                        collapsible="header"
                         extra={genExtra(task)}
+                        showArrow={false}
                       >
                         <div className="subtasks">
                           {task.subtasks.map(
