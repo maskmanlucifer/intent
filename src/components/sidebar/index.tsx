@@ -1,40 +1,35 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import Mousetrap from "mousetrap";
 import "./index.scss";
 import { ReactComponent as FolderIcon } from "../../assets/icons/folder.svg";
 import { ReactComponent as TodayFolderIcon } from "../../assets/icons/today-folder.svg";
 import { ReactComponent as CompletedIcon } from "../../assets/icons/completed.svg";
 import { ReactComponent as AddSquareIcon } from "../../assets/icons/add-square.svg";
-
+import HelpUsImprove from "../help-us-improve";
 import classNames from "classnames";
-import { Button, Drawer, Dropdown, Empty, message, Modal, Popconfirm, Spin, Tooltip } from "antd";
+import { Button, Dropdown, message, Modal, Popover, Tooltip } from "antd";
 import {
-  CalendarOutlined,
-  CloseOutlined,
   DeleteOutlined,
   EditOutlined,
   EllipsisOutlined,
-  LoadingOutlined,
-  MehOutlined,
-  SyncOutlined,
 } from "@ant-design/icons";
 
-import { ReactComponent as ReminderIcon } from "../../assets/icons/reminder.svg";
-import { ReactComponent as AddCircleIcon } from "../../assets/icons/add-circle.svg";
-
-import { Category, TReminderEvent } from "../../types";
+import { Category } from "../../types";
 import {
   addCategory,
   deleteCategory,
   updateCategory,
 } from "../../redux/categorySlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { ReactComponent as TickIcon } from "../../assets/icons/tick-icon.svg";
 import { ReactComponent as ClearInputIcon } from "../../assets/icons/clean-input-icon.svg";
 import { MessageInstance } from "antd/es/message/interface";
-import ReminderForm from "../reminder-form";
-import { fetchReminders, selectIsLoading, selectReminders } from "../../redux/reminderSlice";
 import { AppDispatch } from "../../redux/store";
-import { getDateAndTime } from "../../utils";
+import { KEYBOARD_SHORTCUTS } from "../../constant";
+import { ReactComponent as QuestionIcon } from "../../assets/icons/question.svg";
+import { ReactComponent as KeyboardOutlined } from "../../assets/icons/keyboard.svg";
+import { ReactComponent as DatabaseIcon } from "../../assets/icons/database.svg";
+import KeyboardShortcuts from "../shortcuts";
 
 interface SidebarProps {
   folders: Category[];
@@ -50,33 +45,6 @@ interface SidebarProps {
   }) => void;
 }
 
-const withTextTooltip = (
-  text: string,
-  isSidebarCollapsed: boolean,
-  icon: React.ReactNode,
-  onClick?: () => void
-) => {
-  if (isSidebarCollapsed) {
-    return (
-      <Tooltip
-        title={text}
-        placement="right"
-        arrow={false}
-        mouseEnterDelay={0}
-        mouseLeaveDelay={0}
-      >
-        <div className="sidebar-footer-text" onClick={onClick}>{icon}</div>
-      </Tooltip>
-    );
-  }
-  return (
-    <div className="sidebar-footer-text" onClick={onClick}>
-      {icon}
-      <span className="sidebar-footer-text-text">{text}</span>
-    </div>
-  );
-};
-
 const withTooltip = (
   component: React.ReactNode,
   tooltip: string,
@@ -90,6 +58,10 @@ const withTooltip = (
         arrow={false}
         mouseEnterDelay={0}
         mouseLeaveDelay={0}
+        autoAdjustOverflow={true}
+        overlayInnerStyle={{
+          marginLeft: "10px",
+        }}
       >
         {component}
       </Tooltip>
@@ -170,15 +142,12 @@ const EditCategoryBtn = ({
   );
 };
 
-
-
 const Sidebar = ({
   folders,
   selectedFolder,
   setSelectedFolder,
   isSidebarCollapsed,
   setIsSidebarCollapsed,
-  setIsWhatsNewModalData,
 }: SidebarProps) => {
   const todayFolder = folders.find((folder) => folder.name === "Today");
 
@@ -190,13 +159,28 @@ const Sidebar = ({
   const [isEditing, setIsEditing] = useState<Boolean | string>(false);
   const [isDeleting, setIsDeleting] = useState<Boolean | string>(false);
   const [messageApi, contextHolder] = message.useMessage();
-  const [isReminderFormOpen, setIsReminderFormOpen] = useState(false);
-  const [isReminderFormDrawerOpen, setIsReminderFormDrawerOpen] = useState(false);
-  const [reminderFormData, setReminderFormData] = useState<TReminderEvent | undefined>(undefined);
-  const reminders = useSelector(selectReminders);
-  const isRemindersLoading = useSelector(selectIsLoading);
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const [isDataStorageModalOpen, setIsDataStorageModalOpen] = useState(false);
+  const [isShortcutModalOpen, setIsShortcutModalOpen] = useState(false);
+
 
   const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+
+    const handler4 = (e: KeyboardEvent) => {
+      e.preventDefault();
+      setIsShortcutModalOpen(!isShortcutModalOpen);
+    };
+
+    Mousetrap.bind(KEYBOARD_SHORTCUTS.help.binding, handler4);
+
+    return () => {
+      Mousetrap.unbind(KEYBOARD_SHORTCUTS.linkboard.binding);
+      Mousetrap.unbind(KEYBOARD_SHORTCUTS.help.binding);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isShortcutModalOpen]);
 
   const onDelete = () => {
     if (!isDeleting || typeof isDeleting === "boolean") {
@@ -247,111 +231,108 @@ const Sidebar = ({
         })}
       >
         {contextHolder}
-        {todayFolder &&
-          withTooltip(
-            <div
-              className={classNames("folder-item", "today-folder", {
-                selected: selectedFolder === todayFolder.id,
-              })}
-              onClick={() => setSelectedFolder(todayFolder.id)}
-            >
-              <TodayFolderIcon />
-              <span>{todayFolder.name}</span>
-            </div>,
-            "Today",
-            isSidebarCollapsed
-          )}
-        {restFolders.map((folder: Category) =>
-          withTooltip(
-            <div
-              className={classNames("folder-item", {
-                selected: selectedFolder === folder.id,
-              })}
-              key={folder.id}
-              onClick={() => {
-                if (!isEditing) {
-                  setSelectedFolder(folder.id);
-                  setIsEditing(false);
-                  setIsDeleting(false);
-                }
-              }}
-            >
-              {isEditing === folder.id && (
-                <EditCategoryBtn
-                  folder={folder}
-                  setSelectedFolder={setSelectedFolder}
-                  setIsEditing={setIsEditing}
-                  messageApi={messageApi}
-                />
-              )}
-              {isEditing !== folder.id && (
-                <>
-                  <FolderIcon />
-                  <span className="folder-item-name">{folder.name}</span>
-                  <div
-                    className="folder-item-actions"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <Dropdown
-                      trigger={["click"]}
-                      menu={{ items: menuItems(folder) }}
-                      overlayClassName="folder-edit-actions-item-dropdown"
-                    >
-                      <span
-                        className={classNames(
-                          "folder-item-action ellipsis-icon",
-                          {
-                            expanded: !isSidebarCollapsed,
-                          }
-                        )}
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <EllipsisOutlined />
-                      </span>
-                    </Dropdown>
-                  </div>
-                </>
-              )}
-            </div>,
-            folder.name,
-            isSidebarCollapsed
-          )
+        {todayFolder && (
+          <div
+            className={classNames("folder-item", "today-folder", {
+              selected: selectedFolder === todayFolder.id,
+            })}
+            onClick={() => setSelectedFolder(todayFolder.id)}
+          >
+            {withTooltip(
+              <TodayFolderIcon />,
+              todayFolder.name,
+              isSidebarCollapsed
+            )}
+            <span>{todayFolder.name}</span>
+          </div>
         )}
-        {completedFolder &&
-          withTooltip(
-            <div
-              className={classNames("folder-item", "completed-folder", {
-                selected: selectedFolder === completedFolder.id,
-              })}
-              onClick={() => {
-                setSelectedFolder(completedFolder.id);
+        {restFolders.map((folder: Category) => (
+          <div
+            className={classNames("folder-item", {
+              selected: selectedFolder === folder.id,
+            })}
+            key={folder.id}
+            onClick={() => {
+              if (!isEditing) {
+                setSelectedFolder(folder.id);
                 setIsEditing(false);
                 setIsDeleting(false);
-              }}
-            >
-              <CompletedIcon />
-              <span>{completedFolder.name}</span>
-            </div>,
-            "Completed",
-            isSidebarCollapsed
-          )}
-        {isEditing !== true &&
-          withTooltip(
-            <div
-              className={classNames("folder-item", "add-folder-item")}
-              onClick={() => {
-                if (isSidebarCollapsed) {
-                  setIsSidebarCollapsed(false);
-                }
+              }
+            }}
+          >
+            {isEditing === folder.id && (
+              <EditCategoryBtn
+                folder={folder}
+                setSelectedFolder={setSelectedFolder}
+                setIsEditing={setIsEditing}
+                messageApi={messageApi}
+              />
+            )}
+            {isEditing !== folder.id && (
+              <>
+                {withTooltip(<FolderIcon />, folder.name, isSidebarCollapsed)}
+                <span className="folder-item-name">{folder.name}</span>
+                <div
+                  className="folder-item-actions"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <Dropdown
+                    trigger={["click"]}
+                    menu={{ items: menuItems(folder) }}
+                    overlayClassName="folder-edit-actions-item-dropdown"
+                  >
+                    <span
+                      className={classNames(
+                        "folder-item-action ellipsis-icon",
+                        {
+                          expanded: !isSidebarCollapsed,
+                        }
+                      )}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <EllipsisOutlined />
+                    </span>
+                  </Dropdown>
+                </div>
+              </>
+            )}
+          </div>
+        ))}
+        {completedFolder && (
+          <div
+            className={classNames("folder-item", "completed-folder", {
+              selected: selectedFolder === completedFolder.id,
+            })}
+            onClick={() => {
+              setSelectedFolder(completedFolder.id);
+              setIsEditing(false);
+              setIsDeleting(false);
+            }}
+          >
+            {withTooltip(
+              <CompletedIcon />,
+              completedFolder.name,
+              isSidebarCollapsed
+            )}
+            <span>{completedFolder.name}</span>
+          </div>
+        )}
+        {isEditing !== true && (
+          <div
+            className={classNames("folder-item", "add-folder-item")}
+            onClick={() => {
+              if (isSidebarCollapsed) {
+                setIsSidebarCollapsed(false);
+              }
+              setTimeout(() => {
                 setIsEditing(true);
-              }}
-            >
-              <AddSquareIcon />
-              <span>Add Folder</span>
-            </div>,
-            "Add Folder",
-            isSidebarCollapsed
-          )}
+              }, 300);
+            }}
+          >
+            {withTooltip(<AddSquareIcon />, "Add Folder", isSidebarCollapsed)}
+            <span>Add Folder</span>
+          </div>
+        )}
         {isEditing === true && (
           <div className="folder-item">
             <EditCategoryBtn
@@ -388,163 +369,105 @@ const Sidebar = ({
           </p>
         </Modal>
       </div>
-      <div className="sidebar-footer">
-        {withTextTooltip(
-          "Add Reminder",
-          isSidebarCollapsed,
-          <AddCircleIcon />,
-          () => setIsReminderFormOpen(true)
-        )}
-
-        {withTextTooltip(
-          "Manage Reminders",
-          isSidebarCollapsed,
-          <ReminderIcon />,
-          () => {
-            if (isRemindersLoading === null) {
-              dispatch(fetchReminders());
-            }
-            setIsReminderFormDrawerOpen(!isReminderFormDrawerOpen)
-          }
-        )}
-        <Modal
-          title={!reminderFormData ? "Add Reminder" : "Edit Reminder"}
-          open={isReminderFormOpen}
-          onCancel={() => {
-            setIsReminderFormOpen(false);
-            setReminderFormData(undefined);
-          }}
-          centered={true}
-          maskClosable={false}
-          destroyOnClose={true}
-          footer={null}
-        >
-          <ReminderForm
-            onCancel={() => {
-              setIsReminderFormOpen(false);
-              setReminderFormData(undefined);
-            }}
-            onSave={() => {
-              setIsReminderFormOpen(false);
-              setReminderFormData(undefined);
-              messageApi.open({
-                type: "success",
-                content: "Reminder saved successfully!",
-              });
-            }}
-            isEditing={!!reminderFormData}
-            initialData={reminderFormData}
-          />
-        </Modal>
-        <Drawer
-          title={
-            <div className="drawer-title-reminder-form">
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row-reverse",
-                  justifyContent: "flex-end",
-                  alignItems: "center",
-                  fontFamily: "var(--secondary-font)",
-                  fontSize: "20px",
-                }}
-              >
-                {" "}
-                <Button
-                  icon={<MehOutlined />}
-                  type="link"
-                  className="watch-demo-btn"
-                  onClick={() => {
-                    setIsWhatsNewModalData({
-                      isOpen: true,
-                      feature: 'reminder',
-                      title: 'REMINDER',
-                      media: 'https://ik.imagekit.io/dnz8iqrsyc/reminder.mp4',
-                    });
-                    setIsReminderFormDrawerOpen(false);
-                  }}
-                >
-                  Watch demo
-                </Button>
-                MANAGE REMINDERS{" "}
-              </div> 
-              <Button
-                icon={<CloseOutlined />}
-                type="default"
-                onClick={() => setIsReminderFormDrawerOpen(false)}
-                size="small"
-                style={{ marginLeft: "auto" }}
-              />
-            </div>
-          }
-          open={isReminderFormDrawerOpen}
-          onClose={() => setIsReminderFormDrawerOpen(false)}
-          placement="top"
-          closable={false}
-          height={254}
-        >
-          <div className="reminder-list">
-            {isRemindersLoading && (
-              <div className="reminder-loading">
-                <Spin indicator={<LoadingOutlined spin />} />
-              </div>
-            )}
-            {!isRemindersLoading && reminders.length !== 0 && [...reminders].map((reminder) => (
-              <div key={reminder.id} className="reminder-item">
-                <div className="reminder-details">
-                  <div className="reminder-title">{reminder.title}</div>
-                  <div className="reminder-description">{reminder.description}</div>
-                  <div className="reminder-scheduled">
-                    Created for <CalendarOutlined style={{ marginLeft: 4 }} /> <span className="reminder-scheduled-date">{getDateAndTime(reminder.date, reminder.time).formattedDate}</span> at <span className="reminder-scheduled-time">{getDateAndTime(reminder.date, reminder.time).formattedTime}</span>
-                  </div>
-                  {reminder.isRecurring && reminder.repeatRule && <div className="reminder-repeated">
-                    Repeats <SyncOutlined  style={{ marginLeft: 4 }}/> <span  style={{ marginLeft: 37, }}className="reminder-repeated-icon">{reminder.repeatRule.charAt(0)?.toUpperCase() + reminder.repeatRule.slice(1)}</span>
-                  </div>}
-                </div>
-                <div className="reminder-actions">
-                  <Popconfirm
-                    title="Are you sure you want to delete this reminder?"
-                    onConfirm={() => {
-                      if (chrome.runtime) {
-                        chrome.runtime.sendMessage({ action: "REMOVE_REMINDER", reminderId: reminder.id });
-                      }
-                    }}
-                    okText="Yes"
-                    cancelText="No"
-                  >
-                    <Button type="default" danger icon={<DeleteOutlined />} size="small"/>
-                  </Popconfirm>
-                  <Button
-                    type="primary"
-                    onClick={() => {
-                      setReminderFormData(reminder);
-                      setIsReminderFormOpen(true);
-                    }}
-                    icon={<EditOutlined />}
-                    size="small"
-                  />
-                </div>
-              </div>
-            ))}
-            {!isRemindersLoading && reminders.length === 0 && (
-              <div className="reminder-empty">
-                <Empty description="No reminders found" />
-                <Button
-                  type="primary"
-                  size="small"
-                  onClick={() => {
-                    setIsReminderFormOpen(true);
-                    setIsReminderFormDrawerOpen(false);
-                  }}
-                  className="reminder-empty-button"
-                >
-                  Add Reminder
-                </Button>
-              </div>
-            )}
+      <div className="sidebar-bottom-actions">
+          
+          <div
+            className="sidebar-bottom-action-item"
+            onClick={() => setIsDataStorageModalOpen(true)}
+          >
+            {withTooltip(<DatabaseIcon />, "How We Store Your Data", isSidebarCollapsed)}
+            <span>How we store your data</span>
           </div>
-        </Drawer>
-      </div>
+          
+        <Popover
+          content={<HelpUsImprove setPopoverState={setIsPopoverOpen} />}
+          title={null}
+          trigger="click"
+          open={isPopoverOpen}
+          destroyTooltipOnHide={true}
+          onOpenChange={(open) => setIsPopoverOpen(open)}
+          placement="bottomRight"
+          arrow={false}
+        >
+          
+            <div className="sidebar-bottom-action-item">
+            {withTooltip(<QuestionIcon />, "Help us improve", isSidebarCollapsed)}
+            <span>Help us improve</span>
+            </div>
+        </Popover>
+        
+          
+            <div className="sidebar-bottom-action-item" onClick={() => setIsShortcutModalOpen(!isShortcutModalOpen)}>
+            {withTooltip(<KeyboardOutlined />, "Keyboard Shortcuts (" + KEYBOARD_SHORTCUTS.help.key + ")", isSidebarCollapsed)}
+            <span>Keyboard shortcuts</span>
+          </div>
+          <Modal
+        open={isDataStorageModalOpen}
+        onCancel={() => setIsDataStorageModalOpen(false)}
+        title={
+          <span className="info-modal-header">
+            How Your Data is Stored & Protected
+          </span>
+        }
+        centered={true}
+        width={800}
+        okText="Got it"
+        footer={[
+          <Button
+            key="ok"
+            type="primary"
+            onClick={() => setIsDataStorageModalOpen(false)}
+          >
+            Got it
+          </Button>,
+        ]}
+        onOk={() => setIsDataStorageModalOpen(false)}
+      >
+        <div className="info-modal-content">
+          <p>
+            All your data, including tasks, notes, and settings, is stored
+            locally in your browser. We do not sync or upload any of your data
+            to a server. The only exception is when you choose to import events
+            from an ICS calendar URL, where we need to parse and fetch event
+            details.
+          </p>
+
+          <span className="subheading">When Might Data Be Lost?</span>
+          <div className="data-lost-list">
+            <span>
+              1. If you <strong>clear your browser storage</strong> or reset
+              your browser
+            </span>
+            <span>
+              2. If you <strong>uninstall the extension</strong>
+            </span>
+            <span>
+              3. If your browser <strong>automatically clears storage</strong>{" "}
+              due to low disk space
+            </span>
+            <span>
+              4. If you switch to a different browser or device, as data does
+              not sync across devices
+            </span>
+          </div>
+
+          <p>
+            In the future, we may offer an optional way to sync your data across
+            devices. If this interests you, we’d love your feedback!
+          </p>
+        </div>
+      </Modal>
+      <Modal
+        open={isShortcutModalOpen}
+        title="Keyboard Shortcuts"
+        onOk={() => setIsShortcutModalOpen(false)}
+        onCancel={() => setIsShortcutModalOpen(false)}
+        footer={null}
+        centered={true}
+      >
+        <KeyboardShortcuts />
+      </Modal>
+        </div>
     </div>
   );
 };

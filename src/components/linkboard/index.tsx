@@ -41,10 +41,13 @@ const Linkboard = () => {
   });
 
   const filteredLinksMap = React.useMemo(() => {
-    return filteredLinks.reduce((acc, link) => {
-      acc[link.id] = link as TLink;
-      return acc;
-    }, {} as Record<string, TLink>);
+    return filteredLinks.reduce(
+      (acc, link) => {
+        acc[link.id] = link as TLink;
+        return acc;
+      },
+      {} as Record<string, TLink>
+    );
   }, [filteredLinks]);
 
   return (
@@ -188,7 +191,8 @@ const Linkboard = () => {
               }}
             >
               <Button type="primary" size="small" danger>
-                Delete {selectedLinks.length} link{selectedLinks.length > 1 ? "s" : ""}
+                Delete {selectedLinks.length} link
+                {selectedLinks.length > 1 ? "s" : ""}
               </Button>
             </Popconfirm>
           </div>

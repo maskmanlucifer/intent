@@ -1,22 +1,37 @@
 .todo-item {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 6px;
 
     .checkbox {
-        margin-right: 8px;
+        margin-top: 3px;
     }
-    
+
     .editable-text {
         padding: 4px;
         width: 100%;
         outline: none;
-        height: 24px;
+        min-height: 24px;
         padding-right: 16px;
         min-width: 200px;
+        border: none;
+        background: transparent;
+
+        &:focus {
+            border: none;
+            box-shadow: none;
+        }
 
         &::placeholder {
             color: #b0b0b0;
+        }
+
+        a:hover {
+            cursor: pointer;
+        }
+
+        &:hover {
+            cursor: text;
         }
     }
 }

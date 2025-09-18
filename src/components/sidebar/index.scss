@@ -5,17 +5,15 @@
     padding: 8px;
     background-color: #F2F2F2;
 
+    .sidebar-bottom-actions{
+        margin-top: auto;
+    }
+
     .folder-items-group {
         margin-top: 16px;
         display: flex;
         flex-direction: column;
         gap: 4px;
-
-        &.collapsed {
-            .folder-item span {
-                display: none;
-            }
-        }
     }
 
     .folder-item {
@@ -24,10 +22,13 @@
         cursor: pointer;
         gap: 8px;
         padding: 10px 16px;
+        padding-left: 6px;
         width: 100%;
         font-size: 14px;
         position: relative;
         height: 24px;
+        overflow-x: hidden;
+        min-width: 240px;
 
         &:hover,
         &.selected {
@@ -39,34 +40,24 @@
 
             color: var(--primary-color);
 
-            >svg {
+            > svg {
                 path {
                     fill: var(--primary-color);
                 }
             }
         }
 
-        // &:hover, &.selected  {
-        //     .folder-item-actions {
-        //         display: flex;
-        //     }
-        // }
-
-        .folder-item-name {
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
-        }
-
         .folder-item-actions {
             margin-left: auto;
             display: flex;
-            gap: 4px;
 
             .folder-item-action {
                 padding: 2px;
-                background-color: rgba(0, 0, 0, 0.02);
+                background-color: rgba(0, 0, 0, 0.06);
                 border-radius: 2px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
 
             &:hover {
@@ -80,9 +71,11 @@
             }
         }
 
-        >svg {
-            width: 18px;
-            height: 18px;
+        > svg {
+            min-width: 18px;
+            min-height: 18px;
+            max-width: 18px;
+            max-height: 18px;
         }
 
         &.selected {
@@ -140,6 +133,7 @@
             }
 
             color: var(--primary-color);
+
         }
 
         .category-edit-input {
@@ -216,7 +210,7 @@
 
     .ellipsis-icon {
         position: absolute;
-        right: 0;
+        right: 4px;
         top: 50%;
         transform: translateY(-50%) rotate(90deg);
     }
@@ -336,124 +330,68 @@
     }
 }
 
-.reminder-list {
+.sidebar-bottom-action-item {
     display: flex;
-    height: calc(100% - 32px);
-    gap: 16px;
-    padding: 16px;
-    overflow-x: auto; // Changed from scroll to auto
-    scrollbar-width: thin; // For Firefox
-    scrollbar-color: #d1d1d1 #f1f1f1; // Scrollbar color
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    padding-left: 6px;
+    width: 100%;
+    font-size: 14px;
+    position: relative;
+    height: 24px;
+    overflow-x: hidden;
+    min-width: 240px;
+    color: #333333;
 
-    // Webkit (Chrome, Safari) scrollbar styling
-    &::-webkit-scrollbar {
-        width: 8px;
-    }
-    &::-webkit-scrollbar-track {
-        background: #f1f1f1;
-    }
-    &::-webkit-scrollbar-thumb {
-        background: #d1d1d1;
-        border-radius: 4px;
+    &:hover {
+        cursor: pointer;
     }
 
-    .reminder-item {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        height: calc(100% - 32px);
-        min-width: 360px;
-        border: 1px solid #D9D9D9;
-        border-radius: 4px;
-        padding: 16px;
-        position: relative;
-        background-color: #F7F9FB;
-
-        .reminder-details {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-
-            .reminder-title {
-                font-size: 16px;
-                font-weight: 500;
-            }
-
-            .reminder-description {
-                font-size: 14px;
-                color: #28303F;
-            }
-
-            .reminder-scheduled {
-                font-size: 14px;
-                margin-top: 16px;
-            }
-
-            .reminder-scheduled-date {
-                margin-left: 16px;
-                display: inline-block;
-                padding: 4px 8px;
-                border-radius: 4px;
-                background-color: var(--primary-color);
-                color: white;
-                font-size: 12px;
-            }
-
-            .reminder-scheduled-time {
-                display: inline-block;
-                padding: 4px 8px;
-                border-radius: 4px;
-                background-color: var(--primary-color);
-                color: white;
-                font-size: 12px;
-            }
-
-            .reminder-repeated {
-                font-size: 14px;
-
-                .reminder-repeated-icon {
-                    font-size: 14px;
-                    color: var(--primary-color);
-                    background-color: var(--primary-color);
-                    color: white;
-                    padding: 4px 8px;
-                    border-radius: 4px;
-                    margin-left: 8px;
-                    display: inline-block;
-                    font-size: 12px;
-                }
-            }
-        }
-
-        .reminder-actions {
-            display: flex;
-            gap: 8px;
-            margin-top: auto;
-            position: absolute;
-            top: 16px;
-            right: 16px;
+    svg {
+        min-width: 18px;
+        min-height: 18px;
+        max-width: 18px;
+        max-height: 18px;
+        fill: var(--primary-color);
+        color: var(--primary-color);
+        path {
+            fill: var(--primary-color);
         }
     }
 }
 
-.reminder-empty {
+.contextual-info {
     display: flex;
     align-items: center;
-    justify-content: center;
-    height: 100%;
-    width: 100%;
-    flex-direction: column;
-    gap: 10px;
+    font-size: 14px;
+    color: #aaaaaa;
+    margin-left: 16px;
 }
 
-.reminder-empty-button {
-    margin-bottom: 24px;
-}
-
-.reminder-loading{
+.feedback {
     display: flex;
     align-items: center;
-    justify-content: center;
-    height: 100%;
-    width: 100%;
+    cursor: pointer;
+
+    svg {
+        path {
+            fill: var(--primary-color);
+        }
+    }
+}
+
+
+.keyboard-shortcuts-btn {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+
+    svg {
+        color: var(--primary-color);
+
+        path {
+            fill: var(--primary-color);
+        }
+    }
 }

@@ -45,71 +45,11 @@ body {
     position: relative;
 }
 
-.notes-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: calc(100vh - 100px);
-    width: 100%;
-
-    .ant-empty-image {
-        width: 250px;
-        height: 250px;
-    }
-
-    svg {
-        width: 250px;
-        height: 250px;
-    }
-}
-
 .ant-empty {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-}
-
-.import-calendar-btn {
-    margin-left: auto;
-}
-
-.iframe-container {
-    width: 1200px;
-    height: 600px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: 4px;
-    box-shadow: 0 0px 8px rgba(0, 0, 0, 0.2);
-    z-index: 3;
-    padding: 36px;
-    padding-top: 20px;
-    background-color: #f5f5f5;
-
-    .iframe-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 16px;
-
-        span {
-            font-size: 16px;
-            font-weight: 600;
-        }
-    }
-
-    .close-icon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        padding: 2px;
-        border-radius: 2px;
-        color: rgba(0, 0, 0, 0.45);
-        background-color: rgba(0, 0, 0, 0.06);
-    }
 }
 
 .linkboard-drawer {
@@ -130,40 +70,26 @@ body {
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
-  }
-  
-  ::-webkit-scrollbar-track {
-    background: transparent; /* Keep AntD feel */
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.4); /* Matches AntD grayish scrollbar */
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+    /* Keep AntD feel */
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Matches AntD grayish scrollbar */
     border-radius: 4px;
     transition: background-color 0.3s;
-  }
-  
-  ::-webkit-scrollbar-thumb:hover {
+}
+
+::-webkit-scrollbar-thumb:hover {
     background-color: rgba(0, 0, 0, 0.4);
-  }
-  
-  /* Firefox */
-  * {
+}
+
+/* Firefox */
+* {
     scrollbar-width: thin;
     scrollbar-color: rgba(0, 0, 0, 0.4) transparent;
-  }
-  
-  
-
-  .ant-notification-notice {
-    padding: 10px 12px !important;
-    padding-left: 16px !important;
-
-    .ant-notification-notice-message {
-        margin-bottom: 0px !important;
-    }
-
-    .ant-notification-notice-close {
-        top: 6px !important;
-        right: 10px !important;
-    }
-  }
+}
