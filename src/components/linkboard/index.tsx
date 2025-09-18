@@ -28,7 +28,7 @@ const Linkboard = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [messageApi, contextHolder] = message.useMessage();
   const [linkTypeFilter, setLinkTypeFilter] = React.useState(
-    LINKBOARD_FILTER_OPTIONS[0].value
+    LINKBOARD_FILTER_OPTIONS[0].value,
   );
 
   const [selectedLinks, setSelectedLinks] = React.useState<string[]>([]);
@@ -46,7 +46,7 @@ const Linkboard = () => {
         acc[link.id] = link as TLink;
         return acc;
       },
-      {} as Record<string, TLink>
+      {} as Record<string, TLink>,
     );
   }, [filteredLinks]);
 
@@ -110,12 +110,12 @@ const Linkboard = () => {
                     placement="left"
                     style={{ width: "40px" }}
                     onCancel={(
-                      e?: React.MouseEvent<HTMLElement, MouseEvent>
+                      e?: React.MouseEvent<HTMLElement, MouseEvent>,
                     ) => {
                       e?.stopPropagation();
                     }}
                     onConfirm={(
-                      e?: React.MouseEvent<HTMLElement, MouseEvent>
+                      e?: React.MouseEvent<HTMLElement, MouseEvent>,
                     ) => {
                       e?.stopPropagation();
                       dispatch(removeLink(link.id));
@@ -147,7 +147,7 @@ const Linkboard = () => {
                     setTimeout(() => {
                       if (selectedLinks.includes(link.id)) {
                         setSelectedLinks(
-                          selectedLinks.filter((id) => id !== link.id)
+                          selectedLinks.filter((id) => id !== link.id),
                         );
                       } else {
                         setSelectedLinks([...selectedLinks, link.id]);
@@ -221,7 +221,7 @@ const Linkboard = () => {
                     onClick={(e) => {
                       e.stopPropagation();
                       setSelectedLinks(
-                        selectedLinks.filter((id) => id !== link)
+                        selectedLinks.filter((id) => id !== link),
                       );
                     }}
                   />

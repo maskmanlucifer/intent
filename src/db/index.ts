@@ -42,7 +42,6 @@ export function initDatabase() {
           keyPath: "id",
         });
       }
-
     };
     request.onsuccess = function (event) {
       const target = event.target as IDBOpenDBRequest;

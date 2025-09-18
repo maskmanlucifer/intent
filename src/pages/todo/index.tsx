@@ -80,7 +80,7 @@ const Todo = ({
     return () => {
       Mousetrap.unbind(KEYBOARD_SHORTCUTS.addTask.binding);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -92,7 +92,7 @@ const Todo = ({
           trigger={null}
           collapsible
           collapsed={isSidebarCollapsed}
-          collapsedWidth={'40px'}
+          collapsedWidth={"40px"}
         >
           <Sidebar
             folders={folders}

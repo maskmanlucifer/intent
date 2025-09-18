@@ -67,7 +67,7 @@ class DBHelper {
     if (!this.db) {
       return;
     }
-    
+
     const transaction = this.db.transaction(
       DB_CONFIG.stores.linkboard.name,
       "readwrite",

@@ -11,7 +11,7 @@ const KeyboardShortcuts = () => {
             <div className="keyboard-shortcut-description">{description}</div>
             <div className="keyboard-shortcut-key">{shortcutKey}</div>
           </div>
-        )
+        ),
       )}
     </div>
   );
