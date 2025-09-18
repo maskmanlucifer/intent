@@ -66,11 +66,13 @@ const TodoList = ({
           <PlusOutlined
             className="add-subtask-icon"
             onClick={() => {
-              dispatch(addNewSubtask({
-                parentId: task.id,
-                index: task.subtasks.length,
-                categoryId: task.categoryId,
-              }));
+              dispatch(
+                addNewSubtask({
+                  parentId: task.id,
+                  index: task.subtasks.length,
+                  categoryId: task.categoryId,
+                }),
+              );
             }}
           />
         </Tooltip>
@@ -151,22 +153,24 @@ const TodoList = ({
           mouseEnterDelay={0}
           mouseLeaveDelay={0}
         >
-        <Popconfirm
-          title="Are you sure you want to delete this task?"
-          okText="Yes, delete"
-          onConfirm={() => {
-            dispatch(deleteTask({ id: task.id, categoryId: task.categoryId }));
-            syncSettings({
-              focusedTaskId: null,
-            });
-            messageApi.open({
-              type: "success",
-              content: `Task ${task.text} deleted successfully!`,
-            });
-          }}
-        >
-          <DeleteOutlined className="delete-icon" />
-        </Popconfirm>
+          <Popconfirm
+            title="Are you sure you want to delete this task?"
+            okText="Yes, delete"
+            onConfirm={() => {
+              dispatch(
+                deleteTask({ id: task.id, categoryId: task.categoryId }),
+              );
+              syncSettings({
+                focusedTaskId: null,
+              });
+              messageApi.open({
+                type: "success",
+                content: `Task ${task.text} deleted successfully!`,
+              });
+            }}
+          >
+            <DeleteOutlined className="delete-icon" />
+          </Popconfirm>
         </Tooltip>
       </div>
     );
@@ -265,7 +269,15 @@ const TodoList = ({
       )}{" "}
       {finalTodos.length > 0 && (
         <Collapse
-          activeKey={focusedTaskId ? [focusedTaskId + "-" + selectedFolder] : finalTodos.filter((task) => task.subtasks.length > 0).map((task) => `${task.id}-${selectedFolder}`)}
+          activeKey={
+            focusedTaskId &&
+            finalTodos.filter((task) => task.id === focusedTaskId)[0].subtasks
+              .length > 0
+              ? [focusedTaskId + "-" + selectedFolder]
+              : finalTodos
+                  .filter((task) => task.subtasks.length > 0)
+                  .map((task) => `${task.id}-${selectedFolder}`)
+          }
           expandIconPosition={"start"}
           className={classNames("todo-list-collapse", {
             dragging: isDragging,
@@ -275,10 +287,16 @@ const TodoList = ({
             <Collapse.Panel
               header={
                 <>
-                  <DragIcon className={classNames("drag-icon", {
-                    "no-subtasks": task.subtasks.length === 0,
-                  })} />
-                  <TodoItem todoItem={task} index={index} key={`${task.id}-${selectedFolder}-${task.subtasks.length}`} />
+                  <DragIcon
+                    className={classNames("drag-icon", {
+                      "no-subtasks": task.subtasks.length === 0,
+                    })}
+                  />
+                  <TodoItem
+                    todoItem={task}
+                    index={index}
+                    key={`${task.id}-${selectedFolder}-${task.subtasks.length}`}
+                  />
                 </>
               }
               key={`${task.id}-${selectedFolder}`}
@@ -288,15 +306,17 @@ const TodoList = ({
               className="drag-handle"
               showArrow={false}
             >
-              {task.subtasks.length > 0 && <div className="subtasks">
-                {task.subtasks.map((subtask: Subtask, index: number) => (
-                  <TodoItem
-                    todoItem={subtask}
-                    key={`${subtask.id}-${selectedFolder}`}
-                    index={index}
-                  />
-                ))}
-              </div>}
+              {task.subtasks.length > 0 && (
+                <div className="subtasks">
+                  {task.subtasks.map((subtask: Subtask, index: number) => (
+                    <TodoItem
+                      todoItem={subtask}
+                      key={`${subtask.id}-${selectedFolder}`}
+                      index={index}
+                    />
+                  ))}
+                </div>
+              )}
             </Collapse.Panel>
           ))}
         </Collapse>

@@ -23,14 +23,14 @@ const makeLinksClickable = (text: string) => {
         href={part}
         target="_blank"
         rel="noopener noreferrer"
-        onClick={e => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
         style={{ color: "#1677ff", textDecoration: "underline" }}
       >
         {part}
       </a>
     ) : (
       <span key={i}>{part}</span>
-    )
+    ),
   );
 };
 
@@ -93,7 +93,7 @@ const TodoItem = ({
     <div className="todo-item">
       <Checkbox
         onChange={handleCheckboxChange}
-        onClick={event => {
+        onClick={(event) => {
           event.stopPropagation();
           setIsCompleted(!isCompleted);
         }}
@@ -104,7 +104,7 @@ const TodoItem = ({
         <TextArea
           ref={textareaRef}
           value={text}
-          onChange={e => {
+          onChange={(e) => {
             dispatch(
               updateTaskText({
                 id: todoItem.id,
@@ -119,8 +119,8 @@ const TodoItem = ({
           placeholder={
             todoItem.isSubtask ? "Enter subtask details" : "Enter task details"
           }
-          onClick={event => event.stopPropagation()}
-          onFocus={event => {
+          onClick={(event) => event.stopPropagation()}
+          onFocus={(event) => {
             event.stopPropagation();
             // Move cursor to end
             const textarea = event.target as HTMLTextAreaElement;
@@ -128,7 +128,7 @@ const TodoItem = ({
             textarea.setSelectionRange(value.length, value.length);
           }}
           onBlur={handleBlur}
-          onKeyDown={event => {
+          onKeyDown={(event) => {
             if (event.key === "Enter" && event.metaKey) {
               event.stopPropagation();
               event.preventDefault();
@@ -144,27 +144,27 @@ const TodoItem = ({
               return;
             }
 
-          if (event.key === "Enter") {
-            event.stopPropagation();
-            event.preventDefault();
+            if (event.key === "Enter") {
+              event.stopPropagation();
+              event.preventDefault();
 
-            if (todoItem.isSubtask) {
-              dispatch(
-                addNewSubtask({
-                  parentId: todoItem.parentId,
-                  index: index + 1,
-                  categoryId: todoItem.categoryId,
-                }),
-              );
-            } else {
-              dispatch(
-                addNewTask({
-                  categoryId: todoItem.categoryId,
-                  order: index + 1,
-                }),
-              );
+              if (todoItem.isSubtask) {
+                dispatch(
+                  addNewSubtask({
+                    parentId: todoItem.parentId,
+                    index: index + 1,
+                    categoryId: todoItem.categoryId,
+                  }),
+                );
+              } else {
+                dispatch(
+                  addNewTask({
+                    categoryId: todoItem.categoryId,
+                    order: index + 1,
+                  }),
+                );
+              }
             }
-          }
 
             if (event.key === "Backspace" && text.trim() === "") {
               if (todoItem.isSubtask) {
@@ -203,15 +203,15 @@ const TodoItem = ({
           onClick={handleClickOutsideLink}
           tabIndex={0}
         >
-          {text.trim() === ""
-            ? (
-                <span style={{ color: "#b0b0b0" }}>
-                  {todoItem.isSubtask
-                    ? "Enter subtask details"
-                    : "Enter task details"}
-                </span>
-              )
-            : makeLinksClickable(text)}
+          {text.trim() === "" ? (
+            <span style={{ color: "#b0b0b0" }}>
+              {todoItem.isSubtask
+                ? "Enter subtask details"
+                : "Enter task details"}
+            </span>
+          ) : (
+            makeLinksClickable(text)
+          )}
         </div>
       )}
     </div>

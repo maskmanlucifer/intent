@@ -69,7 +69,7 @@ export const { updateSettings } = sessionSlice.actions;
 
 export const selectActivePage = (state: RootState) => state.session.activePage;
 export const selectSettings = (state: RootState) => state.session;
-  export const selectIsSidebarCollapsed = (state: RootState) =>
+export const selectIsSidebarCollapsed = (state: RootState) =>
   state.session.sidebarCollapsed;
 export const selectFocusedTaskId = (state: RootState) =>
   state.session.focusedTaskId;

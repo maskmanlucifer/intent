@@ -26,8 +26,6 @@ const Topbar = ({
   setIsLinkBoardOpen,
   isLinkBoardOpen,
 }: TopbarProps) => {
-  
-
   useEffect(() => {
     const handler3 = (e: KeyboardEvent) => {
       e.preventDefault();
@@ -39,7 +37,7 @@ const Topbar = ({
     return () => {
       Mousetrap.unbind(KEYBOARD_SHORTCUTS.linkboard.binding);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDrawerOpen, isLinkBoardOpen]);
 
   return (

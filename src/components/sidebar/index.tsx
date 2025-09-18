@@ -48,7 +48,7 @@ interface SidebarProps {
 const withTooltip = (
   component: React.ReactNode,
   tooltip: string,
-  isSidebarCollapsed: boolean
+  isSidebarCollapsed: boolean,
 ) => {
   if (isSidebarCollapsed) {
     return (
@@ -84,7 +84,7 @@ const EditCategoryBtn = ({
   const dispatch = useDispatch();
 
   const [updatedFolderName, setUpdatedFolderName] = useState(
-    folder?.name || ""
+    folder?.name || "",
   );
 
   const editInputRef = useRef<HTMLInputElement>(null);
@@ -152,7 +152,7 @@ const Sidebar = ({
   const todayFolder = folders.find((folder) => folder.name === "Today");
 
   const restFolders = folders.filter(
-    (folder) => folder.name !== "Today" && folder.name !== "Trash"
+    (folder) => folder.name !== "Today" && folder.name !== "Trash",
   );
 
   const completedFolder = { id: "completed", name: "Completed" };
@@ -163,11 +163,9 @@ const Sidebar = ({
   const [isDataStorageModalOpen, setIsDataStorageModalOpen] = useState(false);
   const [isShortcutModalOpen, setIsShortcutModalOpen] = useState(false);
 
-
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-
     const handler4 = (e: KeyboardEvent) => {
       e.preventDefault();
       setIsShortcutModalOpen(!isShortcutModalOpen);
@@ -179,7 +177,7 @@ const Sidebar = ({
       Mousetrap.unbind(KEYBOARD_SHORTCUTS.linkboard.binding);
       Mousetrap.unbind(KEYBOARD_SHORTCUTS.help.binding);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isShortcutModalOpen]);
 
   const onDelete = () => {
@@ -241,7 +239,7 @@ const Sidebar = ({
             {withTooltip(
               <TodayFolderIcon />,
               todayFolder.name,
-              isSidebarCollapsed
+              isSidebarCollapsed,
             )}
             <span>{todayFolder.name}</span>
           </div>
@@ -286,7 +284,7 @@ const Sidebar = ({
                         "folder-item-action ellipsis-icon",
                         {
                           expanded: !isSidebarCollapsed,
-                        }
+                        },
                       )}
                       onClick={(e) => e.stopPropagation()}
                     >
@@ -312,7 +310,7 @@ const Sidebar = ({
             {withTooltip(
               <CompletedIcon />,
               completedFolder.name,
-              isSidebarCollapsed
+              isSidebarCollapsed,
             )}
             <span>{completedFolder.name}</span>
           </div>
@@ -370,15 +368,18 @@ const Sidebar = ({
         </Modal>
       </div>
       <div className="sidebar-bottom-actions">
-          
-          <div
-            className="sidebar-bottom-action-item"
-            onClick={() => setIsDataStorageModalOpen(true)}
-          >
-            {withTooltip(<DatabaseIcon />, "How We Store Your Data", isSidebarCollapsed)}
-            <span>How we store your data</span>
-          </div>
-          
+        <div
+          className="sidebar-bottom-action-item"
+          onClick={() => setIsDataStorageModalOpen(true)}
+        >
+          {withTooltip(
+            <DatabaseIcon />,
+            "How We Store Your Data",
+            isSidebarCollapsed,
+          )}
+          <span>How we store your data</span>
+        </div>
+
         <Popover
           content={<HelpUsImprove setPopoverState={setIsPopoverOpen} />}
           title={null}
@@ -389,85 +390,94 @@ const Sidebar = ({
           placement="bottomRight"
           arrow={false}
         >
-          
-            <div className="sidebar-bottom-action-item">
-            {withTooltip(<QuestionIcon />, "Help us improve", isSidebarCollapsed)}
+          <div className="sidebar-bottom-action-item">
+            {withTooltip(
+              <QuestionIcon />,
+              "Help us improve",
+              isSidebarCollapsed,
+            )}
             <span>Help us improve</span>
-            </div>
+          </div>
         </Popover>
-        
-          
-            <div className="sidebar-bottom-action-item" onClick={() => setIsShortcutModalOpen(!isShortcutModalOpen)}>
-            {withTooltip(<KeyboardOutlined />, "Keyboard Shortcuts (" + KEYBOARD_SHORTCUTS.help.key + ")", isSidebarCollapsed)}
-            <span>Keyboard shortcuts</span>
-          </div>
-          <Modal
-        open={isDataStorageModalOpen}
-        onCancel={() => setIsDataStorageModalOpen(false)}
-        title={
-          <span className="info-modal-header">
-            How Your Data is Stored & Protected
-          </span>
-        }
-        centered={true}
-        width={800}
-        okText="Got it"
-        footer={[
-          <Button
-            key="ok"
-            type="primary"
-            onClick={() => setIsDataStorageModalOpen(false)}
-          >
-            Got it
-          </Button>,
-        ]}
-        onOk={() => setIsDataStorageModalOpen(false)}
-      >
-        <div className="info-modal-content">
-          <p>
-            All your data, including tasks, notes, and settings, is stored
-            locally in your browser. We do not sync or upload any of your data
-            to a server. The only exception is when you choose to import events
-            from an ICS calendar URL, where we need to parse and fetch event
-            details.
-          </p>
 
-          <span className="subheading">When Might Data Be Lost?</span>
-          <div className="data-lost-list">
-            <span>
-              1. If you <strong>clear your browser storage</strong> or reset
-              your browser
+        <div
+          className="sidebar-bottom-action-item"
+          onClick={() => setIsShortcutModalOpen(!isShortcutModalOpen)}
+        >
+          {withTooltip(
+            <KeyboardOutlined />,
+            "Keyboard Shortcuts (" + KEYBOARD_SHORTCUTS.help.key + ")",
+            isSidebarCollapsed,
+          )}
+          <span>Keyboard shortcuts</span>
+        </div>
+        <Modal
+          open={isDataStorageModalOpen}
+          onCancel={() => setIsDataStorageModalOpen(false)}
+          title={
+            <span className="info-modal-header">
+              How Your Data is Stored & Protected
             </span>
-            <span>
-              2. If you <strong>uninstall the extension</strong>
-            </span>
-            <span>
-              3. If your browser <strong>automatically clears storage</strong>{" "}
-              due to low disk space
-            </span>
-            <span>
-              4. If you switch to a different browser or device, as data does
-              not sync across devices
-            </span>
-          </div>
+          }
+          centered={true}
+          width={800}
+          okText="Got it"
+          footer={[
+            <Button
+              key="ok"
+              type="primary"
+              onClick={() => setIsDataStorageModalOpen(false)}
+            >
+              Got it
+            </Button>,
+          ]}
+          onOk={() => setIsDataStorageModalOpen(false)}
+        >
+          <div className="info-modal-content">
+            <p>
+              All your data, including tasks, notes, and settings, is stored
+              locally in your browser. We do not sync or upload any of your data
+              to a server. The only exception is when you choose to import
+              events from an ICS calendar URL, where we need to parse and fetch
+              event details.
+            </p>
 
-          <p>
-            In the future, we may offer an optional way to sync your data across
-            devices. If this interests you, we’d love your feedback!
-          </p>
-        </div>
-      </Modal>
-      <Modal
-        open={isShortcutModalOpen}
-        title="Keyboard Shortcuts"
-        onOk={() => setIsShortcutModalOpen(false)}
-        onCancel={() => setIsShortcutModalOpen(false)}
-        footer={null}
-        centered={true}
-      >
-        <KeyboardShortcuts />
-      </Modal>
-        </div>
+            <span className="subheading">When Might Data Be Lost?</span>
+            <div className="data-lost-list">
+              <span>
+                1. If you <strong>clear your browser storage</strong> or reset
+                your browser
+              </span>
+              <span>
+                2. If you <strong>uninstall the extension</strong>
+              </span>
+              <span>
+                3. If your browser <strong>automatically clears storage</strong>{" "}
+                due to low disk space
+              </span>
+              <span>
+                4. If you switch to a different browser or device, as data does
+                not sync across devices
+              </span>
+            </div>
+
+            <p>
+              In the future, we may offer an optional way to sync your data
+              across devices. If this interests you, we’d love your feedback!
+            </p>
+          </div>
+        </Modal>
+        <Modal
+          open={isShortcutModalOpen}
+          title="Keyboard Shortcuts"
+          onOk={() => setIsShortcutModalOpen(false)}
+          onCancel={() => setIsShortcutModalOpen(false)}
+          footer={null}
+          centered={true}
+        >
+          <KeyboardShortcuts />
+        </Modal>
+      </div>
     </div>
   );
 };
