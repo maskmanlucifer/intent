@@ -17,6 +17,12 @@
       "128": "add.png"
     }
   },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content-script.js"]
+    }
+  ],
   "icons": {
     "16": "logo32.png",
     "32": "logo32.png",

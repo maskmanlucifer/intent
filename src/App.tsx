@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { KEYBOARD_SHORTCUTS, PAGES } from "./constant";
 import "./App.scss";
-import { Button, ConfigProvider, Drawer } from "antd";
+import { Button, ConfigProvider, Drawer, Modal } from "antd";
 import "./db";
 import Todo from "./pages/todo";
 import { useSelector } from "react-redux";
@@ -123,11 +123,24 @@ function App() {
         >
           <Linkboard />
         </Drawer>
-        {isWhatsNewModalData.isOpen && (
-          <div className="iframe-container">
-            <div className="iframe-header">
+        <Modal
+          open={isWhatsNewModalData.isOpen}
+          onCancel={() =>
+            setIsWhatsNewModalData({
+              isOpen: false,
+              feature: "",
+              title: "",
+              media: "",
+            })
+          }
+          footer={null}
+          style={{ maxWidth: '1240px' }}
+          width={'80vw'}
+          closeIcon={null}
+          title={
+            <div className="iframe-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <span>{isWhatsNewModalData.title}</span>
-              <div className="close-icon">
+              <div className="close-icon" style={{ cursor: "pointer" }}>
                 <CloseIcon
                   onClick={() =>
                     setIsWhatsNewModalData({
@@ -140,12 +153,17 @@ function App() {
                 />
               </div>
             </div>
-            <video width="1200" height="560" controls>
+          }
+          centered
+          destroyOnClose
+        >
+          <div className="iframe-container" style={{ display: "flex", justifyContent: "center" }}>
+            <video width="100%" height="100%" controls>
               <source src={isWhatsNewModalData.media} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
-        )}
+        </Modal>
       </div>
     </ConfigProvider>
   );
