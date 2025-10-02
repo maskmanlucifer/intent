@@ -31,6 +31,7 @@ import { ReactComponent as QuestionIcon } from "../../assets/icons/question.svg"
 import { ReactComponent as KeyboardOutlined } from "../../assets/icons/keyboard.svg";
 import { ReactComponent as DatabaseIcon } from "../../assets/icons/database.svg";
 import KeyboardShortcuts from "../shortcuts";
+import ThemeToggle from "../theme-toggle";
 
 interface SidebarProps {
   folders: Category[];
@@ -403,6 +404,8 @@ const Sidebar = ({
           )}
           <span>Keyboard shortcuts</span>
         </div>
+
+        <ThemeToggle isSidebarCollapsed={isSidebarCollapsed} />
         <Modal
           open={isDataStorageModalOpen}
           onCancel={() => setIsDataStorageModalOpen(false)}

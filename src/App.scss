@@ -9,6 +9,8 @@
     --secondary-font: 'Barlow Condensed', sans-serif;
     --tertiary-font: 'Inter', sans-serif;
     --quaternary-font: 'Geist', sans-serif;
+    
+    // Light theme colors
     --blue-10: #eef6fe;
     --blue-50: #eff6ff;
     --blue-100: #dbeafe;
@@ -29,20 +31,81 @@
     --green-500: #12B76A;
     --green-600: #039855;
     --green-700: #027A48;
-    --primary-color: var(--blue-600);
+    
+    // Light theme variables
+    --bg-primary: #ffffff;
+    --bg-secondary: #f5f5f5;
+    --bg-tertiary: #f2f2f2;
+    --bg-sidebar: #f2f2f2;
+    --bg-hover: rgba(0, 0, 0, 0.04);
+    --bg-selected: rgba(21, 93, 252, 0.1);
+    --bg-modal: #ffffff;
+    --bg-input: #ffffff;
+    
+    --text-primary: #1a1a1a;
+    --text-secondary: #666666;
+    --text-tertiary: #999999;
+    --text-disabled: #cccccc;
+    --text-inverse: #ffffff;
+    
+    --border-primary: #e0e0e0;
+    --border-secondary: #d9d9d9;
+    --border-focus: var(--blue-600);
+    
+    --shadow-light: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.15);
+    --shadow-heavy: 0 8px 24px rgba(0, 0, 0, 0.2);
+    
+    --primary-color: #155dfc;
+    --primary-hover: #2b7fff;
+    --primary-active: #1447e6;
+}
+
+// Dark theme variables - Inspired by GitHub, VSCode, and Linear design systems
+[data-theme="dark"] {
+    --bg-primary: #0d1117;
+    --bg-secondary: #161b22;
+    --bg-tertiary: #21262d;
+    --bg-sidebar: #0d1117;
+    --bg-hover: rgba(255, 255, 255, 0.08);
+    --bg-selected: rgba(88, 166, 255, 0.15);
+    --bg-modal: #161b22;
+    --bg-input: #21262d;
+    
+    --text-primary: #f0f6fc;
+    --text-secondary: #c9d1d9;
+    --text-tertiary: #8b949e;
+    --text-disabled: #6e7681;
+    --text-inverse: #0d1117;
+    
+    --border-primary: #30363d;
+    --border-secondary: #21262d;
+    --border-focus: #58a6ff;
+    
+    --shadow-light: 0 1px 3px rgba(0, 0, 0, 0.6);
+    --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.7);
+    --shadow-heavy: 0 8px 24px rgba(0, 0, 0, 0.8);
+    
+    --primary-color: #58a6ff;
+    --primary-hover: #79c0ff;
+    --primary-active: #1f6feb;
 }
 
 body {
     margin: 0;
     padding: 0;
     font-family: var(--tertiary-font);
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
-
 
 .App {
     height: 100vh;
     width: 100vw;
     position: relative;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
 }
 
 .ant-empty {
@@ -66,7 +129,7 @@ body {
     }
 }
 
-/* Light custom scrollbar, compatible with AntD's style */
+/* Custom scrollbar, compatible with AntD's style */
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -74,22 +137,209 @@ body {
 
 ::-webkit-scrollbar-track {
     background: transparent;
-    /* Keep AntD feel */
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.4);
-    /* Matches AntD grayish scrollbar */
+    background-color: var(--text-tertiary);
     border-radius: 4px;
     transition: background-color 0.3s;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: var(--text-secondary);
 }
 
 /* Firefox */
 * {
     scrollbar-width: thin;
-    scrollbar-color: rgba(0, 0, 0, 0.4) transparent;
+    scrollbar-color: var(--text-tertiary) transparent;
+}
+
+/* Global dark theme overrides */
+[data-theme="dark"] {
+    .ant-tooltip-inner {
+        background-color: var(--bg-tertiary) !important;
+        color: var(--text-primary) !important;
+    }
+    
+    .ant-popover-inner {
+        background-color: var(--bg-modal) !important;
+    }
+    
+    .ant-popover-arrow::before {
+        background-color: var(--bg-modal) !important;
+    }
+    
+    .ant-dropdown-menu {
+        background-color: var(--bg-modal) !important;
+        border: 1px solid var(--border-primary) !important;
+    }
+    
+    .ant-dropdown-menu-item {
+        color: var(--text-primary) !important;
+        
+        &:hover {
+            background-color: var(--bg-hover) !important;
+        }
+    }
+    
+    .ant-empty-description {
+        color: var(--text-secondary) !important;
+    }
+    
+    .ant-collapse {
+        background-color: transparent !important;
+        border: 1px solid var(--border-primary) !important;
+        border-radius: 6px !important;
+    }
+    
+    .ant-collapse-item {
+        border-bottom: 1px solid var(--border-primary) !important;
+        border-top: none !important;
+        border-left: none !important;
+        border-right: none !important;
+        
+        &:last-child {
+            border-bottom: none !important;
+        }
+    }
+    
+    .ant-collapse-header {
+        background-color: transparent !important;
+        color: var(--text-primary) !important;
+        border-bottom: none !important;
+    }
+    
+    .ant-collapse-content {
+        background-color: transparent !important;
+        color: var(--text-primary) !important;
+        border-top: none !important;
+    }
+    
+    .ant-collapse-content-box {
+        color: var(--text-primary) !important;
+    }
+    
+    .ant-collapse-arrow {
+        color: var(--text-secondary) !important;
+        
+        &:hover {
+            color: var(--text-primary) !important;
+        }
+    }
+    
+    .ant-btn-primary {
+        background-color: var(--primary-color) !important;
+        border-color: var(--primary-color) !important;
+        
+        &:hover {
+            background-color: var(--primary-hover) !important;
+            border-color: var(--primary-hover) !important;
+        }
+    }
+    
+    .ant-modal-content {
+        background-color: var(--bg-modal) !important;
+        border: 1px solid var(--border-primary) !important;
+        box-shadow: var(--shadow-heavy) !important;
+    }
+    
+    .ant-modal-header {
+        background-color: var(--bg-modal) !important;
+    }
+    
+    .ant-modal-footer {
+        background-color: var(--bg-modal) !important;
+    }
+    
+    .ant-drawer-content {
+        background-color: var(--bg-modal) !important;
+        border-left: 1px solid var(--border-primary) !important;
+        box-shadow: var(--shadow-heavy) !important;
+    }
+    
+    .ant-drawer-header {
+        background-color: var(--bg-modal) !important;
+        border-bottom: 1px solid var(--border-primary) !important;
+    }
+    
+    .ant-modal-close {
+        color: var(--text-secondary) !important;
+        
+        &:hover {
+            color: var(--text-primary) !important;
+        }
+    }
+    
+    .ant-drawer-close {
+        color: var(--text-secondary) !important;
+        
+        &:hover {
+            color: var(--text-primary) !important;
+        }
+    }
+}
+
+/* Global collapse styles for light theme */
+.ant-collapse {
+    background-color: transparent;
+    border: 1px solid var(--border-primary);
+    border-radius: 6px;
+}
+
+.ant-collapse-item {
+    border-bottom: 1px solid var(--border-primary);
+    
+    &:last-child {
+        border-bottom: none;
+    }
+}
+
+.ant-collapse-header {
+    background-color: transparent;
+    color: var(--text-primary);
+}
+
+.ant-collapse-content {
+    background-color: transparent;
+    color: var(--text-primary);
+}
+
+.ant-collapse-arrow {
+    color: var(--text-secondary);
+    
+    &:hover {
+        color: var(--text-primary);
+    }
+}
+
+/* Light theme modal and dialog styles */
+.ant-modal-content {
+    border: 1px solid var(--border-primary);
+    box-shadow: var(--shadow-heavy);
+}
+
+.ant-drawer-content {
+    border-left: 1px solid var(--border-primary);
+    box-shadow: var(--shadow-heavy);
+}
+
+.ant-drawer-header {
+    border-bottom: 1px solid var(--border-primary);
+}
+
+.ant-modal-close {
+    color: var(--text-secondary);
+    
+    &:hover {
+        color: var(--text-primary);
+    }
+}
+
+.ant-drawer-close {
+    color: var(--text-secondary);
+    
+    &:hover {
+        color: var(--text-primary);
+    }
 }

@@ -3,7 +3,8 @@
     flex-direction: column;
     gap: 6px;
     padding: 8px;
-    background-color: #F2F2F2;
+    background-color: var(--bg-sidebar);
+    transition: all 0.3s ease;
 
     .sidebar-bottom-actions{
         margin-top: auto;
@@ -30,8 +31,18 @@
         overflow-x: hidden;
         min-width: 240px;
 
-        &:hover,
+        &:hover {
+            > svg {
+                path {
+                    fill: var(--primary-color);
+                    transition: fill 0.2s ease;
+                }
+            }
+        }
+
         &.selected {
+            color: var(--primary-color);
+            
             .folder-item-content {
                 svg {
                     color: var(--primary-color);
@@ -50,23 +61,31 @@
 
             .folder-item-action {
                 padding: 6px 2px;
-                background-color: rgba(0, 0, 0, 0.06);
+                background-color: var(--bg-hover);
                 border-radius: 2px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                transition: background-color 0.2s ease;
 
                 &:hover {
-                    background-color: rgba(0, 0, 0, 0.08);
+                    background-color: var(--bg-selected);
                     svg {
-                        fill: var(--blue-800);
+                        fill: var(--primary-color);
+                    }
+                }
+                
+                &.delete-action:hover {
+                    svg {
+                        fill: var(--red-500);
                     }
                 }
             }
 
             svg {
-                fill: #333333;
+                fill: var(--text-secondary);
                 transform: rotate(90deg);
+                transition: fill 0.2s ease;
             }
         }
 
@@ -75,6 +94,11 @@
             min-height: 18px;
             max-width: 18px;
             max-height: 18px;
+            
+            path {
+                fill: var(--text-secondary);
+                transition: fill 0.2s ease;
+            }
         }
 
         &.selected {
@@ -112,7 +136,7 @@
 
         &.completed-folder {
             svg path {
-                fill: #28303F;
+                fill: var(--text-tertiary);
                 opacity: 0.6;
             }
 
@@ -121,8 +145,6 @@
                     fill: var(--primary-color);
                     opacity: 1;
                 }
-
-                // color: var(--primary-color);
             }
         }
 
@@ -148,6 +170,8 @@
                 border: 1px solid var(--primary-color);
                 padding-left: 8px;
                 font-size: 14px;
+                background-color: var(--bg-input);
+                color: var(--text-primary);
             }
 
             .tick-button {
@@ -163,8 +187,14 @@
 
             .close-button {
                 margin-left: 8px;
-                color: gray;
+                color: var(--text-tertiary);
                 display: flex;
+                cursor: pointer;
+                transition: color 0.2s ease;
+                
+                &:hover {
+                    color: var(--text-secondary);
+                }
             }
         }
 
@@ -247,10 +277,28 @@
 
     .ant-dropdown-menu-item:first-of-type {
         color: var(--primary-color);
+        
+        &:hover {
+            color: var(--primary-color);
+            background-color: var(--bg-hover);
+        }
+        
+        .anticon {
+            color: var(--primary-color);
+        }
     }
 
     .ant-dropdown-menu-item:last-of-type {
         color: var(--red-500);
+        
+        &:hover {
+            color: var(--red-500);
+            background-color: var(--bg-hover);
+        }
+        
+        .anticon {
+            color: var(--red-500);
+        }
     }
 }
 
@@ -341,10 +389,17 @@
     height: 24px;
     overflow-x: hidden;
     min-width: 240px;
-    color: #333333;
+    color: var(--text-secondary);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+
+    span  {
+        color: var(--text-primary);
+    }
 
     &:hover {
         cursor: pointer;
+        color: var(--text-primary);
     }
 
     svg {
@@ -352,8 +407,19 @@
         min-height: 18px;
         max-width: 18px;
         max-height: 18px;
+        fill: var(--text-secondary);
+        color: var(--text-secondary);
+        transition: fill 0.3s ease, color 0.3s ease;
+        
+        path {
+            fill: var(--text-secondary);
+        }
+    }
+    
+    &:hover svg {
         fill: var(--primary-color);
         color: var(--primary-color);
+        
         path {
             fill: var(--primary-color);
         }

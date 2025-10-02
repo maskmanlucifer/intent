@@ -51,7 +51,7 @@ const Topbar = ({
           className="topbar-left-title"
           onClick={() => setSidebarCollapsed(!isSidebarCollapsed)}
         >
-          {!isSidebarCollapsed && "INT3NT"}{" "}
+          {!isSidebarCollapsed && "INT3NT"}
           {showCollapsedIcon && (
             <Tooltip
               arrow={false}
@@ -68,7 +68,7 @@ const Topbar = ({
             >
               <CollapseIcon />
             </Tooltip>
-          )}{" "}
+          )}
           {!showCollapsedIcon && isSidebarCollapsed && (
             <Tooltip
               arrow={false}

@@ -65,7 +65,8 @@ const TodoList = ({
         >
           <PlusOutlined
             className="add-subtask-icon"
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               dispatch(
                 addNewSubtask({
                   parentId: task.id,
@@ -86,7 +87,8 @@ const TodoList = ({
             className={classNames("focus-icon", {
               focused: isFocused,
             })}
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               if (isFocused) {
                 syncSettings({
                   focusedTaskId: null,
@@ -117,7 +119,8 @@ const TodoList = ({
             <Dropdown
               overlay={
                 <Menu
-                  onClick={({ key }) => {
+                  onClick={({ key, domEvent }) => {
+                    domEvent.stopPropagation();
                     if (key === "none") {
                       return;
                     }
@@ -156,7 +159,8 @@ const TodoList = ({
           <Popconfirm
             title="Are you sure you want to delete this task?"
             okText="Yes, delete"
-            onConfirm={() => {
+            onConfirm={(e) => {
+              e?.stopPropagation();
               dispatch(
                 deleteTask({ id: task.id, categoryId: task.categoryId }),
               );
