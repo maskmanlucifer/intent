@@ -3,7 +3,7 @@
   "name": "Intent",
   "version": "3.3",
   "description": "Your All-in-One Productivity Hub",
-  "permissions": ["storage", "alarms", "tabs", "contextMenus"],
+  "permissions": ["storage", "tabs", "contextMenus"],
   "background": {
     "service_worker": "background.js",
     "type": "module"
