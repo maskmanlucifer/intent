@@ -7,8 +7,9 @@ import { ReactComponent as CompletedIcon } from "../../assets/icons/completed.sv
 import { ReactComponent as AddSquareIcon } from "../../assets/icons/add-square.svg";
 import HelpUsImprove from "../help-us-improve";
 import classNames from "classnames";
-import { Button, Dropdown, message, Modal, Popover, Tooltip } from "antd";
+import { Button, Dropdown, Input, message, Modal, Popover, Tooltip } from "antd";
 import {
+  CloseOutlined,
   DeleteOutlined,
   EditOutlined,
   EllipsisOutlined,
@@ -162,6 +163,8 @@ const Sidebar = ({
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const [isDataStorageModalOpen, setIsDataStorageModalOpen] = useState(false);
   const [isShortcutModalOpen, setIsShortcutModalOpen] = useState(false);
+  const [isUpsertCategoryModalOpen, setIsUpsertCategoryModalOpen] = useState(false);
+  const [categoryName, setCategoryName] = useState("");
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -207,6 +210,8 @@ const Sidebar = ({
         label: "Edit Category",
         onClick: () => {
           setIsEditing(folder.id);
+          setCategoryName(folder.name);
+          setIsUpsertCategoryModalOpen(true);
         },
         icon: <EditOutlined />,
       },
@@ -258,15 +263,7 @@ const Sidebar = ({
               }
             }}
           >
-            {isEditing === folder.id && (
-              <EditCategoryBtn
-                folder={folder}
-                setSelectedFolder={setSelectedFolder}
-                setIsEditing={setIsEditing}
-                messageApi={messageApi}
-              />
-            )}
-            {isEditing !== folder.id && (
+            {(
               <>
                 {withTooltip(<FolderIcon />, folder.name, isSidebarCollapsed)}
                 <span className="folder-item-name">{folder.name}</span>
@@ -319,12 +316,7 @@ const Sidebar = ({
           <div
             className={classNames("folder-item", "add-folder-item")}
             onClick={() => {
-              if (isSidebarCollapsed) {
-                setIsSidebarCollapsed(false);
-              }
-              setTimeout(() => {
-                setIsEditing(true);
-              }, 300);
+              setIsUpsertCategoryModalOpen(true);
             }}
           >
             {withTooltip(<AddSquareIcon />, "Add Folder", isSidebarCollapsed)}
@@ -363,7 +355,7 @@ const Sidebar = ({
           }
         >
           <p style={{ margin: 0, padding: 0 }}>
-            Are you sure you want to delete this note?
+            Are you sure you want to delete this folder?
           </p>
         </Modal>
       </div>
@@ -476,6 +468,42 @@ const Sidebar = ({
           centered={true}
         >
           <KeyboardShortcuts />
+        </Modal>
+        <Modal 
+          open={isUpsertCategoryModalOpen}
+          title={isEditing ? "Edit Category" : "Add Category"}
+          onOk={() => {
+            if(isEditing) {
+              dispatch(updateCategory({ id: isEditing as string, name: categoryName }));
+              messageApi.open({
+                type: "success",
+                content: `Folder ${categoryName} updated successfully!`,
+              });
+            } else {
+              dispatch(addCategory({ id: Date.now().toString(), name: categoryName }));
+              messageApi.open({
+                type: "success",
+                content: `Folder ${categoryName} added successfully!`,
+              });
+            }
+            setIsUpsertCategoryModalOpen(false);
+            setCategoryName("");
+            setIsEditing(false);
+          }}
+          onCancel={() => setIsUpsertCategoryModalOpen(false)}
+          centered={true}
+          okText={isEditing ? "Update" : "Add"}
+          width={460}
+          okButtonProps={{size: "small"}}
+          cancelButtonProps={{size: "small"}}
+          closeIcon={<CloseOutlined style={{ fontSize: "14px" }} />}
+          onClose={() => {
+            setIsUpsertCategoryModalOpen(false);
+            setCategoryName("");
+            setIsEditing(false);
+          }}
+        >
+          <Input size="small" value={categoryName} onChange={(e) => setCategoryName(e.target.value)} placeholder={isEditing ? "Enter new name" : "Enter new folder name"} />
         </Modal>
       </div>
     </div>

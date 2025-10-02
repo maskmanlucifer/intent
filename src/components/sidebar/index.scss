@@ -37,9 +37,6 @@
                     color: var(--primary-color);
                 }
             }
-
-            color: var(--primary-color);
-
             > svg {
                 path {
                     fill: var(--primary-color);
@@ -52,22 +49,24 @@
             display: flex;
 
             .folder-item-action {
-                padding: 2px;
+                padding: 6px 2px;
                 background-color: rgba(0, 0, 0, 0.06);
                 border-radius: 2px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-            }
 
-            &:hover {
-                .folder-item-action {
+                &:hover {
                     background-color: rgba(0, 0, 0, 0.08);
+                    svg {
+                        fill: var(--blue-800);
+                    }
                 }
             }
 
             svg {
-                fill: var(--blue-800);
+                fill: #333333;
+                transform: rotate(90deg);
             }
         }
 
@@ -123,7 +122,7 @@
                     opacity: 1;
                 }
 
-                color: var(--primary-color);
+                // color: var(--primary-color);
             }
         }
 
