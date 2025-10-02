@@ -119,6 +119,28 @@ body {
     .ant-drawer-header-title {
         flex-direction: row-reverse;
     }
+    
+    // Custom drawer animation - slower and smoother
+    .ant-drawer-content {
+        transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+    }
+    
+    .ant-drawer-mask {
+        transition: opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+    }
+}
+
+// Override Ant Design's default drawer animation
+.ant-drawer {
+    &.ant-drawer-open {
+        .ant-drawer-content {
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+        }
+        
+        .ant-drawer-mask {
+            transition: opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+        }
+    }
 }
 
 .watch-demo-btn {
@@ -276,6 +298,39 @@ body {
         
         &:hover {
             color: var(--text-primary) !important;
+        }
+    }
+    
+    // Additional dark theme improvements for linkboard
+    .ant-select-selector {
+        background-color: var(--bg-input) !important;
+        border-color: var(--border-primary) !important;
+        color: var(--text-primary) !important;
+    }
+    
+    .ant-select-arrow {
+        color: var(--text-secondary) !important;
+    }
+    
+    .ant-select-selection-item {
+        color: var(--text-primary) !important;
+    }
+    
+    .ant-select-dropdown {
+        background-color: var(--bg-modal) !important;
+        border: 1px solid var(--border-primary) !important;
+    }
+    
+    .ant-select-item {
+        color: var(--text-primary) !important;
+        
+        &:hover {
+            background-color: var(--bg-hover) !important;
+        }
+        
+        &.ant-select-item-option-selected {
+            background-color: var(--bg-selected) !important;
+            color: var(--primary-color) !important;
         }
     }
 }

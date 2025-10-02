@@ -11,17 +11,108 @@ import {
   Checkbox,
   Empty,
   message,
+  Modal,
   Popconfirm,
   Select,
-  Space,
-  Tooltip,
 } from "antd";
+import { LinkOutlined, DeleteOutlined, MehOutlined } from "@ant-design/icons";
 import { ReactComponent as TrashIcon } from "../../assets/icons/remove.svg";
+import { ReactComponent as CloseIcon } from "../../assets/icons/close.svg";
 import { InfoCircleOutlined } from "@ant-design/icons";
 import { AppDispatch } from "../../redux/store";
 import { LINKBOARD_FILTER_OPTIONS } from "../../constant";
 import classNames from "classnames";
 import { TLink } from "../../types";
+
+
+// Helper function to check if URL is YouTube
+const isYouTubeUrl = (url: string): boolean => {
+  return /youtube\.com|youtu\.be/.test(url);
+};
+
+// Component for rendering OG image content
+const OgImageContent: React.FC<{ link: TLink }> = ({ link }) => {
+  const [imageError, setImageError] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [imageLoaded, setImageLoaded] = React.useState(false);
+
+  // Generate beautiful aesthetic fallback images
+  const getFallbackImage = (link: TLink) => {
+    try {
+      if (link.type === "video" && isYouTubeUrl(link.url)) {
+        // YouTube thumbnail
+        const videoId = link.url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/)?.[1];
+        if (videoId) {
+          return `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+        }
+        // Minimal pattern for YouTube fallback
+        return `https://images.unsplash.com/photo-1557683316-973673baf926?w=410&h=200&fit=crop&crop=center&auto=format&q=80`;
+      }
+      
+      // Beautiful aesthetic patterns using Pexels sources
+      const patterns = [
+        `https://images.pexels.com/photos/2567011/pexels-photo-2567011.jpeg?auto=compress&cs=tinysrgb&w=410&h=200&fit=crop`,
+      ];
+      
+      // Use link ID to consistently pick a pattern
+      const hash = link.id.split('').reduce((a, b) => {
+        a = ((a << 5) - a) + b.charCodeAt(0);
+        return a & a;
+      }, 0);
+      
+      return patterns[Math.abs(hash) % patterns.length];
+    } catch {
+      // Ultimate fallback - clean minimal pattern
+      return `https://images.pexels.com/photos/34076422/pexels-photo-34076422.jpeg?auto=compress&cs=tinysrgb&w=410&h=200&fit=crop`;
+    }
+  };
+
+  const handleImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    setIsLoading(false);
+    setImageLoaded(true);
+  };
+
+  const handleImageError = () => {
+    setImageError(true);
+    setIsLoading(false);
+  };
+
+  // Get the image source - prefer link.imageUrl, fallback to generated image
+  const imageSrc = link.imageUrl && !imageError ? link.imageUrl : getFallbackImage(link);
+
+  return (
+    <div className="og-image-container">
+      {isLoading && (
+        <div className="image-loading">
+          <div className="loading-spinner"></div>
+        </div>
+      )}
+      <img 
+        src={imageSrc}
+        alt={link.title || "Content preview"}
+        onLoad={handleImageLoad}
+        onError={handleImageError}
+        style={{ 
+          display: isLoading ? "none" : "block",
+          width: "100%",
+          height: "200px",
+          objectFit: "cover"
+        }}
+      />
+      
+      {/* Video play overlay for YouTube videos */}
+      {link.type === "video" && isYouTubeUrl(link.url) && imageLoaded && (
+        <div className="video-play-overlay">
+          <div className="play-button">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 const Linkboard = () => {
   const links = useSelector(selectLinks);
@@ -32,6 +123,7 @@ const Linkboard = () => {
   );
 
   const [selectedLinks, setSelectedLinks] = React.useState<string[]>([]);
+  const [isDemoModalOpen, setIsDemoModalOpen] = React.useState(false);
 
   const filteredLinks = [...links].filter((link) => {
     if (linkTypeFilter === "all") {
@@ -53,18 +145,35 @@ const Linkboard = () => {
   return (
     <div className="linkboard">
       {contextHolder}
+      
+      {/* Linkboard Header with Demo Button */}
+      <div className="linkboard-header">
+        <div className="linkboard-title">
+          <h2>Linkboard</h2>
+        </div>
+        <Button
+          icon={<MehOutlined />}
+          type="link"
+          className="watch-demo-btn"
+          onClick={() => setIsDemoModalOpen(true)}
+        >
+          Watch demo
+        </Button>
+      </div>
+      
       <div className="link-list">
         {links.length > 0 && (
-          <Space.Compact className="linkboard-filter" block>
+          <div className="linkboard-filter">
             <Select
               defaultValue={linkTypeFilter}
               options={LINKBOARD_FILTER_OPTIONS}
-              style={{ width: "45%" }}
+              size="middle"
+              style={{ width: "200px" }}
               onChange={(item) => {
                 setLinkTypeFilter(item);
               }}
             />
-          </Space.Compact>
+          </div>
         )}
         {links.length === 0 && linkTypeFilter === "all" && (
           <Empty
@@ -80,85 +189,105 @@ const Linkboard = () => {
             description="No links found"
           />
         )}
-        {filteredLinks.length > 0 &&
-          filteredLinks.map((link) => (
-            <Tooltip title={link.url} arrow={false} placement="top">
+        {filteredLinks.length > 0 && (
+          <div className="masonry-container">
+            {filteredLinks.map((link) => (
               <div
                 key={link.id}
-                className="link-item"
-                onClick={() => window.open(link.url, "_blank")}
+                className={classNames("masonry-item", {
+                  "youtube-item": link.type === "video" && isYouTubeUrl(link.url),
+                  "webpage-item": link.type === "webpage",
+                  "image-item": link.type === "image",
+                })}
               >
-                {link.imageUrl && <img src={link.imageUrl} alt="link" />}
-                <div className="link-details">
-                  {link.url && (
-                    <img
-                      src={`https://www.google.com/s2/favicons?domain=${new URL(link.url).hostname}`}
-                      alt="favicon"
-                      className="favicon"
-                    />
-                  )}
-                  {link.title && <h2 className="link-title">{link.title}</h2>}
-                  {link.url && (
-                    <span className="link-url">
-                      {new URL(link.url).hostname}
-                    </span>
-                  )}
-                  <Popconfirm
-                    icon={<InfoCircleOutlined style={{ color: "#155dfc" }} />}
-                    title="Remove url from linkboard"
-                    okText="Remove"
-                    placement="left"
-                    style={{ width: "40px" }}
-                    onCancel={(
-                      e?: React.MouseEvent<HTMLElement, MouseEvent>,
-                    ) => {
-                      e?.stopPropagation();
+                  <div className="masonry-content">
+                    <OgImageContent link={link} />
+                  </div>
+                  
+                  {/* Bottom bar with URL and actions */}
+                  <div className="bottom-bar">
+                    <div className="url-section">
+                      {link.url && (
+                        <img
+                          src={`https://www.google.com/s2/favicons?domain=${new URL(link.url).hostname}`}
+                          alt="favicon"
+                          className="favicon"
+                        />
+                      )}
+                      <span className="url-text">
+                        {link.url ? new URL(link.url).hostname : "Link"}
+                      </span>
+                    </div>
+                    
+                    <div className="separator"></div>
+                    
+                    <div className="actions-section">
+                      <button
+                        className="action-btn open-btn"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          window.open(link.url, "_blank");
+                        }}
+                        title="Open in new tab"
+                      >
+                        <LinkOutlined />
+                      </button>
+                      
+                      <Popconfirm
+                        icon={<InfoCircleOutlined style={{ color: "#155dfc" }} />}
+                        title="Remove url from linkboard"
+                        okText="Remove"
+                        placement="left"
+                        onCancel={(e?: React.MouseEvent<HTMLElement, MouseEvent>) => {
+                          e?.stopPropagation();
+                        }}
+                        onConfirm={(e?: React.MouseEvent<HTMLElement, MouseEvent>) => {
+                          e?.stopPropagation();
+                          dispatch(removeLink(link.id));
+                          messageApi.open({
+                            type: "success",
+                            content: "Link removed from linkboard",
+                            duration: 3,
+                          });
+                        }}
+                        cancelText="Cancel"
+                        description={"Are you sure you want to remove this link?"}
+                      >
+                        <button
+                          className="action-btn delete-btn"
+                          onClick={(e) => e.stopPropagation()}
+                          title="Delete link"
+                        >
+                          <DeleteOutlined />
+                        </button>
+                      </Popconfirm>
+                    </div>
+                  </div>
+                  
+                  <Checkbox
+                    onClick={(e) => e.stopPropagation()}
+                    className={classNames("link-item-select", {
+                      selected: selectedLinks.includes(link.id),
+                    })}
+                    onChange={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      setTimeout(() => {
+                        if (selectedLinks.includes(link.id)) {
+                          setSelectedLinks(
+                            selectedLinks.filter((id) => id !== link.id),
+                          );
+                        } else {
+                          setSelectedLinks([...selectedLinks, link.id]);
+                        }
+                      }, 50);
                     }}
-                    onConfirm={(
-                      e?: React.MouseEvent<HTMLElement, MouseEvent>,
-                    ) => {
-                      e?.stopPropagation();
-                      dispatch(removeLink(link.id));
-                      messageApi.open({
-                        type: "success",
-                        content: "Link removed from linkboard",
-                        duration: 3,
-                      });
-                    }}
-                    cancelText="Cancel"
-                    description={"Are you sure you want to remove this link?"}
-                  >
-                    <button
-                      className="delete-card-btn"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <TrashIcon className="remove-icon" />
-                    </button>
-                  </Popconfirm>
+                    checked={selectedLinks.includes(link.id)}
+                  />
                 </div>
-                <Checkbox
-                  onClick={(e) => e.stopPropagation()}
-                  className={classNames("link-item-select", {
-                    selected: selectedLinks.includes(link.id),
-                  })}
-                  onChange={(e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    setTimeout(() => {
-                      if (selectedLinks.includes(link.id)) {
-                        setSelectedLinks(
-                          selectedLinks.filter((id) => id !== link.id),
-                        );
-                      } else {
-                        setSelectedLinks([...selectedLinks, link.id]);
-                      }
-                    }, 50);
-                  }}
-                  checked={selectedLinks.includes(link.id)}
-                />
-              </div>
-            </Tooltip>
-          ))}
+            ))}
+          </div>
+        )}
       </div>
       {selectedLinks.length > 0 && (
         <div className="selected-links">
@@ -231,6 +360,35 @@ const Linkboard = () => {
           </div>
         </div>
       )}
+      
+      {/* Demo Modal */}
+      <Modal
+        open={isDemoModalOpen}
+        onCancel={() => setIsDemoModalOpen(false)}
+        footer={null}
+        style={{ maxWidth: '1240px' }}
+        width={'80vw'}
+        closeIcon={null}
+        title={
+          <div className="iframe-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <span>LINKBOARD</span>
+            <div className="close-icon" style={{ cursor: "pointer" }}>
+              <CloseIcon
+                onClick={() => setIsDemoModalOpen(false)}
+              />
+            </div>
+          </div>
+        }
+        centered
+        destroyOnClose
+      >
+        <div className="iframe-container" style={{ display: "flex", justifyContent: "center" }}>
+          <video width="100%" height="100%" controls>
+            <source src="https://ik.imagekit.io/dnz8iqrsyc/linkboard-intro.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </Modal>
     </div>
   );
 };
