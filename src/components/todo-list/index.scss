@@ -64,12 +64,15 @@
    .ant-collapse-item .ant-collapse-header {
       padding-top: 6px;
       padding-bottom: 6px;
+      position: relative;
    }
 
    .ant-collapse-header {
       &:hover {
          .todo-actions {
-            display: flex;
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
             border: 1px solid var(--border-primary);
             background-color: var(--bg-tertiary);
          }
@@ -77,9 +80,40 @@
 
       &:focus-within {
          .todo-actions {
-            display: flex;
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
             border: 1px solid var(--border-primary);
             background-color: var(--bg-tertiary);
+         }
+      }
+
+      // Prevent focus flickering on collapse header
+      &:focus,
+      &:active,
+      &:focus-visible {
+         outline: none !important;
+         box-shadow: none !important;
+         background-color: transparent !important;
+      }
+   }
+
+   // Fix collapse panel focus states
+   .ant-collapse-item {
+      &:focus,
+      &:active,
+      &:focus-visible {
+         outline: none !important;
+         box-shadow: none !important;
+      }
+      
+      .ant-collapse-header {
+         &:focus,
+         &:active,
+         &:focus-visible {
+            outline: none !important;
+            box-shadow: none !important;
+            background-color: transparent !important;
          }
       }
    }
@@ -115,13 +149,31 @@
    }
 
    .todo-actions {
-      display: none;
+      display: flex;
+      opacity: 0;
+      visibility: hidden;
       gap: 8px;
       align-items: center;
       height: 22px;
       cursor: pointer;
       padding: 8px;
       border-radius: 4px;
+      transition: opacity 0.15s ease-in-out, visibility 0.15s ease-in-out !important;
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      pointer-events: none;
+
+      // Prevent focus/active states that cause flickering
+      &:focus,
+      &:active,
+      &:focus-visible {
+         outline: none !important;
+         box-shadow: none !important;
+         background-color: var(--bg-tertiary) !important;
+      }
 
       span {
          cursor: pointer;
@@ -158,6 +210,15 @@
 
       svg {
          cursor: pointer;
+         
+         // Prevent focus states on icons
+         &:focus,
+         &:active,
+         &:focus-visible {
+            outline: none !important;
+            box-shadow: none !important;
+            background-color: transparent !important;
+         }
       }
    }
 }
@@ -185,6 +246,83 @@
    color: var(--primary-color);
 }
 
+// Fix dropdown flickering issues
+.ant-dropdown-trigger {
+   &:focus,
+   &:active,
+   &:focus-visible {
+      outline: none !important;
+      box-shadow: none !important;
+      background-color: transparent !important;
+   }
+   
+   .anticon {
+      &:focus,
+      &:active,
+      &:focus-visible {
+         outline: none !important;
+         box-shadow: none !important;
+         background-color: transparent !important;
+         color: var(--primary-color) !important;
+      }
+   }
+}
+
+// Fix dropdown menu item focus states
+.ant-dropdown-menu {
+   .ant-dropdown-menu-item {
+      &:focus,
+      &:active {
+         background-color: var(--bg-hover) !important;
+         outline: none !important;
+      }
+      
+      &:hover {
+         background-color: var(--bg-hover) !important;
+      }
+   }
+}
+
+// Global fix for Ant Design focus states that cause blue flickering
+.ant-collapse,
+.ant-collapse-item,
+.ant-collapse-header,
+.ant-collapse-content {
+   &:focus,
+   &:active,
+   &:focus-visible {
+      outline: none !important;
+      box-shadow: none !important;
+      background-color: transparent !important;
+      transform: none !important;
+   }
+}
+
+// Specifically target the collapse items in todo list
+.todo-list-collapse {
+   .ant-collapse-item {
+      &:focus:not(.drag-selected):not(.sortable-drag):not(.sortable-chosen),
+      &:active:not(.drag-selected):not(.sortable-drag):not(.sortable-chosen),
+      &:focus-visible:not(.drag-selected):not(.sortable-drag):not(.sortable-chosen) {
+         outline: none !important;
+         box-shadow: none !important;
+         background-color: transparent !important;
+         transform: none !important;
+      }
+      
+      .ant-collapse-header {
+         &:focus:not(.drag-selected):not(.sortable-drag):not(.sortable-chosen),
+         &:active:not(.drag-selected):not(.sortable-drag):not(.sortable-chosen),
+         &:focus-visible:not(.drag-selected):not(.sortable-drag):not(.sortable-chosen) {
+            outline: none !important;
+            box-shadow: none !important;
+            background-color: transparent !important;
+            transform: none !important;
+         }
+      }
+   }
+}
+
 // .todo-list-collapse:focus {
 //    .drag-selected {
 //       background-color: transparent;
@@ -200,18 +338,47 @@
       border: 2px dashed var(--primary-color);
       border-radius: 4px;
    }
+   
+   // Ensure drag transforms work during dragging
+   .ant-collapse-item,
+   .ant-collapse-header {
+      &:focus,
+      &:active,
+      &:focus-visible {
+         transform: none !important;
+      }
+   }
+   
+   .drag-selected,
+   .sortable-drag {
+      transform: rotate(0.5deg) !important;
+   }
 }
 
 .drag-selected {
    background-color: var(--bg-selected);
    transform: rotate(0.5deg);
    box-shadow: var(--shadow-medium);
+   
+   // Prevent rotation during focus (but allow during drag)
+   &:focus:not(.sortable-chosen),
+   &:focus-within:not(.sortable-chosen),
+   &:focus-visible:not(.sortable-chosen) {
+      transform: none !important;
+   }
 }
 
 .sortable-drag {
    opacity: 0.8;
    transform: rotate(0.5deg);
    box-shadow: var(--shadow-heavy);
+   
+   // Prevent rotation during focus (but allow during drag)
+   &:focus:not(.sortable-chosen),
+   &:focus-within:not(.sortable-chosen),
+   &:focus-visible:not(.sortable-chosen) {
+      transform: none !important;
+   }
 }
 
 .sortable-ghost {
