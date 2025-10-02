@@ -39,12 +39,6 @@ interface SidebarProps {
   setSelectedFolder: (id: string) => void;
   isSidebarCollapsed: boolean;
   setIsSidebarCollapsed: (isSidebarCollapsed: boolean) => void;
-  setIsWhatsNewModalData: (isWhatsNewModalData: {
-    isOpen: boolean;
-    feature: string;
-    title: string;
-    media: string;
-  }) => void;
 }
 
 const withTooltip = (
