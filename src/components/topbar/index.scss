@@ -2,9 +2,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #e0e0e0;
-    background-color: #f5f5f5;
+    border-bottom: 1px solid var(--border-primary);
+    background-color: var(--bg-secondary);
     position: relative;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 
     .topbar-left {
         display: flex;
@@ -13,14 +14,10 @@
         gap: 16px;
         font-family: var(--secondary-font);
         width: 259px;
-        transition: width 0.2s ease-in-out;
+        transition: width 0.35s ease-in-out !important;
 
         &.topbar-left-collapsed {
             width: 39px;
-
-            .topbar-left-title {
-                justify-content: center;
-            }
         }
 
         .topbar-left-title {
@@ -29,14 +26,30 @@
             display: flex;
             width: 100%;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
             margin-left: 10px;
             margin-right: 10px;
+            color: var(--text-primary);
+            transition: all 0.35s ease-in-out;
+            gap: 12px;
 
+            // Smooth text transition
+            span {
+                transition: opacity 0.35s ease-in-out;
+            }
+            
             svg {
                 width: 20px;
                 height: 20px;
                 cursor: pointer;
+                transition: fill 0.35s ease-in-out, transform 0.35s ease-in-out;
+                fill: var(--text-primary);
+                flex-shrink: 0;
+                
+                &:hover {
+                    fill: var(--primary-color);
+                    transform: scale(1.1);
+                }
             }
         }
     }
@@ -48,7 +61,7 @@
         padding: 8px 16px;
         justify-content: space-between;
         flex: 1;
-        border-left: 1px solid #e0e0e0;
+        border-left: 1px solid var(--border-primary);
 
         .link-board-button {
             margin-left: auto;

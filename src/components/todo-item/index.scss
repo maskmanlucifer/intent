@@ -2,6 +2,7 @@
     display: flex;
     align-items: flex-start;
     gap: 6px;
+    width: 100%;
 
     .checkbox {
         margin-top: 3px;
@@ -16,6 +17,7 @@
         min-width: 200px;
         border: none;
         background: transparent;
+        flex: 1;
 
         &:focus {
             border: none;
@@ -23,7 +25,7 @@
         }
 
         &::placeholder {
-            color: #b0b0b0;
+            color: var(--text-disabled);
         }
 
         a:hover {

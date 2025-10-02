@@ -21,12 +21,12 @@
       }
 
       .disable-focus-mode-button {
-         background-color: rgba(0, 0, 0, 0.04);
+         background-color: var(--bg-hover);
       }
    }
 
    .completed-tasks-toggle {
-      background-color: rgba(0, 0, 0, 0.04);
+      background-color: var(--bg-hover);
    }
 
    .add-task-button {
@@ -70,16 +70,16 @@
       &:hover {
          .todo-actions {
             display: flex;
-            border: 1px solid rgba(0, 0, 0, 0.09);
-            background-color: rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--border-primary);
+            background-color: var(--bg-tertiary);
          }
       }
 
       &:focus-within {
          .todo-actions {
             display: flex;
-            border: 1px solid rgba(0, 0, 0, 0.09);
-            background-color: rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--border-primary);
+            background-color: var(--bg-tertiary);
          }
       }
    }
@@ -141,6 +141,12 @@
          height: 18px;
          width: 18px;
 
+         path {
+            stroke: var(--text-tertiary);
+            fill: var(--text-tertiary);
+            transition: stroke 0.2s ease, fill 0.2s ease;
+         }
+
          &.focused,
          &:hover {
             path {
@@ -165,7 +171,13 @@
       svg {
          height: 18px;
          width: 18px;
+         fill: var(--text-secondary);
+         transition: fill 0.2s ease;
       }
+   }
+   
+   &:hover .ant-dropdown-menu-title-content svg {
+      fill: var(--primary-color);
    }
 }
 
@@ -184,29 +196,46 @@
 
    .sortable-ghost {
       opacity: 0.3;
-      background-color: var(--blue-10);
+      background-color: var(--bg-selected);
       border: 2px dashed var(--primary-color);
       border-radius: 4px;
    }
 }
 
 .drag-selected {
-   background-color: var(--blue-10);
+   background-color: var(--bg-selected);
    transform: rotate(0.5deg);
-   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+   box-shadow: var(--shadow-medium);
 }
 
 .sortable-drag {
    opacity: 0.8;
    transform: rotate(0.5deg);
-   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+   box-shadow: var(--shadow-heavy);
 }
 
 .sortable-ghost {
    opacity: 0.3;
-   background-color: var(--blue-10);
+   background-color: var(--bg-selected);
    border: 2px dashed var(--primary-color);
    border-radius: 4px;
+}
+
+// Dark theme specific drag and drop styles
+[data-theme="dark"] {
+   .sortable-ghost {
+      background-color: var(--bg-selected);
+      border: 2px dashed var(--primary-color);
+   }
+   
+   .drag-selected {
+      background-color: var(--bg-selected);
+      box-shadow: var(--shadow-medium);
+   }
+   
+   .sortable-drag {
+      box-shadow: var(--shadow-heavy);
+   }
 }
 
 .drag-handle {
@@ -233,6 +262,10 @@
       transition: all 0.2s ease;
       pointer-events: none;
       z-index: 1;
+      
+      path {
+         fill: var(--text-secondary);
+      }
    }
 
    // Create a larger invisible hover area for the drag icon
@@ -254,6 +287,10 @@
       .drag-icon {
          opacity: 0.9;
          transform: scale(1.1);
+         
+         path {
+            fill: var(--primary-color);
+         }
       }
       
       &::before {
@@ -267,6 +304,10 @@
       .drag-icon {
          opacity: 1;
          transform: scale(1.15);
+         
+         path {
+            fill: var(--primary-color);
+         }
       }
       
       &::before {
@@ -289,7 +330,7 @@
    .todo-list-header-right {
       font-size: 14px;
       display: flex;
-      color: rgba(0, 0, 0, 0.5);
+      color: var(--text-tertiary);
    }
 }
 

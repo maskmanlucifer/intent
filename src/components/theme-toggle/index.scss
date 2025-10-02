@@ -1,0 +1,67 @@
+.theme-toggle-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  padding-left: 6px;
+  width: 100%;
+  font-size: 14px;
+  position: relative;
+  height: 24px;
+  overflow-x: hidden;
+  min-width: 240px;
+  color: var(--text-secondary);
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  .theme-toggle-text  {
+    color: var(--text-primary);
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  .theme-toggle-button {
+    min-width: 18px;
+    min-height: 18px;
+    max-width: 18px;
+    max-height: 18px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    transition: color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      color: var(--primary-color);
+      background-color: transparent;
+    }
+
+    &:focus {
+      color: var(--primary-color);
+      background-color: transparent;
+    }
+
+    .anticon {
+      font-size: 16px;
+    }
+  }
+
+  .theme-toggle-text {
+    font-size: 14px;
+    transition: color 0.2s ease;
+  }
+
+  &:hover .theme-toggle-button {
+    color: var(--primary-color);
+  }
+
+  &:hover .theme-toggle-text {
+    color: var(--text-primary);
+  }
+}

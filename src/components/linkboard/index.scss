@@ -18,14 +18,14 @@
 
     .link-item {
         width: 100%;
-        background: #f5f5f5;
+        background: var(--bg-tertiary);
         border-radius: 8px;
         display: flex;
         flex-direction: column;
-        border: 1px solid #e0e0e0;
+        border: 1px solid var(--border-primary);
         cursor: pointer;
         text-decoration: none;
-        color: #333333;
+        color: var(--text-primary);
         font-size: 16px;
         font-weight: 500;
         position: relative;
@@ -46,15 +46,16 @@
             svg {
                 width: 16px;
                 height: 16px;
-                color: rgba(0, 0, 0, 0.45);
+                fill: var(--text-tertiary);
+                transition: fill 0.2s ease;
             }
 
             &:hover {
-                background: #e0e0e0;
-                border-color: #e0e0e0;
+                background: var(--bg-hover);
+                border-color: var(--border-primary);
 
                 svg {
-                    color: rgba(0, 0, 0, 0.85);
+                    fill: var(--text-primary);
                 }
             }
         }
@@ -83,7 +84,7 @@
         }
 
         &:hover {
-            box-shadow: 0 0px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow-light);
             transition: background 0.2s ease-in-out;
 
             .link-item-select {
@@ -120,7 +121,7 @@
         }
 
         .link-url {
-            color: rgba(0, 0, 0, 0.4);
+            color: var(--text-tertiary);
             font-size: 14px;
             font-weight: 400;
             display: flex;
@@ -145,7 +146,7 @@
 
     .selected-links {
         min-width: 448px;
-        background-color: #ffffff;
+        background-color: var(--bg-modal);
         position: fixed;
         left: 30%;
         top: 50%;
@@ -154,6 +155,8 @@
         flex-direction: column;
         gap: 16px;
         border-radius: 8px;
+        border: 1px solid var(--border-primary);
+        box-shadow: var(--shadow-heavy);
         z-index: 1000000000;
         transform: translateY(-50%);
 
@@ -191,13 +194,13 @@
             display: flex;
             gap: 8px;
             align-items: center;
-            border: 1px solid #e0e0e0;
+            border: 1px solid var(--border-primary);
             border-radius: 4px;
             padding: 4px 8px;
             width: fit-content;
             width: 200px;
             height: 20px;
-            background-color: #f5f5f5;
+            background-color: var(--bg-tertiary);
 
             .favicon {
                 height: 16px;
@@ -205,7 +208,7 @@
 
             .link-host {
                 font-size: 14px;
-                color: #333333;
+                color: var(--text-primary);
                 max-width: 40%;
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -214,7 +217,7 @@
 
             .link-url {
                 font-size: 12px;
-                color: #666666;
+                color: var(--text-secondary);
                 width: 40%;
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -223,6 +226,14 @@
 
             .remove-icon-bucket {
                 cursor: pointer;
+                width: 16px;
+                height: 16px;
+                fill: var(--text-tertiary);
+                transition: fill 0.2s ease;
+                
+                &:hover {
+                    fill: var(--red-500);
+                }
             }
         }
     }
