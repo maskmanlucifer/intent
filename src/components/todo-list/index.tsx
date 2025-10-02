@@ -286,7 +286,7 @@ const TodoList = ({
           {finalTodos.map((task, index) => (
             <Collapse.Panel
               header={
-                <>
+                <div className="drag-handle-content">
                   <DragIcon
                     className={classNames("drag-icon", {
                       "no-subtasks": task.subtasks.length === 0,
@@ -297,7 +297,7 @@ const TodoList = ({
                     index={index}
                     key={`${task.id}-${selectedFolder}-${task.subtasks.length}`}
                   />
-                </>
+                </div>
               }
               key={`${task.id}-${selectedFolder}`}
               extra={genExtra(task)}
