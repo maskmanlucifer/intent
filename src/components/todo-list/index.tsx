@@ -4,7 +4,6 @@ import {
   Button,
   Collapse,
   Dropdown,
-  Menu,
   message,
   Popconfirm,
   Tooltip,
@@ -29,6 +28,8 @@ import { selectFocusedTaskId, syncSettings } from "../../redux/sessionSlice";
 import useDnd from "../../hooks/useDnd";
 import { ReactComponent as DragIcon } from "../../assets/icons/drag-icon.svg";
 import { KEYBOARD_SHORTCUTS } from "../../constant";
+import { useMemo, useCallback } from "react";
+import React from "react";
 
 const TodoList = ({
   selectedFolder,
@@ -49,14 +50,19 @@ const TodoList = ({
     });
   }
 
-  const genExtra = (task: Task) => {
+  const genExtra = useCallback((task: Task) => {
     const isFocused = focusedTaskId === task.id;
     const filteredFolders = folders.filter(
       (folder) => folder.id !== task.categoryId,
     );
 
     return (
-      <div className="todo-actions">
+      <div 
+        className="todo-actions"
+        onClick={(e) => e.stopPropagation()}
+        onMouseDown={(e) => e.stopPropagation()}
+        onMouseUp={(e) => e.stopPropagation()}
+      >
         <Tooltip
           arrow={false}
           title="Add subtask"
@@ -66,6 +72,7 @@ const TodoList = ({
           <PlusOutlined
             className="add-subtask-icon"
             onClick={(e) => {
+              e.preventDefault();
               e.stopPropagation();
               dispatch(
                 addNewSubtask({
@@ -75,6 +82,8 @@ const TodoList = ({
                 }),
               );
             }}
+            onMouseDown={(e) => e.stopPropagation()}
+            onMouseUp={(e) => e.stopPropagation()}
           />
         </Tooltip>
         <Tooltip
@@ -88,6 +97,7 @@ const TodoList = ({
               focused: isFocused,
             })}
             onClick={(e) => {
+              e.preventDefault();
               e.stopPropagation();
               if (isFocused) {
                 syncSettings({
@@ -107,6 +117,8 @@ const TodoList = ({
                 });
               }
             }}
+            onMouseDown={(e) => e.stopPropagation()}
+            onMouseUp={(e) => e.stopPropagation()}
           />
         </Tooltip>
         {filteredFolders.length > 0 && (
@@ -116,10 +128,36 @@ const TodoList = ({
             mouseEnterDelay={0}
             mouseLeaveDelay={0}
           >
-            <Dropdown
-              overlay={
-                <Menu
-                  onClick={({ key, domEvent }) => {
+            <div
+              onClick={(e: React.MouseEvent) => {
+                e.preventDefault();
+                e.stopPropagation();
+              }}
+              onMouseDown={(e: React.MouseEvent) => e.stopPropagation()}
+              onMouseUp={(e: React.MouseEvent) => e.stopPropagation()}
+            >
+              <Dropdown
+                menu={{
+                  items: [
+                    {
+                      key: "none",
+                      label: "Move item to folder",
+                      className: "folder-move-item-to",
+                      disabled: true,
+                    },
+                    ...filteredFolders.map((folder) => ({
+                      key: folder.id,
+                      label: (
+                        <>
+                          <FolderIcon />
+                          {folder.name}
+                        </>
+                      ),
+                      className: "folder-move-item",
+                    })),
+                  ],
+                  onClick: ({ key, domEvent }) => {
+                    domEvent.preventDefault();
                     domEvent.stopPropagation();
                     if (key === "none") {
                       return;
@@ -131,23 +169,20 @@ const TodoList = ({
                         destinationCategoryId: key,
                       }),
                     );
+                  },
+                }}
+                trigger={["click"]}
+              >
+                <SwapOutlined 
+                  onClick={(e: React.MouseEvent) => {
+                    e.preventDefault();
+                    e.stopPropagation();
                   }}
-                >
-                  <Menu.Item key="none" className="folder-move-item-to">
-                    Move item to folder
-                  </Menu.Item>
-                  {filteredFolders.map((folder) => (
-                    <Menu.Item key={folder.id} className="folder-move-item">
-                      <FolderIcon />
-                      {folder.name}
-                    </Menu.Item>
-                  ))}
-                </Menu>
-              }
-              trigger={["click"]}
-            >
-              <SwapOutlined />
-            </Dropdown>
+                  onMouseDown={(e: React.MouseEvent) => e.stopPropagation()}
+                  onMouseUp={(e: React.MouseEvent) => e.stopPropagation()}
+                />
+              </Dropdown>
+            </div>
           </Tooltip>
         )}
         <Tooltip
@@ -160,6 +195,7 @@ const TodoList = ({
             title="Are you sure you want to delete this task?"
             okText="Yes, delete"
             onConfirm={(e) => {
+              e?.preventDefault();
               e?.stopPropagation();
               dispatch(
                 deleteTask({ id: task.id, categoryId: task.categoryId }),
@@ -173,12 +209,20 @@ const TodoList = ({
               });
             }}
           >
-            <DeleteOutlined className="delete-icon" />
+            <DeleteOutlined 
+              className="delete-icon"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              }}
+              onMouseDown={(e) => e.stopPropagation()}
+              onMouseUp={(e) => e.stopPropagation()}
+            />
           </Popconfirm>
         </Tooltip>
       </div>
     );
-  };
+  }, [focusedTaskId, folders, dispatch, messageApi]);
 
   const handleToggleCompletedTasks = () => {
     dispatch(
@@ -201,6 +245,63 @@ const TodoList = ({
 
   const nonCompletedTodos = todos.filter((todo) => !todo.isCompleted);
   const doWeHaveCompletedTasks = todos.length > nonCompletedTodos.length;
+
+  // Memoize the extra content for each task to prevent re-rendering
+  const taskExtras = useMemo(() => {
+    const extras: Record<string, React.ReactNode> = {};
+    finalTodos.forEach((task) => {
+      extras[task.id] = genExtra(task);
+    });
+    return extras;
+  }, [finalTodos, genExtra]);
+
+  // Memoize collapse items to prevent re-rendering issues
+  const collapseItems = useMemo(() => {
+    return finalTodos.map((task, index) => ({
+      key: `${task.id}-${selectedFolder}`,
+      label: (
+        <div className="drag-handle-content">
+          <DragIcon
+            className={classNames("drag-icon", {
+              "no-subtasks": task.subtasks.length === 0,
+            })}
+          />
+          <TodoItem
+            todoItem={task}
+            index={index}
+            key={`${task.id}-${selectedFolder}-${task.subtasks.length}`}
+          />
+        </div>
+      ),
+      extra: taskExtras[task.id],
+      children: task.subtasks.length > 0 ? (
+        <div className="subtasks">
+          {task.subtasks.map((subtask: Subtask, index: number) => (
+            <TodoItem
+              todoItem={subtask}
+              key={`${subtask.id}-${selectedFolder}`}
+              index={index}
+            />
+          ))}
+        </div>
+      ) : undefined,
+      className: "drag-handle",
+      showArrow: false,
+      collapsible: "header" as const,
+      "data-allow-drop": true,
+    }));
+  }, [finalTodos, selectedFolder, taskExtras]);
+
+  // Memoize active keys to prevent unnecessary re-renders
+  const activeKeys = useMemo(() => {
+    if (focusedTaskId &&
+        finalTodos.filter((task) => task.id === focusedTaskId)[0]?.subtasks?.length > 0) {
+      return [focusedTaskId + "-" + selectedFolder];
+    }
+    return finalTodos
+      .filter((task) => task.subtasks.length > 0)
+      .map((task) => `${task.id}-${selectedFolder}`);
+  }, [focusedTaskId, finalTodos, selectedFolder]);
 
   return (
     <div className="todo-list">
@@ -273,57 +374,14 @@ const TodoList = ({
       )}{" "}
       {finalTodos.length > 0 && (
         <Collapse
-          activeKey={
-            focusedTaskId &&
-            finalTodos.filter((task) => task.id === focusedTaskId)[0].subtasks
-              .length > 0
-              ? [focusedTaskId + "-" + selectedFolder]
-              : finalTodos
-                  .filter((task) => task.subtasks.length > 0)
-                  .map((task) => `${task.id}-${selectedFolder}`)
-          }
+          key={`collapse-${selectedFolder}-${finalTodos.length}`}
+          activeKey={activeKeys}
           expandIconPosition={"start"}
           className={classNames("todo-list-collapse", {
             dragging: isDragging,
           })}
-        >
-          {finalTodos.map((task, index) => (
-            <Collapse.Panel
-              header={
-                <div className="drag-handle-content">
-                  <DragIcon
-                    className={classNames("drag-icon", {
-                      "no-subtasks": task.subtasks.length === 0,
-                    })}
-                  />
-                  <TodoItem
-                    todoItem={task}
-                    index={index}
-                    key={`${task.id}-${selectedFolder}-${task.subtasks.length}`}
-                  />
-                </div>
-              }
-              key={`${task.id}-${selectedFolder}`}
-              extra={genExtra(task)}
-              collapsible="header"
-              data-allow-drop={true}
-              className="drag-handle"
-              showArrow={false}
-            >
-              {task.subtasks.length > 0 && (
-                <div className="subtasks">
-                  {task.subtasks.map((subtask: Subtask, index: number) => (
-                    <TodoItem
-                      todoItem={subtask}
-                      key={`${subtask.id}-${selectedFolder}`}
-                      index={index}
-                    />
-                  ))}
-                </div>
-              )}
-            </Collapse.Panel>
-          ))}
-        </Collapse>
+          items={collapseItems}
+        />
       )}
       {focusedTaskId === null && todos.length > 0 && (
         <Tooltip

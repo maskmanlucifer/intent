@@ -60,10 +60,7 @@ const categorySlice = createSlice({
   },
 });
 
-export const selectCategories = createSelector(
-  (state: { categories: { items: Category[] } }) => state.categories.items,
-  (items) => items,
-);
+export const selectCategories = (state: { categories: { items: Category[] } }) => state.categories.items;
 
 export const selectCategoryById = createSelector(
   [(state) => state.categories.items, (_, id) => id],
