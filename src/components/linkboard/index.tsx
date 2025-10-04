@@ -35,6 +35,24 @@ const OgImageContent: React.FC<{ link: TLink }> = ({ link }) => {
   const [imageError, setImageError] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
   const [imageLoaded, setImageLoaded] = React.useState(false);
+  const [showDotPlaceholder, setShowDotPlaceholder] = React.useState(false);
+
+  // Generate random color for dot based on link ID for consistency
+  const getRandomDotColor = (linkId: string) => {
+    const colors = [
+      '#1E3A8A', '#7C2D12', '#B45309', '#365314', '#1F2937',
+      '#7C3AED', '#BE185D', '#0F766E', '#1E40AF', '#991B1B',
+      '#451A03', '#312E81', '#374151', '#92400E', '#065F46',
+      '#581C87', '#701A75', '#0C4A6E', '#7C2D12', '#78350F'
+    ];
+    
+    const hash = linkId.split('').reduce((a, b) => {
+      a = ((a << 5) - a) + b.charCodeAt(0);
+      return a & a;
+    }, 0);
+    
+    return colors[Math.abs(hash) % colors.length];
+  };
 
   // Generate beautiful aesthetic fallback images
   const getFallbackImage = (link: TLink) => {
@@ -70,38 +88,59 @@ const OgImageContent: React.FC<{ link: TLink }> = ({ link }) => {
   const handleImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
     setIsLoading(false);
     setImageLoaded(true);
+    setShowDotPlaceholder(false);
   };
 
   const handleImageError = () => {
     setImageError(true);
     setIsLoading(false);
+    // If there's no original image URL, show dot placeholder
+    if (!link.imageUrl) {
+      setShowDotPlaceholder(true);
+    }
   };
+
+  // Check if we should show dot placeholder (no original image URL)
+  const shouldShowDot = !link.imageUrl || showDotPlaceholder;
 
   // Get the image source - prefer link.imageUrl, fallback to generated image
   const imageSrc = link.imageUrl && !imageError ? link.imageUrl : getFallbackImage(link);
 
   return (
     <div className="og-image-container">
-      {isLoading && (
+      {isLoading && !shouldShowDot && (
         <div className="image-loading">
           <div className="loading-spinner"></div>
         </div>
       )}
-      <img 
-        src={imageSrc}
-        alt={link.title || "Content preview"}
-        onLoad={handleImageLoad}
-        onError={handleImageError}
-        style={{ 
-          display: isLoading ? "none" : "block",
-          width: "100%",
-          height: "200px",
-          objectFit: "cover"
-        }}
-      />
+      
+      {shouldShowDot ? (
+        <div 
+          className="dot-placeholder"
+          style={{ 
+            backgroundColor: 'white',
+            '--dot-color': getRandomDotColor(link.id)
+          } as React.CSSProperties & { '--dot-color': string }}
+        >
+          <div className="random-dot"></div>
+        </div>
+      ) : (
+        <img 
+          src={imageSrc}
+          alt={link.title || "Content preview"}
+          onLoad={handleImageLoad}
+          onError={handleImageError}
+          style={{ 
+            display: isLoading ? "none" : "block",
+            width: "100%",
+            height: "200px",
+            objectFit: "cover"
+          }}
+        />
+      )}
       
       {/* Video play overlay for YouTube videos */}
-      {link.type === "video" && isYouTubeUrl(link.url) && imageLoaded && (
+      {link.type === "video" && isYouTubeUrl(link.url) && imageLoaded && !shouldShowDot && (
         <div className="video-play-overlay">
           <div className="play-button">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
