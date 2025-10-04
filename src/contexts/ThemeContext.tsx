@@ -24,6 +24,12 @@ interface ThemeProviderProps {
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const [theme, setThemeState] = useState<Theme>(() => {
+    // Check if theme was already set by the inline script
+    const existingTheme = document.documentElement.getAttribute('data-theme') as Theme;
+    if (existingTheme === 'dark' || existingTheme === 'light') {
+      return existingTheme;
+    }
+    
     // Check localStorage first
     const savedTheme = localStorage.getItem('theme') as Theme;
     if (savedTheme && (savedTheme === 'light' || savedTheme === 'dark')) {
@@ -50,8 +56,11 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   };
 
   useEffect(() => {
-    // Set initial theme
-    document.documentElement.setAttribute('data-theme', theme);
+    // Only update if theme attribute doesn't match current state
+    const currentAttribute = document.documentElement.getAttribute('data-theme');
+    if (currentAttribute !== theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+    }
     
     // Listen for system theme changes
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');

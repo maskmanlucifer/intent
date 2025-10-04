@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Intent",
-  "version": "3.4",
-  "description": "Your All-in-One Productivity Hub",
+  "version": "3.5",
+  "description": "Manage your todos and save links to read later.",
   "permissions": ["storage", "tabs", "contextMenus"],
   "background": {
     "service_worker": "background.js",
@@ -31,5 +31,11 @@
   },
   "chrome_url_overrides": {
     "newtab": "index.html"
-  }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["static/*"],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }
