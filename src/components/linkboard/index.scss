@@ -83,7 +83,7 @@
                 border-top-color: var(--border-secondary);
                 
                 .url-section .url-text {
-                    color: var(--text-primary);
+                    color: #2563EB;
                 }
                 
                 .action-btn {
@@ -138,12 +138,13 @@
             
             .url-text {
                 font-size: 13px;
-                color: var(--text-secondary);
+                color: #3B82F6;
                 font-family: var(--tertiary-font);
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
                 line-height: 1.3;
+                font-weight: 500;
             }
         }
         
@@ -217,6 +218,32 @@
         
         &:hover img {
             transform: scale(1.02);
+        }
+        
+        // Dot placeholder for missing OG images
+        .dot-placeholder {
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px 12px 0 0;
+            position: relative;
+            
+            .random-dot {
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                background-color: var(--dot-color);
+                transition: transform 0.3s ease;
+                opacity: 0.8;
+            }
+            
+            &:hover .random-dot {
+                transform: scale(1.15);
+                opacity: 1;
+            }
         }
         
         // Video play overlay for YouTube videos
