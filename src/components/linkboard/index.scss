@@ -82,10 +82,6 @@
                 background: var(--bg-tertiary);
                 border-top-color: var(--border-secondary);
                 
-                .url-section .url-text {
-                    color: #2563EB;
-                }
-                
                 .action-btn {
                     transform: scale(1.05);
                 }
@@ -138,7 +134,7 @@
             
             .url-text {
                 font-size: 13px;
-                color: #3B82F6;
+                color: #2563EB;
                 font-family: var(--tertiary-font);
                 overflow: hidden;
                 text-overflow: ellipsis;
