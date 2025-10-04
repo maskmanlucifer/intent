@@ -115,39 +115,35 @@ body {
     align-items: center;
 }
 
-.linkboard-drawer {
-    .ant-drawer-header-title {
-        flex-direction: row-reverse;
-    }
-    
-    // Custom drawer animation - slower and smoother
-    .ant-drawer-content {
-        transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
-    }
-    
-    .ant-drawer-mask {
-        transition: opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
-    }
-}
-
-// Override Ant Design's default drawer animation
-.ant-drawer {
-    &.ant-drawer-open {
-        .ant-drawer-content {
-            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
-        }
-        
-        .ant-drawer-mask {
-            transition: opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
-        }
-    }
-}
+// Removed old drawer styles - now using custom SmoothSidebar component
 
 .watch-demo-btn {
-    color: var(--blue-600);
-
+    color: #3B82F6 !important;
+    font-weight: 500;
+    
     &:hover {
-        color: var(--blue-500) !important;
+        color: #2563EB !important;
+        background: rgba(59, 130, 246, 0.1) !important;
+    }
+    
+    &:focus {
+        color: #2563EB !important;
+    }
+}
+
+// Dark theme specific adjustments for better visibility
+[data-theme="dark"] {
+    .watch-demo-btn {
+        color: #60A5FA !important;
+        
+        &:hover {
+            color: #93C5FD !important;
+            background: rgba(96, 165, 250, 0.15) !important;
+        }
+        
+        &:focus {
+            color: #93C5FD !important;
+        }
     }
 }
 

@@ -1,9 +1,10 @@
 .linkboard-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     padding: 20px 16px 0 16px;
     margin-bottom: 16px;
+    gap: 36px;
     
     .linkboard-title {
         h2 {
@@ -14,14 +15,11 @@
             font-family: var(--secondary-font);
         }
     }
-    
-    .watch-demo-btn {
-        color: var(--blue-600);
-        font-weight: 500;
-        
-        &:hover {
-            color: var(--blue-500) !important;
-        }
+}
+
+.close-icon {
+    svg {
+        color: var(--text-secondary);
     }
 }
 
@@ -724,6 +722,26 @@
                     fill: var(--red-500);
                 }
             }
+        }
+    }
+}
+
+// Dark theme specific improvements for better visibility
+[data-theme="dark"] {
+    .url-text {
+        color: #60A5FA !important;
+    }
+    
+    .masonry-item:hover .url-text {
+        color: #93C5FD !important;
+    }
+    
+    .watch-demo-btn {
+        color: #60A5FA !important;
+        
+        &:hover {
+            color: #93C5FD !important;
+            background: rgba(96, 165, 250, 0.15) !important;
         }
     }
 }
