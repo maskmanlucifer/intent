@@ -1,9 +1,73 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="background-color: #0d1117; color: #f0f6fc;">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <title>Intent</title>
+    
+    <!-- Load theme initialization script immediately -->
+    <script src="theme-init.js"></script>
+    
+    <!-- Critical CSS with default dark theme -->
+    <style>
+      /* Default to dark theme to prevent flash - this is the key */
+      html:not([data-theme="light"]) {
+        background-color: #0d1117 !important;
+        color: #f0f6fc !important;
+      }
+      
+      body {
+        background-color: #0d1117 !important;
+        color: #f0f6fc !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        font-family: Inter, sans-serif !important;
+        transition: background-color 0.3s ease, color 0.3s ease !important;
+      }
+      
+      /* Dark theme styles */
+      [data-theme="dark"] {
+        --bg-primary: #0d1117;
+        --text-primary: #f0f6fc;
+      }
+      
+      [data-theme="dark"] html,
+      [data-theme="dark"] body {
+        background-color: #0d1117 !important;
+        color: #f0f6fc !important;
+      }
+      
+      /* Light theme styles - only when explicitly set */
+      [data-theme="light"] {
+        --bg-primary: #ffffff;
+        --text-primary: #1a1a1a;
+      }
+      
+      [data-theme="light"] html,
+      [data-theme="light"] body {
+        background-color: #ffffff !important;
+        color: #1a1a1a !important;
+      }
+      
+      /* Ensure root div also has proper background */
+      #root {
+        background-color: inherit !important;
+        color: inherit !important;
+        height: 100vh !important;
+        width: 100vw !important;
+      }
+      
+      /* Additional protection - force dark until theme is set */
+      html:not([data-theme]) {
+        background-color: #0d1117 !important;
+        color: #f0f6fc !important;
+      }
+      
+      html:not([data-theme]) body {
+        background-color: #0d1117 !important;
+        color: #f0f6fc !important;
+      }
+    </style>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

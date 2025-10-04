@@ -1,0 +1,137 @@
+.loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  pointer-events: none;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+  
+  &.dark-theme {
+    .fog-overlay {
+      background: radial-gradient(circle at center, transparent 0%, rgba(13, 17, 23, 0.95) 100%);
+    }
+    
+    .loading-dot {
+      background: rgba(248, 246, 252, 0.6);
+    }
+  }
+  
+  &.light-theme {
+    .fog-overlay {
+      background: radial-gradient(circle at center, transparent 0%, rgba(255, 255, 255, 0.95) 100%);
+    }
+    
+    .loading-dot {
+      background: rgba(26, 26, 26, 0.6);
+    }
+  }
+  
+  .fog-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    animation: fogClear 1.5s ease-out forwards;
+    
+    .fog-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: inherit;
+      animation: fogDrift 2s ease-in-out infinite;
+      
+      &.fog-layer-1 {
+        animation-delay: 0s;
+        opacity: 0.8;
+      }
+      
+      &.fog-layer-2 {
+        animation-delay: 0.5s;
+        opacity: 0.6;
+        transform: scale(1.1);
+      }
+      
+      &.fog-layer-3 {
+        animation-delay: 1s;
+        opacity: 0.4;
+        transform: scale(1.2);
+      }
+    }
+  }
+  
+  .loading-indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    gap: 8px;
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out 0.3s forwards;
+    
+    .loading-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      animation: dotPulse 1.4s ease-in-out infinite;
+      
+      &:nth-child(1) {
+        animation-delay: 0s;
+      }
+      
+      &:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      
+      &:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+    }
+  }
+}
+
+// Animations
+@keyframes fogClear {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+
+@keyframes fogDrift {
+  0%, 100% {
+    transform: translateX(0) scale(1);
+  }
+  50% {
+    transform: translateX(10px) scale(1.05);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes dotPulse {
+  0%, 80%, 100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
