@@ -409,6 +409,8 @@ const Linkboard = () => {
         style={{ maxWidth: '1240px' }}
         width={'80vw'}
         closeIcon={null}
+        zIndex={1002}
+        maskStyle={{ zIndex: 1001 }}
         title={
           <div className="iframe-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <span>LINKBOARD</span>

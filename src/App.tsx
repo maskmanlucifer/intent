@@ -13,6 +13,7 @@ import {
 } from "./redux/sessionSlice";
 import Topbar from "./components/topbar";
 import Linkboard from "./components/linkboard";
+import SmoothSidebar from "./components/smooth-sidebar";
 import Mousetrap from "mousetrap";
 import { ThemeProvider, useTheme } from "./contexts/ThemeContext";
 
@@ -87,31 +88,13 @@ const AppContent = () => {
           isSidebarCollapsed={isSidebarCollapsed}
           setIsSidebarCollapsed={handleSidebarCollapsed}
         />
-        <Drawer
-          closeIcon={true}
-          open={isLinkBoardOpen}
+        <SmoothSidebar
+          isOpen={isLinkBoardOpen}
           onClose={() => setIsLinkBoardOpen(false)}
-          placement="right"
-          className="linkboard-drawer"
-          width={'100%'}
-          maskClosable={true}
-          mask={true}
-          title={
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                fontFamily: "var(--secondary-font)",
-                fontSize: "20px",
-              }}
-            >
-              LINKBOARD
-            </div>
-          }
+          title="LINKBOARD"
         >
           <Linkboard />
-        </Drawer>
+        </SmoothSidebar>
         </div>
     </ConfigProvider>
   );

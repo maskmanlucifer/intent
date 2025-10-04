@@ -1,0 +1,53 @@
+.theme-wave-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.theme-wave {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(var(--primary-color-rgb), 0.8) 0%,
+    rgba(var(--primary-color-rgb), 0.6) 20%,
+    rgba(var(--primary-color-rgb), 0.4) 40%,
+    rgba(var(--primary-color-rgb), 0.2) 60%,
+    rgba(var(--primary-color-rgb), 0.1) 80%,
+    transparent 100%
+  );
+  transform: translate(-50%, -50%);
+  animation: themeWaveExpand 0.8s ease-out forwards;
+}
+
+@keyframes themeWaveExpand {
+  0% {
+    width: 20px;
+    height: 20px;
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    width: 200vh;
+    height: 200vh;
+    opacity: 0;
+  }
+}
+
+// CSS custom properties for primary color RGB values
+[data-theme="light"] {
+  --primary-color-rgb: 59, 130, 246; // blue-500
+}
+
+[data-theme="dark"] {
+  --primary-color-rgb: 96, 165, 250; // blue-400
+}
