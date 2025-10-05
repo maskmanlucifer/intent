@@ -12,3 +12,13 @@ Feel free to open a discussion or reach out if you have any questions. We’re h
 
 Happy coding! 🎉
 
+
+----------
+Features in plan
+- Authentication
+- Data sync to server
+- Option to add label in saved links
+- Feature to let users club links togather to created moodboards
+- Feature to share bulk links via QA code
+- Mobile app for intent
+
