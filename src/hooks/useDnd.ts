@@ -77,7 +77,7 @@ const useDnd = (selectedFolder: string, finalTodos: Task[]) => {
         sortableInstance.current = null;
       }
     };
-  }, [selectedFolder, dispatch]);
+  }, [selectedFolder, finalTodos.length, dispatch]);
 
   // Cleanup on unmount
   useEffect(() => {
