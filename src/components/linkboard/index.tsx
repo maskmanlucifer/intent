@@ -18,7 +18,6 @@ import {
 import { DeleteOutlined, MehOutlined } from "@ant-design/icons";
 import { ReactComponent as TrashIcon } from "../../assets/icons/remove.svg";
 import { ReactComponent as CloseIcon } from "../../assets/icons/close.svg";
-import { ReactComponent as RedirectionArrowIcon } from "../../assets/icons/redirection-arrow.svg";
 import { InfoCircleOutlined } from "@ant-design/icons";
 import { AppDispatch } from "../../redux/store";
 import { LINKBOARD_FILTER_OPTIONS } from "../../constant";
@@ -239,9 +238,13 @@ const Linkboard = () => {
                   "webpage-item": link.type === "webpage",
                   "image-item": link.type === "image",
                 })}
+                onClick={() => window.open(link.url, "_blank")}
               >
                   <div className="masonry-content">
                     <OgImageContent link={link} />
+                    <div className="url-pill-overlay">
+                      {link.url}
+                    </div>
                   </div>
                   
                   {/* Bottom bar with URL and actions */}
@@ -262,17 +265,6 @@ const Linkboard = () => {
                     <div className="separator"></div>
                     
                     <div className="actions-section">
-                      <button
-                        className="action-btn open-btn"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          window.open(link.url, "_blank");
-                        }}
-                        title="Open in new tab"
-                      >
-                        <RedirectionArrowIcon />
-                      </button>
-                      
                       <Popconfirm
                         icon={<InfoCircleOutlined style={{ color: "#155dfc" }} />}
                         title="Remove url from linkboard"
