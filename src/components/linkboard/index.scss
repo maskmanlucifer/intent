@@ -75,6 +75,12 @@
             box-shadow: var(--shadow-medium);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border-color: var(--border-secondary);
+            transform: translateY(-2px);
+            
+            .masonry-content .url-pill-overlay {
+                opacity: 1;
+                visibility: visible;
+            }
             
             .bottom-bar {
                 background: var(--bg-tertiary);
@@ -83,7 +89,20 @@
                 .action-btn {
                     transform: scale(1.05);
                 }
+                
+                .url-text {
+                    color: var(--primary-color);
+                    
+                    &::after {
+                        opacity: 1;
+                    }
+                }
             }
+        }
+        
+        &:active {
+            transform: translateY(0px);
+            transition: transform 0.1s ease;
         }
 
         // All items use fixed dimensions for uniform look
@@ -99,6 +118,31 @@
         width: 100%;
         flex: 1;
         position: relative;
+        
+        .url-pill-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.75);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-family: var(--tertiary-font);
+            font-weight: 400;
+            max-width: 85%;
+            word-break: break-all;
+            text-align: center;
+            line-height: 1.3;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.15s ease;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
     }
 
     // Bottom bar with URL and actions
@@ -139,6 +183,16 @@
                 white-space: nowrap;
                 line-height: 1.3;
                 font-weight: 500;
+                transition: color 0.2s ease;
+                position: relative;
+                
+                &::after {
+                    content: "↗";
+                    opacity: 0;
+                    margin-left: 4px;
+                    font-size: 10px;
+                    transition: opacity 0.2s ease;
+                }
             }
         }
         
@@ -176,11 +230,6 @@
                 &:hover {
                     background: var(--bg-hover);
                     color: var(--text-primary);
-                    
-                    &.open-btn {
-                        color: #22c55e;
-                        background: rgba(34, 197, 94, 0.1);
-                    }
                     
                     &.delete-btn {
                         color: #ef4444;
@@ -734,6 +783,17 @@
     
     .masonry-item:hover .url-text {
         color: #93C5FD !important;
+        
+        &::after {
+            opacity: 1;
+        }
+    }
+    
+    .url-pill-overlay {
+        background: rgba(0, 0, 0, 0.85) !important;
+        color: #f8f9fa !important;
+        border-color: rgba(255, 255, 255, 0.2) !important;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5) !important;
     }
     
     .watch-demo-btn {

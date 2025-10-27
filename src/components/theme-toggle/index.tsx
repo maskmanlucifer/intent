@@ -44,11 +44,9 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ isSidebarCollapsed }) => {
         />,
         `Switch to ${theme === 'light' ? 'dark' : 'light'} theme`
       )}
-      {!isSidebarCollapsed && (
-        <span className="theme-toggle-text">
-          {theme === 'light' ? 'Dark theme' : 'Light theme'}
-        </span>
-      )}
+      <span className="theme-toggle-text">
+        {theme === 'light' ? 'Dark theme' : 'Light theme'}
+      </span>
     </div>
   );
 };
