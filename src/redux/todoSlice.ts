@@ -81,9 +81,19 @@ const todoSlice = createSlice({
       const { id, categoryId } = action.payload;
 
       const categoryTasks = state.itemsByCategory[categoryId] || [];
-      const updatedTasks = categoryTasks.filter((todo) => todo.id !== id);
+      const index = categoryTasks.findIndex((todo) => todo.id === id);
 
+      const updatedTasks = categoryTasks.filter((todo) => todo.id !== id);
       state.itemsByCategory[categoryId] = reorderTasksInCategory(updatedTasks);
+
+      // Set active item to previous task in list, or next item, or undefined
+      if (index > 0 && updatedTasks.length > 0) {
+        state.activeItem = updatedTasks[index - 1]?.id;
+      } else if (updatedTasks[index]) {
+        state.activeItem = updatedTasks[index]?.id;
+      } else {
+        state.activeItem = updatedTasks[0]?.id ?? undefined;
+      }
 
       dbHelper.deleteTodo(id);
       dbHelper.upsertTasks(state.itemsByCategory[categoryId]);

@@ -172,7 +172,6 @@ const Sidebar = ({
     Mousetrap.bind(KEYBOARD_SHORTCUTS.help.binding, handler4);
 
     return () => {
-      Mousetrap.unbind(KEYBOARD_SHORTCUTS.linkboard.binding);
       Mousetrap.unbind(KEYBOARD_SHORTCUTS.help.binding);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -202,7 +201,7 @@ const Sidebar = ({
     return [
       {
         key: "edit",
-        label: "Edit Category",
+        label: "Edit folder",
         onClick: () => {
           setIsEditing(folder.id);
           setCategoryName(folder.name);
@@ -212,7 +211,7 @@ const Sidebar = ({
       },
       {
         key: "delete",
-        label: "Delete Category",
+        label: "Delete folder",
         onClick: () => {
           setIsDeleting(folder.id);
         },
@@ -426,9 +425,7 @@ const Sidebar = ({
             <p>
               All your data, including tasks, notes, and settings, is stored
               locally in your browser. We do not sync or upload any of your data
-              to a server. The only exception is when you choose to import
-              events from an ICS calendar URL, where we need to parse and fetch
-              event details.
+              to a server.
             </p>
 
             <span className="subheading">When Might Data Be Lost?</span>
@@ -468,7 +465,7 @@ const Sidebar = ({
         </Modal>
         <Modal 
           open={isUpsertCategoryModalOpen}
-          title={isEditing ? "Edit Category" : "Add Category"}
+          title={isEditing ? "Edit folder" : "Add folder"}
           onOk={() => {
             if(isEditing) {
               dispatch(updateCategory({ id: isEditing as string, name: categoryName }));
