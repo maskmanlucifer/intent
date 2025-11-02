@@ -11,8 +11,6 @@ import { KEYBOARD_SHORTCUTS } from "../../constant";
 interface TopbarProps {
   isSidebarCollapsed: boolean;
   setSidebarCollapsed: (collapsed: boolean) => void;
-  setIsDrawerOpen: (open: boolean) => void;
-  isDrawerOpen: boolean;
   showCollapsedIcon: boolean;
   setIsLinkBoardOpen: (open: boolean) => void;
   isLinkBoardOpen: boolean;
@@ -21,24 +19,22 @@ interface TopbarProps {
 const Topbar = ({
   isSidebarCollapsed,
   setSidebarCollapsed,
-  isDrawerOpen,
   showCollapsedIcon,
   setIsLinkBoardOpen,
   isLinkBoardOpen,
 }: TopbarProps) => {
   useEffect(() => {
-    const handler3 = (e: KeyboardEvent) => {
+    const handler = (e: KeyboardEvent) => {
       e.preventDefault();
       setIsLinkBoardOpen(!isLinkBoardOpen);
     };
 
-    Mousetrap.bind(KEYBOARD_SHORTCUTS.linkboard.binding, handler3);
+    Mousetrap.bind(KEYBOARD_SHORTCUTS.linkboard.binding, handler);
 
     return () => {
       Mousetrap.unbind(KEYBOARD_SHORTCUTS.linkboard.binding);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isDrawerOpen, isLinkBoardOpen]);
+  }, [isLinkBoardOpen, setIsLinkBoardOpen]);
 
   return (
     <div className="topbar">

@@ -353,6 +353,12 @@ const TodoList = ({
                   type: "success",
                   content: `All completed todos deleted successfully!`,
                 });
+                dispatch(
+                  updateCategory({
+                    id: selectedFolder,
+                    showCompletedTasks: false,
+                  }),
+                );
               }}
             >
               <Button type="primary" size="small" className="delete-all-button">

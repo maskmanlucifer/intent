@@ -23,7 +23,6 @@ const Linkboard = lazy(() => import("./components/linkboard"));
 
 const AppContent = () => {
   const activePage = useSelector(selectActivePage);
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isLinkBoardOpen, setIsLinkBoardOpen] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
   const [showLoadingScreen, setShowLoadingScreen] = useState(true);
@@ -103,8 +102,6 @@ const AppContent = () => {
           <Topbar
             isSidebarCollapsed={isSidebarCollapsed}
             setSidebarCollapsed={handleSidebarCollapsed}
-            setIsDrawerOpen={setIsDrawerOpen}
-            isDrawerOpen={isDrawerOpen}
             showCollapsedIcon={activePage === PAGES.TODO}
             setIsLinkBoardOpen={setIsLinkBoardOpen}
             isLinkBoardOpen={isLinkBoardOpen}

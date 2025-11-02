@@ -14,7 +14,7 @@
         gap: 16px;
         font-family: var(--secondary-font);
         width: 259px;
-        transition: width 0.35s ease-in-out !important;
+        transition: width 0.3s ease-in-out !important;
 
         &.topbar-left-collapsed {
             width: 39px;
@@ -30,19 +30,19 @@
             margin-left: 10px;
             margin-right: 10px;
             color: var(--text-primary);
-            transition: all 0.35s ease-in-out;
+            transition: all 0.3s ease-in-out;
             gap: 12px;
 
             // Smooth text transition
             span {
-                transition: opacity 0.35s ease-in-out;
+                transition: opacity 0.3s ease-in-out;
             }
             
             svg {
                 width: 20px;
                 height: 20px;
                 cursor: pointer;
-                transition: fill 0.35s ease-in-out, transform 0.35s ease-in-out;
+                transition: fill 0.3s ease-in-out, transform 0.3s ease-in-out;
                 fill: var(--text-primary);
                 flex-shrink: 0;
                 

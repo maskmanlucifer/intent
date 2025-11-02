@@ -6,7 +6,7 @@ import "./index.scss";
 import { ReactComponent as EmptyTodo } from "../../assets/images/empty-todo.svg";
 import Sidebar from "../../components/sidebar";
 import TodoList from "../../components/todo-list";
-import { RootState } from "../../redux/store";
+import { RootState, store } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { selectCategories } from "../../redux/categorySlice";
 import { addNewTask, selectTodoList } from "../../redux/todoSlice";
@@ -47,20 +47,31 @@ const Todo = ({
     });
   };
 
-  const nonCompletedTodosLength = todos.filter(
-    (todo) => !todo.isCompleted,
-  ).length;
-
   const dispatch = useDispatch();
 
-  const handleAddTask = () => {
+  const handleAddTask = React.useCallback(() => {
+    // Get the current selectedFolder from Redux state to ensure we always use the latest value
+    const currentSettings = store.getState().session;
+    const currentSelectedFolder = currentSettings.selectedFolder;
+    
+    // Don't add tasks to the "completed" category
+    if (!currentSelectedFolder || currentSelectedFolder === "completed") {
+      return;
+    }
+
+    // Get the current todos for the selected folder to calculate the correct order
+    const currentTodos = selectTodoList(store.getState(), currentSelectedFolder);
+    const currentNonCompletedTodosLength = currentTodos.filter(
+      (todo) => !todo.isCompleted,
+    ).length;
+
     dispatch(
       addNewTask({
-        categoryId: selectedFolder,
-        order: nonCompletedTodosLength,
+        categoryId: currentSelectedFolder,
+        order: currentNonCompletedTodosLength,
       }),
     );
-  };
+  }, [dispatch]);
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -73,8 +84,7 @@ const Todo = ({
     return () => {
       Mousetrap.unbind(KEYBOARD_SHORTCUTS.addTask.binding);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [handleAddTask]);
 
   return (
     <div className="todo-page">
