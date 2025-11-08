@@ -57,7 +57,7 @@ const showItemSavedTooltip = () => {
     tooltip.innerHTML = `
       <div style="display: flex; align-items: center; gap: 8px;">
         <span style="font-size: 18px; animation: pulse 1.2s infinite;">✅</span>
-        <span><strong>Saved to Linkboard</strong> successfully.</span>
+        <span><strong style="color: #111827;">Saved to Intent</strong> successfully.</span>
       </div>
     `;
   
