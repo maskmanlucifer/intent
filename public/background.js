@@ -62,9 +62,9 @@ chrome.action.onClicked.addListener((tab) => {
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
-    id: "save-item",
-    title: "Save Item to Intent",
-    contexts: ["link", "image"],
+    id: "save-to-intent",
+    title: "Save to Intent",
+    contexts: ["image", "link"],
   });
 });
 
@@ -78,11 +78,15 @@ function getYouTubeThumbnailUrl(videoUrl) {
 }
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {
-  if (info.menuItemId !== "save-item") {
+  if (info.menuItemId !== "save-to-intent") {
     return;
   }
 
-  const url = info.linkUrl || info.srcUrl;
+  const hasImage = Boolean(info.mediaType === "image" || info.srcUrl);
+  const hasLink = Boolean(info.linkUrl);
+
+  const isImageAction = hasImage && (!hasLink || info.mediaType === "image");
+  const url = isImageAction ? info.srcUrl : info.linkUrl || info.srcUrl;
 
   if (!url) return;
 
@@ -96,7 +100,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     createdAt: Date.now(),
   };
 
-  if (info.mediaType === "image" || info.srcUrl) {
+  if (isImageAction) {
     linkData.type = "image";
     linkData.imageUrl = url;
   } else if (url.includes("youtube.com/watch") || url.includes("youtu.be")) {
