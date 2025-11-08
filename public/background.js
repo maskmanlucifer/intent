@@ -62,15 +62,9 @@ chrome.action.onClicked.addListener((tab) => {
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
-    id: "save-link",
-    title: "Save Link in Intent",
-    contexts: ["link"],
-  });
-
-  chrome.contextMenus.create({
-    id: "save-image",
-    title: "Save Image in Intent",
-    contexts: ["image"],
+    id: "save-item",
+    title: "Save Item to Intent",
+    contexts: ["link", "image"],
   });
 });
 
@@ -84,6 +78,10 @@ function getYouTubeThumbnailUrl(videoUrl) {
 }
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {
+  if (info.menuItemId !== "save-item") {
+    return;
+  }
+
   const url = info.linkUrl || info.srcUrl;
 
   if (!url) return;
@@ -98,18 +96,14 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     createdAt: Date.now(),
   };
 
-  if (info.menuItemId === "save-link") {
-    if (url.includes("youtube.com/watch") || url.includes("youtu.be")) {
-      linkData.type = "video";
-      linkData.imageUrl = getYouTubeThumbnailUrl(url);
-    } else {
-      linkData.type = "webpage";
-    }
-  }
-
-  if (info.menuItemId === "save-image") {
+  if (info.mediaType === "image" || info.srcUrl) {
     linkData.type = "image";
     linkData.imageUrl = url;
+  } else if (url.includes("youtube.com/watch") || url.includes("youtu.be")) {
+    linkData.type = "video";
+    linkData.imageUrl = getYouTubeThumbnailUrl(url);
+  } else {
+    linkData.type = "webpage";
   }
 
   putLinkDataToIDB(linkData);
