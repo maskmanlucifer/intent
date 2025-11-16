@@ -346,8 +346,11 @@ body {
         background-color: transparent !important;
     }
     .todo-item .ant-checkbox-checked .ant-checkbox-inner {
-        background-color: var(--text-tertiary) !important; /* neutral light gray */
-        border-color: var(--text-tertiary) !important;
+        background-color: var(--primary-color) !important; /* vivid accent for better contrast */
+        border-color: var(--primary-color) !important;
+    }
+    .todo-item .ant-checkbox-checked .ant-checkbox-inner::after {
+        border-color: #ffffff !important; /* ensure the check mark is clearly visible */
     }
 }
 
