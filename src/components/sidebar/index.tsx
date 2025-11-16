@@ -143,7 +143,6 @@ const Sidebar = ({
   selectedFolder,
   setSelectedFolder,
   isSidebarCollapsed,
-  setIsSidebarCollapsed,
 }: SidebarProps) => {
   const todayFolder = folders.find((folder) => folder.name === "Today");
 

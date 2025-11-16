@@ -60,6 +60,16 @@ export const KEYBOARD_SHORTCUTS = {
     description: "Add a new task",
     binding: "n",
   },
+  shiftEnterTask: {
+    key: "Shift + Enter",
+    description: "On task: focus last subtask or create one",
+    binding: "shift+enter",
+  },
+  shiftEnterSubtask: {
+    key: "Shift + Enter",
+    description: "On subtask: focus next task or create one",
+    binding: "shift+enter",
+  },
   linkboard: {
     key: isMac ? "⌘ + m" : "Ctrl + m",
     description: "Open linkboard",
