@@ -338,6 +338,17 @@ body {
             color: var(--primary-color) !important;
         }
     }
+
+    /* Make todo checkbox neutral (not blue) and brighter in dark theme */
+    .todo-item .ant-checkbox-inner {
+        border-color: var(--text-disabled) !important; /* brighter than border-primary */
+        border-width: 2px !important;
+        background-color: transparent !important;
+    }
+    .todo-item .ant-checkbox-checked .ant-checkbox-inner {
+        background-color: var(--text-tertiary) !important; /* neutral light gray */
+        border-color: var(--text-tertiary) !important;
+    }
 }
 
 /* Global collapse styles for light theme */

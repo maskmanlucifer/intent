@@ -42,6 +42,9 @@ const todoSlice = createSlice({
   name: "todos",
   initialState,
   reducers: {
+    setActiveItem: (state, action) => {
+      state.activeItem = action.payload;
+    },
     updateTaskText: (state, action) => {
       const { id, text, parentId, isSubtask, categoryId } = action.payload;
       let parentFinalTodo = undefined;
@@ -395,6 +398,7 @@ export const selectCompletedTodoList = createSelector(selectTodoList, (items) =>
 export const selectActiveTodo = (state: RootState) => state.todos.activeItem;
 
 export const {
+  setActiveItem,
   updateTaskText,
   toggleTaskState,
   addNewTask,

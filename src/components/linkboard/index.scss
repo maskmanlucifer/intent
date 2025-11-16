@@ -677,7 +677,7 @@
         gap: 16px;
         border-radius: 12px;
         border: 1px solid var(--border-primary);
-        box-shadow: var(--shadow-heavy);
+            box-shadow: var(--shadow-heavy), 0 6px 20px rgba(0, 0, 0, 0.2);
         z-index: 1000000000;
         transform: translateX(-50%);
         max-height: 60vh;

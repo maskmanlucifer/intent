@@ -7,7 +7,9 @@ import {
   addNewTask,
   deleteSubtask,
   deleteTask,
+  selectTodoList,
   selectActiveTodo,
+  setActiveItem,
   toggleTaskState,
   updateTaskText,
 } from "../../redux/todoSlice";
@@ -46,6 +48,9 @@ const TodoItem = ({
   const [isCompleted, setIsCompleted] = useState(todoItem.isCompleted);
   const [editing, setEditing] = useState(false);
   const activeItem = useSelector(selectActiveTodo);
+  const categoryTasks = useSelector((state: any) =>
+    selectTodoList(state, todoItem.categoryId),
+  ) as Task[];
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -129,6 +134,46 @@ const TodoItem = ({
           }}
           onBlur={handleBlur}
           onKeyDown={(event) => {
+            // Shift+Enter behavior:
+            // - On task: create a subtask and focus it
+            // - On subtask: focus next task (or create one and focus)
+            if (event.key === "Enter" && event.shiftKey) {
+              event.stopPropagation();
+              event.preventDefault();
+              if (todoItem.isSubtask) {
+                const parentIndex = categoryTasks.findIndex(
+                  (t) => t.id === todoItem.parentId,
+                );
+                const nextTask =
+                  parentIndex >= 0 ? categoryTasks[parentIndex + 1] : undefined;
+                if (nextTask) {
+                  dispatch(setActiveItem(nextTask.id));
+                } else {
+                  dispatch(
+                    addNewTask({
+                      categoryId: todoItem.categoryId,
+                      order: categoryTasks.length,
+                    }),
+                  );
+                }
+              } else {
+                // If task has subtasks, focus last subtask; else create one and focus
+                if ("subtasks" in todoItem && (todoItem as Task).subtasks.length > 0) {
+                  const lastSubtask = (todoItem as Task).subtasks[(todoItem as Task).subtasks.length - 1];
+                  dispatch(setActiveItem(lastSubtask.id));
+                } else {
+                  dispatch(
+                    addNewSubtask({
+                      parentId: todoItem.id,
+                      index: 0,
+                      categoryId: todoItem.categoryId,
+                    }),
+                  );
+                }
+              }
+              return;
+            }
+
             if (event.key === "Enter" && event.metaKey) {
               event.stopPropagation();
               event.preventDefault();
