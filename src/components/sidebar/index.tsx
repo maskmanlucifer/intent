@@ -92,7 +92,7 @@ const EditCategoryBtn = ({
       setSelectedFolder(folderId);
       messageApi.open({
         type: "success",
-        content: `Folder ${updatedFolderName} added successfully!`,
+        content: `Folder ${updatedFolderName} created successfully!`,
       });
     } else {
       dispatch(updateCategory({ id: folder.id, name: updatedFolderName }));
@@ -407,6 +407,7 @@ const Sidebar = ({
             </span>
           }
           centered={true}
+          closeIcon={<CloseOutlined style={{ fontSize: "14px" }} />}
           width={800}
           okText="Got it"
           footer={[
@@ -414,6 +415,7 @@ const Sidebar = ({
               key="ok"
               type="primary"
               onClick={() => setIsDataStorageModalOpen(false)}
+              size="small"
             >
               Got it
             </Button>,
