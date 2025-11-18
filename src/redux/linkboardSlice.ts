@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createSelector } from "@reduxjs/toolkit";
 import { TLink } from "../types";
 import { RootState, store } from "./store";
 import dbHelper from "../db/helper";
@@ -62,15 +62,20 @@ const notesSlice = createSlice({
 export const { addLink, removeLink, updateLink, addLinks, removeLinks } =
   notesSlice.actions;
 
-export const selectLinks = (state: RootState) =>
-  [...state.linkboard.links].sort((a, b) => {
-    if (a.createdAt > b.createdAt) {
-      return -1;
-    }
-    if (a.createdAt < b.createdAt) {
-      return 1;
-    }
-    return 0;
-  });
+const selectLinkboardLinks = (state: RootState) => state.linkboard.links;
+
+export const selectLinks = createSelector(
+  [selectLinkboardLinks],
+  (links) =>
+    [...links].sort((a, b) => {
+      if (a.createdAt > b.createdAt) {
+        return -1;
+      }
+      if (a.createdAt < b.createdAt) {
+        return 1;
+      }
+      return 0;
+    })
+);
 
 export default notesSlice.reducer;

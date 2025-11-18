@@ -7,7 +7,7 @@ import { ReactComponent as CompletedIcon } from "../../assets/icons/completed.sv
 import { ReactComponent as AddSquareIcon } from "../../assets/icons/add-square.svg";
 import HelpUsImprove from "../help-us-improve";
 import classNames from "classnames";
-import { Button, Dropdown, Input, message, Modal, Popover, Tooltip } from "antd";
+import { Button, Dropdown, Input, InputRef, message, Modal, Popover, Tooltip } from "antd";
 import {
   CloseOutlined,
   DeleteOutlined,
@@ -159,6 +159,17 @@ const Sidebar = ({
   const [isShortcutModalOpen, setIsShortcutModalOpen] = useState(false);
   const [isUpsertCategoryModalOpen, setIsUpsertCategoryModalOpen] = useState(false);
   const [categoryName, setCategoryName] = useState("");
+  const inputRef = useRef<InputRef>(null);
+
+  useEffect(() => {
+    if (isUpsertCategoryModalOpen) {
+      setTimeout(() => {
+        inputRef.current?.focus({
+          cursor: "end",
+        });
+      }, 100);
+    }
+  }, [isUpsertCategoryModalOpen]);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -464,11 +475,11 @@ const Sidebar = ({
         >
           <KeyboardShortcuts />
         </Modal>
-        <Modal 
+        <Modal
           open={isUpsertCategoryModalOpen}
           title={isEditing ? "Edit folder" : "Add folder"}
           onOk={() => {
-            if(isEditing) {
+            if (isEditing) {
               dispatch(updateCategory({ id: isEditing as string, name: categoryName }));
               messageApi.open({
                 type: "success",
@@ -489,8 +500,8 @@ const Sidebar = ({
           centered={true}
           okText={isEditing ? "Update" : "Add"}
           width={460}
-          okButtonProps={{size: "small"}}
-          cancelButtonProps={{size: "small"}}
+          okButtonProps={{ size: "small" }}
+          cancelButtonProps={{ size: "small" }}
           closeIcon={<CloseOutlined style={{ fontSize: "14px" }} />}
           onClose={() => {
             setIsUpsertCategoryModalOpen(false);
@@ -498,7 +509,7 @@ const Sidebar = ({
             setIsEditing(false);
           }}
         >
-          <Input size="small" value={categoryName} onChange={(e) => setCategoryName(e.target.value)} placeholder={isEditing ? "Enter new name" : "Enter new folder name"} />
+          <Input size="small" ref={inputRef} value={categoryName} onChange={(e) => setCategoryName(e.target.value)} placeholder={isEditing ? "Enter new name" : "Enter new folder name"} />
         </Modal>
       </div>
     </div>

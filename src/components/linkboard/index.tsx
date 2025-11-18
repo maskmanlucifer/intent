@@ -45,12 +45,12 @@ const OgImageContent: React.FC<{ link: TLink }> = ({ link }) => {
       '#451A03', '#312E81', '#374151', '#92400E', '#065F46',
       '#581C87', '#701A75', '#0C4A6E', '#7C2D12', '#78350F'
     ];
-    
+
     const hash = linkId.split('').reduce((a, b) => {
       a = ((a << 5) - a) + b.charCodeAt(0);
       return a & a;
     }, 0);
-    
+
     return colors[Math.abs(hash) % colors.length];
   };
 
@@ -66,18 +66,18 @@ const OgImageContent: React.FC<{ link: TLink }> = ({ link }) => {
         // Minimal pattern for YouTube fallback
         return `https://images.unsplash.com/photo-1557683316-973673baf926?w=410&h=200&fit=crop&crop=center&auto=format&q=80`;
       }
-      
+
       // Beautiful aesthetic patterns using Pexels sources
       const patterns = [
         `https://images.pexels.com/photos/2567011/pexels-photo-2567011.jpeg?auto=compress&cs=tinysrgb&w=410&h=200&fit=crop`,
       ];
-      
+
       // Use link ID to consistently pick a pattern
       const hash = link.id.split('').reduce((a, b) => {
         a = ((a << 5) - a) + b.charCodeAt(0);
         return a & a;
       }, 0);
-      
+
       return patterns[Math.abs(hash) % patterns.length];
     } catch {
       // Ultimate fallback - clean minimal pattern
@@ -113,11 +113,11 @@ const OgImageContent: React.FC<{ link: TLink }> = ({ link }) => {
           <div className="loading-spinner"></div>
         </div>
       )}
-      
+
       {shouldShowDot ? (
-        <div 
+        <div
           className="dot-placeholder"
-          style={{ 
+          style={{
             backgroundColor: 'white',
             '--dot-color': getRandomDotColor(link.id)
           } as React.CSSProperties & { '--dot-color': string }}
@@ -125,12 +125,12 @@ const OgImageContent: React.FC<{ link: TLink }> = ({ link }) => {
           <div className="random-dot"></div>
         </div>
       ) : (
-        <img 
+        <img
           src={imageSrc}
           alt={link.title || "Content preview"}
           onLoad={handleImageLoad}
           onError={handleImageError}
-          style={{ 
+          style={{
             display: isLoading ? "none" : "block",
             width: "100%",
             height: "200px",
@@ -138,13 +138,13 @@ const OgImageContent: React.FC<{ link: TLink }> = ({ link }) => {
           }}
         />
       )}
-      
+
       {/* Video play overlay for YouTube videos */}
       {link.type === "video" && isYouTubeUrl(link.url) && imageLoaded && !shouldShowDot && (
         <div className="video-play-overlay">
           <div className="play-button">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
-              <path d="M8 5v14l11-7z"/>
+              <path d="M8 5v14l11-7z" />
             </svg>
           </div>
         </div>
@@ -184,7 +184,7 @@ const Linkboard = () => {
   return (
     <div className="linkboard">
       {contextHolder}
-      
+
       {/* Linkboard Header with Demo Button */}
       <div className="linkboard-header">
         <div className="linkboard-title">
@@ -199,7 +199,7 @@ const Linkboard = () => {
           Watch demo
         </Button>
       </div>
-      
+
       <div className="link-list">
         {links.length > 0 && (
           <div className="linkboard-filter">
@@ -240,83 +240,83 @@ const Linkboard = () => {
                 })}
                 onClick={() => window.open(link.url, "_blank")}
               >
-                  <div className="masonry-content">
-                    <OgImageContent link={link} />
-                    <div className="url-pill-overlay">
-                      {link.url}
-                    </div>
+                <div className="masonry-content">
+                  <OgImageContent link={link} />
+                  <div className="url-pill-overlay">
+                    {link.url}
                   </div>
-                  
-                  {/* Bottom bar with URL and actions */}
-                  <div className="bottom-bar">
-                    <div className="url-section">
-                      {link.url && (
-                        <img
-                          src={`https://www.google.com/s2/favicons?domain=${new URL(link.url).hostname}`}
-                          alt="favicon"
-                          className="favicon"
-                        />
-                      )}
-                      <span className="url-text">
-                        {link.url ? new URL(link.url).hostname : "Link"}
-                      </span>
-                    </div>
-                    
-                    <div className="separator"></div>
-                    
-                    <div className="actions-section">
-                      <Popconfirm
-                        icon={<InfoCircleOutlined style={{ color: "#155dfc" }} />}
-                        title="Remove url from linkboard"
-                        okText="Remove"
-                        placement="left"
-                        onCancel={(e?: React.MouseEvent<HTMLElement, MouseEvent>) => {
-                          e?.stopPropagation();
-                        }}
-                        onConfirm={(e?: React.MouseEvent<HTMLElement, MouseEvent>) => {
-                          e?.stopPropagation();
-                          dispatch(removeLink(link.id));
-                          messageApi.open({
-                            type: "success",
-                            content: "Link removed from linkboard",
-                            duration: 3,
-                          });
-                        }}
-                        cancelText="Cancel"
-                        description={"Are you sure you want to remove this link?"}
-                      >
-                        <button
-                          className="action-btn delete-btn"
-                          onClick={(e) => e.stopPropagation()}
-                          title="Delete link"
-                        >
-                          <DeleteOutlined />
-                        </button>
-                      </Popconfirm>
-                    </div>
-                  </div>
-                  
-                  <Checkbox
-                    onClick={(e) => e.stopPropagation()}
-                    className={classNames("link-item-select", {
-                      selected: selectedLinks.includes(link.id),
-                    })}
-                    onChange={(e) => {
-                      e.stopPropagation();
-                      e.preventDefault();
-                      setTimeout(() => {
-                        if (selectedLinks.includes(link.id)) {
-                          setSelectedLinks(
-                            selectedLinks.filter((id) => id !== link.id),
-                          );
-                        } else {
-                          setSelectedLinks([...selectedLinks, link.id]);
-                        }
-                      }, 50);
-                    }}
-                    checked={selectedLinks.includes(link.id)}
-                  />
                 </div>
+
+                {/* Bottom bar with URL and actions */}
+                <div className="bottom-bar">
+                  <div className="url-section">
+                    {link.url && (
+                      <img
+                        src={`https://www.google.com/s2/favicons?domain=${new URL(link.url).hostname}`}
+                        alt="favicon"
+                        className="favicon"
+                      />
+                    )}
+                    <span className="url-text">
+                      {link.url ? new URL(link.url).hostname : "Link"}
+                    </span>
+                  </div>
+
+                  <div className="separator"></div>
+
+                  <div className="actions-section">
+                    <Popconfirm
+                      icon={<InfoCircleOutlined style={{ color: "#155dfc" }} />}
+                      title="Remove url from linkboard"
+                      okText="Remove"
+                      placement="left"
+                      onCancel={(e?: React.MouseEvent<HTMLElement, MouseEvent>) => {
+                        e?.stopPropagation();
+                      }}
+                      onConfirm={(e?: React.MouseEvent<HTMLElement, MouseEvent>) => {
+                        e?.stopPropagation();
+                        dispatch(removeLink(link.id));
+                        messageApi.open({
+                          type: "success",
+                          content: "Link removed from linkboard",
+                          duration: 3,
+                        });
+                      }}
+                      cancelText="Cancel"
+                      description={"Are you sure you want to remove this link?"}
+                    >
+                      <button
+                        className="action-btn delete-btn"
+                        onClick={(e) => e.stopPropagation()}
+                        title="Delete link"
+                      >
+                        <DeleteOutlined />
+                      </button>
+                    </Popconfirm>
+                  </div>
+                </div>
+
+                <Checkbox
+                  onClick={(e) => e.stopPropagation()}
+                  className={classNames("link-item-select", {
+                    selected: selectedLinks.includes(link.id),
+                  })}
+                  onChange={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    setTimeout(() => {
+                      if (selectedLinks.includes(link.id)) {
+                        setSelectedLinks(
+                          selectedLinks.filter((id) => id !== link.id),
+                        );
+                      } else {
+                        setSelectedLinks([...selectedLinks, link.id]);
+                      }
+                    }, 50);
+                  }}
+                  checked={selectedLinks.includes(link.id)}
+                />
+              </div>
             ))}
           </div>
         )}
@@ -392,7 +392,7 @@ const Linkboard = () => {
           </div>
         </div>
       )}
-      
+
       {/* Demo Modal */}
       <Modal
         open={isDemoModalOpen}
@@ -402,7 +402,11 @@ const Linkboard = () => {
         width={'80vw'}
         closeIcon={null}
         zIndex={1002}
-        maskStyle={{ zIndex: 1001 }}
+        styles={{
+          mask: {
+            zIndex: 1001
+          }
+        }}
         title={
           <div className="iframe-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <span>LINKBOARD</span>
