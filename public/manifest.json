@@ -1,9 +1,13 @@
 {
   "manifest_version": 3,
   "name": "Intent",
-  "version": "4.2",
+  "version": "4.3",
   "description": "Manage your todos and save links to read later.",
-  "permissions": ["storage", "tabs", "contextMenus"],
+  "permissions": [
+    "storage",
+    "tabs",
+    "contextMenus"
+  ],
   "background": {
     "service_worker": "background.js",
     "type": "module"
@@ -19,8 +23,13 @@
   },
   "content_scripts": [
     {
-      "matches": ["http://*/*", "https://*/*"],
-      "js": ["content-script.js"]
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": [
+        "content-script.js"
+      ]
     }
   ],
   "icons": {
@@ -34,8 +43,12 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["static/*"],
-      "matches": ["<all_urls>"]
+      "resources": [
+        "static/*"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
     }
   ]
 }

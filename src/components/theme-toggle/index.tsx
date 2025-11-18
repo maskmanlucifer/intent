@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Tooltip } from 'antd';
+import { Tooltip } from 'antd';
 import { SunOutlined, MoonOutlined } from '@ant-design/icons';
 import { useTheme } from '../../contexts/ThemeContext';
 import './index.scss';
@@ -33,18 +33,12 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ isSidebarCollapsed }) => {
   };
 
   return (
-    <div className="theme-toggle-container" onClick={toggleTheme}>
+    <div className="sidebar-bottom-action-item" onClick={toggleTheme}>
       {withTooltip(
-        <Button
-          type="text"
-          icon={theme === 'light' ? <MoonOutlined /> : <SunOutlined />}
-          onClick={toggleTheme}
-          className="theme-toggle-button"
-          size="small"
-        />,
+        theme === 'light' ? <MoonOutlined /> : <SunOutlined />,
         `Switch to ${theme === 'light' ? 'dark' : 'light'} theme`
       )}
-      <span className="theme-toggle-text">
+      <span>
         {theme === 'light' ? 'Dark theme' : 'Light theme'}
       </span>
     </div>
