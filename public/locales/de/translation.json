@@ -45,7 +45,8 @@
         "folderUpdated": "Ordner {{name}} erfolgreich aktualisiert!",
         "folderDeleted": "Ordner {{name}} erfolgreich gelöscht!",
         "update": "Aktualisieren",
-        "add": "Hinzufügen"
+        "add": "Hinzufügen",
+        "whatsNew": "Was gibt es Neues"
     },
     "completed": {
         "confirmDeleteTask": "Sind Sie sicher, dass Sie diese Aufgabe löschen möchten?",
@@ -111,5 +112,20 @@
         "linksRemoved": "Links vom Linkboard entfernt",
         "deleteLinks": "{{count}} Link löschen",
         "deleteLinks_plural": "{{count}} Links löschen"
+    },
+    "whatsNew": {
+        "title": "Was gibt es Neues in INT3NT",
+        "update1Title": "Verbesserte Aufgabe ↔ Unteraufgabe Navigation",
+        "update1Description": "Navigieren Sie nahtlos zwischen Aufgaben und Unteraufgaben mit Shift+Enter. Bei einer Aufgabe springen Sie zur letzten Unteraufgabe oder erstellen eine neue. Bei einer Unteraufgabe wechseln Sie zur nächsten Aufgabe oder erstellen eine. Arbeiten Sie schneller mit verbesserter Tastaturnavigation.",
+        "update2Title": "Mehrere Links auf einmal öffnen",
+        "update2Description": "Wählen Sie mehrere Links im Linkboard aus und öffnen Sie sie alle mit einem Klick. Perfekt für die Verwaltung mehrerer Ressourcen und die effiziente Batch-Verarbeitung Ihrer gespeicherten Links.",
+        "update3Title": "Mehrsprachige Unterstützung",
+        "update3Description": "INT3NT unterstützt jetzt 10 Sprachen: Englisch, Spanisch, Französisch, Deutsch, Italienisch, Portugiesisch, Russisch, Chinesisch, Japanisch und Koreanisch. Wechseln Sie jederzeit die Sprache in der Seitenleiste.",
+        "gotIt": "Verstanden",
+        "feedbackTitle": "Feedback & Feature-Anfragen",
+        "feedbackPlaceholder": "Teilen Sie Ihr Feedback oder fordern Sie neue Funktionen an...",
+        "submitFeedback": "Feedback senden",
+        "feedbackSent": "Vielen Dank für Ihr Feedback!",
+        "feedbackFailed": "Feedback konnte nicht gesendet werden. Bitte versuchen Sie es erneut."
     }
 }

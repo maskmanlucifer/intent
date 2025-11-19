@@ -45,7 +45,8 @@
         "folderUpdated": "Folder {{name}} updated successfully!",
         "folderDeleted": "Folder {{name}} deleted successfully!",
         "update": "Update",
-        "add": "Add"
+        "add": "Add",
+        "whatsNew": "What's New"
     },
     "completed": {
         "confirmDeleteTask": "Are you sure you want to delete this task?",
@@ -111,5 +112,20 @@
         "linksRemoved": "Links removed from linkboard",
         "deleteLinks": "Delete {{count}} link",
         "deleteLinks_plural": "Delete {{count}} links"
+    },
+    "whatsNew": {
+        "title": "What's New in INT3NT",
+        "update1Title": "Improved Task ↔ Subtask Navigation",
+        "update1Description": "Navigate seamlessly between tasks and subtasks using Shift+Enter. On a task, jump to the last subtask or create a new one. On a subtask, move to the next task or create one. Work faster with improved keyboard navigation.",
+        "update2Title": "Open Multiple Links at Once",
+        "update2Description": "Select multiple links in Linkboard and open them all at once with a single click. Perfect for managing multiple resources and batch processing your saved links efficiently.",
+        "update3Title": "Multi-Language Support",
+        "update3Description": "INT3NT now supports 10 languages: English, Spanish, French, German, Italian, Portuguese, Russian, Chinese, Japanese, and Korean. Switch languages anytime from the sidebar.",
+        "gotIt": "Got it",
+        "feedbackTitle": "Feedback & Feature Requests",
+        "feedbackPlaceholder": "Share your feedback or request new features...",
+        "submitFeedback": "Submit Feedback",
+        "feedbackSent": "Thank you for your feedback!",
+        "feedbackFailed": "Failed to submit feedback. Please try again."
     }
 }

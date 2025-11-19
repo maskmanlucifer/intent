@@ -111,5 +111,20 @@
         "linksRemoved": "Link rimossi da linkboard",
         "deleteLinks": "Elimina {{count}} link",
         "deleteLinks_plural": "Elimina {{count}} link"
+    },
+    "whatsNew": {
+        "title": "Novità in INT3NT",
+        "update1Title": "Navigazione Migliorata Attività ↔ Sottoattività",
+        "update1Description": "Naviga senza problemi tra attività e sottoattività usando Shift+Invio. Su un'attività, salta all'ultima sottoattività o creane una nuova. Su una sottoattività, passa all'attività successiva o creane una. Lavora più velocemente con la navigazione da tastiera migliorata.",
+        "update2Title": "Apri Più Link Contemporaneamente",
+        "update2Description": "Seleziona più link nella Linkboard e aprili tutti in una volta con un solo clic. Perfetto per gestire più risorse ed elaborare in batch i tuoi link salvati in modo efficiente.",
+        "update3Title": "Supporto Multilingua",
+        "update3Description": "INT3NT ora supporta 10 lingue: inglese, spagnolo, francese, tedesco, italiano, portoghese, russo, cinese, giapponese e coreano. Cambia lingua in qualsiasi momento dalla barra laterale.",
+        "gotIt": "Capito",
+        "feedbackTitle": "Feedback e Richieste di Funzionalità",
+        "feedbackPlaceholder": "Condividi il tuo feedback o richiedi nuove funzionalità...",
+        "submitFeedback": "Invia Feedback",
+        "feedbackSent": "Grazie per il tuo feedback!",
+        "feedbackFailed": "Impossibile inviare il feedback. Riprova."
     }
 }

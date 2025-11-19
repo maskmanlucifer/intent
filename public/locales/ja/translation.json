@@ -109,7 +109,22 @@
         "openLinks_plural": "{{count}} リンクを開く",
         "removeLinksTitle": "リンクボードからリンクを削除",
         "linksRemoved": "リンクボードからリンクを削除しました",
-        "deleteLinks": "{{count}} リンクを削除",
-        "deleteLinks_plural": "{{count}} リンクを削除"
+        "deleteLinks": "リンクを{{count}}件削除",
+        "deleteLinks_plural": "リンクを{{count}}件削除"
+    },
+    "whatsNew": {
+        "title": "INT3NTの新機能",
+        "update1Title": "タスク ↔ サブタスク ナビゲーションの改善",
+        "update1Description": "Shift+Enterを使用して、タスクとサブタスク間をシームレスに移動できます。タスクでは、最後のサブタスクにジャンプするか、新しいサブタスクを作成します。サブタスクでは、次のタスクに移動するか、新しいタスクを作成します。改善されたキーボードナビゲーションで作業を高速化します。",
+        "update2Title": "複数のリンクを一度に開く",
+        "update2Description": "リンクボードで複数のリンクを選択し、ワンクリックですべて開くことができます。複数のリソースを管理し、保存されたリンクを効率的に一括処理するのに最適です。",
+        "update3Title": "多言語サポート",
+        "update3Description": "INT3NTは現在、英語、スペイン語、フランス語、ドイツ語、イタリア語、ポルトガル語、ロシア語、中国語、日本語、韓国語の10言語をサポートしています。サイドバーからいつでも言語を切り替えることができます。",
+        "gotIt": "了解",
+        "feedbackTitle": "フィードバックと機能リクエスト",
+        "feedbackPlaceholder": "フィードバックを共有するか、新機能をリクエストしてください...",
+        "submitFeedback": "フィードバックを送信",
+        "feedbackSent": "フィードバックありがとうございます！",
+        "feedbackFailed": "フィードバックの送信に失敗しました。もう一度お試しください。"
     }
 }

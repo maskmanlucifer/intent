@@ -111,5 +111,20 @@
         "linksRemoved": "链接已从链接板移除",
         "deleteLinks": "删除 {{count}} 个链接",
         "deleteLinks_plural": "删除 {{count}} 个链接"
+    },
+    "whatsNew": {
+        "title": "INT3NT 的新功能",
+        "update1Title": "改进的任务 ↔ 子任务导航",
+        "update1Description": "使用 Shift+Enter 在任务和子任务之间无缝导航。在任务上，跳转到最后一个子任务或创建一个新子任务。在子任务上，移动到下一个任务或创建一个新任务。通过改进的键盘导航更快地工作。",
+        "update2Title": "一次打开多个链接",
+        "update2Description": "在 Linkboard 中选择多个链接，只需单击一次即可全部打开。非常适合管理多个资源和高效批量处理保存的链接。",
+        "update3Title": "多语言支持",
+        "update3Description": "INT3NT 现在支持 10 种语言：英语、西班牙语、法语、德语、意大利语、葡萄牙语、俄语、中文、日语和韩语。随时从侧边栏切换语言。",
+        "gotIt": "知道了",
+        "feedbackTitle": "反馈和功能请求",
+        "feedbackPlaceholder": "分享您的反馈或请求新功能...",
+        "submitFeedback": "提交反馈",
+        "feedbackSent": "感谢您的反馈！",
+        "feedbackFailed": "提交反馈失败。请重试。"
     }
 }

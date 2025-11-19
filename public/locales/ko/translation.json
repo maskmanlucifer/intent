@@ -111,5 +111,20 @@
         "linksRemoved": "링크 보드에서 링크가 제거되었습니다",
         "deleteLinks": "{{count}}개 링크 삭제",
         "deleteLinks_plural": "{{count}}개 링크 삭제"
+    },
+    "whatsNew": {
+        "title": "INT3NT의 새로운 기능",
+        "update1Title": "향상된 작업 ↔ 하위 작업 탐색",
+        "update1Description": "Shift+Enter를 사용하여 작업과 하위 작업 간을 원활하게 이동하세요. 작업에서 마지막 하위 작업으로 이동하거나 새 하위 작업을 만듭니다. 하위 작업에서 다음 작업으로 이동하거나 새 작업을 만듭니다. 향상된 키보드 탐색으로 더 빠르게 작업하세요.",
+        "update2Title": "한 번에 여러 링크 열기",
+        "update2Description": "링크보드에서 여러 링크를 선택하고 한 번의 클릭으로 모두 엽니다. 여러 리소스를 관리하고 저장된 링크를 효율적으로 일괄 처리하는 데 완벽합니다.",
+        "update3Title": "다국어 지원",
+        "update3Description": "INT3NT는 이제 영어, 스페인어, 프랑스어, 독일어, 이탈리아어, 포르투갈어, 러시아어, 중국어, 일본어, 한국어 등 10개 언어를 지원합니다. 사이드바에서 언제든지 언어를 전환하세요.",
+        "gotIt": "확인",
+        "feedbackTitle": "피드백 및 기능 요청",
+        "feedbackPlaceholder": "피드백을 공유하거나 새로운 기능을 요청하세요...",
+        "submitFeedback": "피드백 제출",
+        "feedbackSent": "피드백 감사합니다!",
+        "feedbackFailed": "피드백 제출에 실패했습니다. 다시 시도해 주세요."
     }
 }

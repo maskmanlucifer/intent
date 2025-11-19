@@ -440,7 +440,7 @@ const Linkboard = () => {
           </div>
         }
         centered
-        destroyOnClose
+        destroyOnHidden
       >
         <div className="iframe-container" style={{ display: "flex", justifyContent: "center" }}>
           <video width="100%" height="100%" controls>
