@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 import { useEffect, useState } from "react";
 import { KEYBOARD_SHORTCUTS, PAGES } from "./constant";
+import { theme as antdTheme } from 'antd';
 import "./App.scss";
 import { ConfigProvider } from "antd";
 import "./db";
@@ -73,7 +74,7 @@ const AppContent = () => {
       <LoadingScreen isVisible={showLoadingScreen} theme={theme} />
       <ConfigProvider
         theme={{
-          algorithm: theme === 'dark' ? require('antd').theme.darkAlgorithm : require('antd').theme.defaultAlgorithm,
+          algorithm: theme === 'dark' ? antdTheme.darkAlgorithm : antdTheme.defaultAlgorithm,
           token: {
             controlHeight: 32,
             fontFamily: "Inter",

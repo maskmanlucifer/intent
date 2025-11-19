@@ -18,6 +18,12 @@ module.exports = {
                 name: 'vendors',
                 chunks: 'all',
               },
+              i18next: {
+                test: /[\\/]node_modules[\\/](i18next|react-i18next|i18next-http-backend|i18next-browser-languagedetector)[\\/]/,
+                name: 'i18next',
+                chunks: 'all',
+                priority: 10,
+            },
               antd: {
                 test: /[\\/]node_modules[\\/]antd[\\/]/,
                 name: 'antd',
