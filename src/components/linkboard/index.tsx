@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import "./index.scss";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -156,10 +157,18 @@ const OgImageContent: React.FC<{ link: TLink }> = ({ link }) => {
 const Linkboard = () => {
   const links = useSelector(selectLinks);
   const dispatch = useDispatch<AppDispatch>();
+  const { t } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
   const [linkTypeFilter, setLinkTypeFilter] = React.useState(
     LINKBOARD_FILTER_OPTIONS[0].value,
   );
+
+  const translatedFilterOptions = React.useMemo(() => {
+    return LINKBOARD_FILTER_OPTIONS.map(option => ({
+      ...option,
+      label: t(`linkboard.filter${option.label}`)
+    }));
+  }, [t]);
 
   const [selectedLinks, setSelectedLinks] = React.useState<string[]>([]);
   const [isDemoModalOpen, setIsDemoModalOpen] = React.useState(false);
@@ -196,7 +205,7 @@ const Linkboard = () => {
           className="watch-demo-btn"
           onClick={() => setIsDemoModalOpen(true)}
         >
-          Watch demo
+          {t('linkboard.watchDemo')}
         </Button>
       </div>
 
@@ -205,7 +214,7 @@ const Linkboard = () => {
           <div className="linkboard-filter">
             <Select
               defaultValue={linkTypeFilter}
-              options={LINKBOARD_FILTER_OPTIONS}
+              options={translatedFilterOptions}
               size="middle"
               style={{ width: "200px" }}
               onChange={(item) => {
@@ -218,14 +227,14 @@ const Linkboard = () => {
           <Empty
             className="empty-link-list"
             image={Empty.PRESENTED_IMAGE_SIMPLE}
-            description="No links added"
+            description={t('linkboard.noLinksAdded')}
           />
         )}
         {filteredLinks.length === 0 && linkTypeFilter !== "all" && (
           <Empty
             className="empty-link-list"
             image={Empty.PRESENTED_IMAGE_SIMPLE}
-            description="No links found"
+            description={t('linkboard.noLinksFound')}
           />
         )}
         {filteredLinks.length > 0 && (
@@ -267,8 +276,8 @@ const Linkboard = () => {
                   <div className="actions-section">
                     <Popconfirm
                       icon={<InfoCircleOutlined style={{ color: "#155dfc" }} />}
-                      title="Remove url from linkboard"
-                      okText="Remove"
+                      title={t('linkboard.removeUrlTitle')}
+                      okText={t('linkboard.remove')}
                       placement="left"
                       onCancel={(e?: React.MouseEvent<HTMLElement, MouseEvent>) => {
                         e?.stopPropagation();
@@ -278,17 +287,17 @@ const Linkboard = () => {
                         dispatch(removeLink(link.id));
                         messageApi.open({
                           type: "success",
-                          content: "Link removed from linkboard",
+                          content: t('linkboard.linkRemoved'),
                           duration: 3,
                         });
                       }}
-                      cancelText="Cancel"
-                      description={"Are you sure you want to remove this link?"}
+                      cancelText={t('linkboard.cancel')}
+                      description={t('linkboard.confirmRemove')}
                     >
                       <button
                         className="action-btn delete-btn"
                         onClick={(e) => e.stopPropagation()}
-                        title="Delete link"
+                        title={t('linkboard.deleteLink')}
                       >
                         <DeleteOutlined />
                       </button>
@@ -325,10 +334,7 @@ const Linkboard = () => {
         <div className="selected-links">
           <div className="selected-links-header" style={{ position: "relative" }}>
             <h1>
-              <span className="selected-links-count">
-                {selectedLinks.length}
-              </span>{" "}
-              link{selectedLinks.length > 1 ? "s" : ""} selected
+              {t('linkboard.linksSelected', { count: selectedLinks.length })}
             </h1>
             <div
               className="close-selection-btn"
@@ -350,12 +356,11 @@ const Linkboard = () => {
                 });
               }}
             >
-              Open {selectedLinks.length} link
-              {selectedLinks.length > 1 ? "s" : ""}
+              {t('linkboard.openLinks', { count: selectedLinks.length })}
             </Button>}
             <Popconfirm
-              title="Remove links from linkboard"
-              okText="Remove"
+              title={t('linkboard.removeLinksTitle')}
+              okText={t('linkboard.remove')}
               placement="top"
               style={{ width: "40px" }}
               arrow={false}
@@ -364,14 +369,13 @@ const Linkboard = () => {
                 setSelectedLinks([]);
                 messageApi.open({
                   type: "success",
-                  content: "Links removed from linkboard",
+                  content: t('linkboard.linksRemoved'),
                   duration: 3,
                 });
               }}
             >
               <Button size="small" danger>
-                Delete {selectedLinks.length} link
-                {selectedLinks.length > 1 ? "s" : ""}
+                {t('linkboard.deleteLinks', { count: selectedLinks.length })}
               </Button>
             </Popconfirm>
           </div>
@@ -427,7 +431,7 @@ const Linkboard = () => {
         }}
         title={
           <div className="iframe-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <span>LINKBOARD</span>
+            <span>{t('linkboard.title')}</span>
             <div className="close-icon" style={{ cursor: "pointer" }}>
               <CloseIcon
                 onClick={() => setIsDemoModalOpen(false)}

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useTranslation, Trans } from "react-i18next";
 import Mousetrap from "mousetrap";
 import "./index.scss";
 import { ReactComponent as FolderIcon } from "../../assets/icons/folder.svg";
@@ -32,6 +33,7 @@ import { ReactComponent as KeyboardOutlined } from "../../assets/icons/keyboard.
 import { ReactComponent as DatabaseIcon } from "../../assets/icons/database.svg";
 import KeyboardShortcuts from "../shortcuts";
 import ThemeToggle from "../theme-toggle";
+import LanguageSwitcher from "../language-switcher";
 
 interface SidebarProps {
   folders: Category[];
@@ -77,6 +79,7 @@ const EditCategoryBtn = ({
   setIsEditing: (isEditing: boolean) => void;
   messageApi: MessageInstance;
 }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
 
   const [updatedFolderName, setUpdatedFolderName] = useState(
@@ -92,13 +95,13 @@ const EditCategoryBtn = ({
       setSelectedFolder(folderId);
       messageApi.open({
         type: "success",
-        content: `Folder ${updatedFolderName} created successfully!`,
+        content: t('sidebar.folderCreated', { name: updatedFolderName }),
       });
     } else {
       dispatch(updateCategory({ id: folder.id, name: updatedFolderName }));
       messageApi.open({
         type: "success",
-        content: `Folder ${updatedFolderName} updated successfully!`,
+        content: t('sidebar.folderUpdated', { name: updatedFolderName }),
       });
     }
     setUpdatedFolderName("");
@@ -113,7 +116,7 @@ const EditCategoryBtn = ({
         autoFocus
         type="text"
         className="item-input"
-        placeholder={"Enter new name"}
+        placeholder={t('sidebar.enterNewName')}
         value={updatedFolderName}
         onChange={(e) => setUpdatedFolderName(e.target.value)}
         onKeyDown={(e) => {
@@ -143,14 +146,16 @@ const Sidebar = ({
   selectedFolder,
   setSelectedFolder,
   isSidebarCollapsed,
+  setIsSidebarCollapsed,
 }: SidebarProps) => {
+  const { t } = useTranslation();
   const todayFolder = folders.find((folder) => folder.name === "Today");
 
   const restFolders = folders.filter(
     (folder) => folder.name !== "Today" && folder.name !== "Trash",
   );
 
-  const completedFolder = { id: "completed", name: "Completed" };
+  const completedFolder = { id: "completed", name: t('todo.completed') };
   const [isEditing, setIsEditing] = useState<Boolean | string>(false);
   const [isDeleting, setIsDeleting] = useState<Boolean | string>(false);
   const [messageApi, contextHolder] = message.useMessage();
@@ -203,7 +208,7 @@ const Sidebar = ({
     }
     messageApi.open({
       type: "success",
-      content: `Folder ${folder.name} deleted successfully!`,
+      content: t('sidebar.folderDeleted', { name: folder.name }),
     });
   };
 
@@ -211,7 +216,7 @@ const Sidebar = ({
     return [
       {
         key: "edit",
-        label: "Edit folder",
+        label: t('sidebar.editFolder'),
         onClick: () => {
           setIsEditing(folder.id);
           setCategoryName(folder.name);
@@ -221,7 +226,7 @@ const Sidebar = ({
       },
       {
         key: "delete",
-        label: "Delete folder",
+        label: t('sidebar.deleteFolder'),
         onClick: () => {
           setIsDeleting(folder.id);
         },
@@ -250,7 +255,7 @@ const Sidebar = ({
               todayFolder.name,
               isSidebarCollapsed,
             )}
-            <span>{todayFolder.name}</span>
+            <span title={t('todo.today')}>{t('todo.today')}</span>
           </div>
         )}
         {restFolders.map((folder: Category) => (
@@ -270,7 +275,7 @@ const Sidebar = ({
             {(
               <>
                 {withTooltip(<FolderIcon />, folder.name, isSidebarCollapsed)}
-                <span className="folder-item-name">{folder.name}</span>
+                <span className="folder-item-name" title={folder.name}>{folder.name}</span>
                 <div
                   className="folder-item-actions"
                   onClick={(e) => e.stopPropagation()}
@@ -323,8 +328,8 @@ const Sidebar = ({
               setIsUpsertCategoryModalOpen(true);
             }}
           >
-            {withTooltip(<AddSquareIcon />, "Add Folder", isSidebarCollapsed)}
-            <span>Add Folder</span>
+            {withTooltip(<AddSquareIcon />, t('sidebar.addFolder'), isSidebarCollapsed)}
+            <span>{t('sidebar.addFolder')}</span>
           </div>
         )}
         {isEditing === true && (
@@ -338,7 +343,7 @@ const Sidebar = ({
           </div>
         )}
         <Modal
-          title="Confirm Deletion"
+          title={t('sidebar.confirmDeletionTitle')}
           open={isDeleting !== false}
           centered={true}
           onCancel={() => setIsDeleting(false)}
@@ -350,16 +355,16 @@ const Sidebar = ({
                 size="small"
                 className="modal-cancel-button"
               >
-                Cancel
+                {t('sidebar.cancel')}
               </Button>
               <Button type="primary" danger onClick={onDelete} size="small">
-                Delete
+                {t('sidebar.delete')}
               </Button>
             </div>
           }
         >
           <p style={{ margin: 0, padding: 0 }}>
-            Are you sure you want to delete this folder?
+            {t('sidebar.confirmDeletionMessage')}
           </p>
         </Modal>
       </div>
@@ -370,10 +375,10 @@ const Sidebar = ({
         >
           {withTooltip(
             <DatabaseIcon />,
-            "How We Store Your Data",
+            t('sidebar.howWeStoreData'),
             isSidebarCollapsed,
           )}
-          <span>How we store your data</span>
+          <span title={t('sidebar.howWeStoreData')}>{t('sidebar.howWeStoreData')}</span>
         </div>
 
         <Popover
@@ -389,10 +394,10 @@ const Sidebar = ({
           <div className="sidebar-bottom-action-item">
             {withTooltip(
               <QuestionIcon />,
-              "Help us improve",
+              t('sidebar.helpUsImprove'),
               isSidebarCollapsed,
             )}
-            <span>Help us improve</span>
+            <span title={t('sidebar.helpUsImprove')}>{t('sidebar.helpUsImprove')}</span>
           </div>
         </Popover>
 
@@ -402,11 +407,16 @@ const Sidebar = ({
         >
           {withTooltip(
             <KeyboardOutlined />,
-            "Keyboard Shortcuts (" + KEYBOARD_SHORTCUTS.help.key + ")",
+            t('sidebar.keyboardShortcuts') + " (" + KEYBOARD_SHORTCUTS.help.key + ")",
             isSidebarCollapsed,
           )}
-          <span>Keyboard shortcuts</span>
+          <span title={t('sidebar.keyboardShortcuts') + " (" + KEYBOARD_SHORTCUTS.help.key + ")"}>{t('sidebar.keyboardShortcuts')}</span>
         </div>
+
+        <LanguageSwitcher
+          isSidebarCollapsed={isSidebarCollapsed}
+          setIsSidebarCollapsed={setIsSidebarCollapsed}
+        />
 
         <ThemeToggle isSidebarCollapsed={isSidebarCollapsed} />
         <Modal
@@ -414,13 +424,12 @@ const Sidebar = ({
           onCancel={() => setIsDataStorageModalOpen(false)}
           title={
             <span className="info-modal-header">
-              How Your Data is Stored & Protected
+              {t('sidebar.dataStorageTitle')}
             </span>
           }
           centered={true}
           closeIcon={<CloseOutlined style={{ fontSize: "14px" }} />}
           width={800}
-          okText="Got it"
           footer={[
             <Button
               key="ok"
@@ -428,46 +437,40 @@ const Sidebar = ({
               onClick={() => setIsDataStorageModalOpen(false)}
               size="small"
             >
-              Got it
+              {t('sidebar.gotIt')}
             </Button>,
           ]}
           onOk={() => setIsDataStorageModalOpen(false)}
         >
           <div className="info-modal-content">
             <p>
-              All your data, including tasks, notes, and settings, is stored
-              locally in your browser. We do not sync or upload any of your data
-              to a server.
+              {t('sidebar.dataStorageContent')}
             </p>
 
-            <span className="subheading">When Might Data Be Lost?</span>
+            <span className="subheading">{t('sidebar.whenDataLost')}</span>
             <div className="data-lost-list">
               <span>
-                1. If you <strong>clear your browser storage</strong> or reset
-                your browser
+                1. <Trans i18nKey="sidebar.dataLost1" />
               </span>
               <span>
-                2. If you <strong>uninstall the extension</strong>
+                2. <Trans i18nKey="sidebar.dataLost2" />
               </span>
               <span>
-                3. If your browser <strong>automatically clears storage</strong>{" "}
-                due to low disk space
+                3. <Trans i18nKey="sidebar.dataLost3" />
               </span>
               <span>
-                4. If you switch to a different browser or device, as data does
-                not sync across devices
+                4. {t('sidebar.dataLost4')}
               </span>
             </div>
 
             <p>
-              In the future, we may offer an optional way to sync your data
-              across devices. If this interests you, we’d love your feedback!
+              {t('sidebar.futureSync')}
             </p>
           </div>
         </Modal>
         <Modal
           open={isShortcutModalOpen}
-          title="Keyboard Shortcuts"
+          title={t('sidebar.keyboardShortcuts')}
           onOk={() => setIsShortcutModalOpen(false)}
           onCancel={() => setIsShortcutModalOpen(false)}
           footer={null}
@@ -477,19 +480,19 @@ const Sidebar = ({
         </Modal>
         <Modal
           open={isUpsertCategoryModalOpen}
-          title={isEditing ? "Edit folder" : "Add folder"}
+          title={isEditing ? t('sidebar.editFolder') : t('sidebar.addFolder')}
           onOk={() => {
             if (isEditing) {
               dispatch(updateCategory({ id: isEditing as string, name: categoryName }));
               messageApi.open({
                 type: "success",
-                content: `Folder ${categoryName} updated successfully!`,
+                content: t('sidebar.folderUpdated', { name: categoryName }),
               });
             } else {
               dispatch(addCategory({ id: Date.now().toString(), name: categoryName }));
               messageApi.open({
                 type: "success",
-                content: `Folder ${categoryName} added successfully!`,
+                content: t('sidebar.folderCreated', { name: categoryName }),
               });
             }
             setIsUpsertCategoryModalOpen(false);
@@ -498,10 +501,11 @@ const Sidebar = ({
           }}
           onCancel={() => setIsUpsertCategoryModalOpen(false)}
           centered={true}
-          okText={isEditing ? "Update" : "Add"}
+          okText={isEditing ? t('sidebar.update') : t('sidebar.add')}
           width={460}
           okButtonProps={{ size: "small" }}
           cancelButtonProps={{ size: "small" }}
+          cancelText={t('sidebar.cancel')}
           closeIcon={<CloseOutlined style={{ fontSize: "14px" }} />}
           onClose={() => {
             setIsUpsertCategoryModalOpen(false);
@@ -509,7 +513,7 @@ const Sidebar = ({
             setIsEditing(false);
           }}
         >
-          <Input size="small" ref={inputRef} value={categoryName} onChange={(e) => setCategoryName(e.target.value)} placeholder={isEditing ? "Enter new name" : "Enter new folder name"} />
+          <Input size="small" ref={inputRef} value={categoryName} onChange={(e) => setCategoryName(e.target.value)} placeholder={isEditing ? t('sidebar.enterNewName') : t('sidebar.enterNewName')} />
         </Modal>
       </div>
     </div>
