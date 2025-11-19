@@ -323,18 +323,36 @@ const Linkboard = () => {
       </div>
       {selectedLinks.length > 0 && (
         <div className="selected-links">
-          <div className="selected-links-header">
+          <div className="selected-links-header" style={{ position: "relative" }}>
             <h1>
               <span className="selected-links-count">
                 {selectedLinks.length}
               </span>{" "}
               link{selectedLinks.length > 1 ? "s" : ""} selected
             </h1>
+            <div
+              className="close-selection-btn"
+              onClick={() => setSelectedLinks([])}
+            >
+              <CloseIcon />
+            </div>
           </div>
           <div className="selected-links-body">
-            <Button size="small" danger onClick={() => setSelectedLinks([])}>
-              Deselect all
-            </Button>
+            {chrome && chrome.tabs && <Button
+              size="small"
+              type="primary"
+              onClick={() => {
+                selectedLinks.forEach((linkId) => {
+                  const link = filteredLinksMap[linkId];
+                  if (link && link.url) {
+                    chrome.tabs.create({ url: link.url, active: false });
+                  }
+                });
+              }}
+            >
+              Open {selectedLinks.length} link
+              {selectedLinks.length > 1 ? "s" : ""}
+            </Button>}
             <Popconfirm
               title="Remove links from linkboard"
               okText="Remove"
@@ -351,7 +369,7 @@ const Linkboard = () => {
                 });
               }}
             >
-              <Button type="primary" size="small" danger>
+              <Button size="small" danger>
                 Delete {selectedLinks.length} link
                 {selectedLinks.length > 1 ? "s" : ""}
               </Button>
