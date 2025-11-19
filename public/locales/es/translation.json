@@ -1,0 +1,52 @@
+{
+    "app": {
+        "title": "INT3NT",
+        "collapseSidebar": "Contraer barra lateral",
+        "expandSidebar": "Expandir barra lateral",
+        "linkboard": "Tablero de enlaces",
+        "loadingLinkboard": "Cargando tablero..."
+    },
+    "todo": {
+        "addTask": "Añadir nueva tarea",
+        "emptyState": "Todo limpio, toma un descanso. 🍃",
+        "completed": "Completado",
+        "today": "Hoy",
+        "trash": "Papelera"
+    },
+    "sidebar": {
+        "addFolder": "Añadir carpeta",
+        "editFolder": "Editar carpeta",
+        "deleteFolder": "Eliminar carpeta",
+        "confirmDeletionTitle": "Confirmar eliminación",
+        "confirmDeletionMessage": "¿Estás seguro de que quieres eliminar esta carpeta?",
+        "cancel": "Cancelar",
+        "delete": "Eliminar",
+        "howWeStoreData": "Cómo almacenamos tus datos",
+        "helpUsImprove": "Ayúdanos a mejorar",
+        "keyboardShortcuts": "Atajos de teclado",
+        "changeLanguage": "Cambiar idioma",
+        "theme": "Tema",
+        "dataStorageTitle": "Cómo se almacenan y protegen tus datos",
+        "dataStorageContent": "Todos tus datos, incluidas tareas, notas y configuraciones, se almacenan localmente en tu navegador. No sincronizamos ni subimos ninguno de tus datos a un servidor.",
+        "whenDataLost": "¿Cuándo se pueden perder los datos?",
+        "dataLost1": "Si <strong>borras el almacenamiento del navegador</strong> o restableces tu navegador",
+        "dataLost2": "Si <strong>desinstalas la extensión</strong>",
+        "dataLost3": "Si tu navegador <strong>borra automáticamente el almacenamiento</strong> debido a poco espacio en disco",
+        "dataLost4": "Si cambias a un navegador o dispositivo diferente, ya que los datos no se sincronizan entre dispositivos",
+        "futureSync": "En el futuro, podemos ofrecer una forma opcional de sincronizar tus datos entre dispositivos. Si esto te interesa, ¡nos encantaría recibir tus comentarios!",
+        "gotIt": "Entendido",
+        "enterNewName": "Ingresar nuevo nombre",
+        "folderCreated": "¡Carpeta {{name}} creada con éxito!",
+        "folderUpdated": "¡Carpeta {{name}} actualizada con éxito!",
+        "folderDeleted": "¡Carpeta {{name}} eliminada con éxito!"
+    },
+    "completed": {
+        "confirmDeleteTask": "¿Estás seguro de que quieres eliminar esta tarea?",
+        "yesDelete": "Sí, eliminar",
+        "taskDeleted": "¡Tarea {{text}} eliminada con éxito!",
+        "allDeleted": "¡Todas las tareas completadas eliminadas!",
+        "confirmDeleteAll": "¿Estás seguro de que quieres eliminar todas las tareas completadas?",
+        "deleteAll": "Eliminar todas las tareas completadas",
+        "noCompleted": "No hay tareas completadas disponibles"
+    }
+}

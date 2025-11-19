@@ -9,9 +9,13 @@
     "canvas-confetti": "^1.9.3",
     "classnames": "^2.5.1",
     "cra-template": "1.2.0",
+    "i18next": "^25.6.3",
+    "i18next-browser-languagedetector": "^8.2.0",
+    "i18next-http-backend": "^3.0.2",
     "mousetrap": "^1.6.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-i18next": "^16.3.4",
     "react-redux": "^9.2.0",
     "react-scripts": "5.0.1",
     "redux-thunk": "^3.1.0",
@@ -47,20 +51,21 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@craco/craco": "^7.1.0",
     "@types/canvas-confetti": "^1.9.0",
     "@types/chrome": "^0.0.306",
     "@types/mousetrap": "^1.6.15",
     "@types/react": "^19.0.10",
     "@types/sortablejs": "^1.15.8",
-    "prettier": "^3.4.2",
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "@craco/craco": "^7.1.0",
     "compression-webpack-plugin": "^10.0.0",
     "image-minimizer-webpack-plugin": "^3.8.3",
     "imagemin": "^8.0.1",
     "imagemin-gifsicle": "^7.0.0",
     "imagemin-jpegtran": "^7.0.0",
     "imagemin-optipng": "^8.0.0",
-    "imagemin-svgo": "^10.0.1"
+    "imagemin-svgo": "^10.0.1",
+    "prettier": "^3.4.2",
+    "typescript": "^5.9.3"
   }
 }

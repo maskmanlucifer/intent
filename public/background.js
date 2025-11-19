@@ -1,5 +1,55 @@
 /* eslint-disable no-undef */
 
+// Static translations for background script
+const TRANSLATIONS = {
+  en: "Save to Intent",
+  zh: "保存到 Intent",
+  es: "Guardar en Intent",
+  fr: "Enregistrer dans Intent",
+  de: "In Intent speichern",
+  it: "Salva in Intent",
+  pt: "Salvar no Intent",
+  ru: "Сохранить в Intent",
+  ja: "Intentに保存",
+  ko: "Intent에 저장",
+  hi: "Intent में सहेजें"
+};
+
+// List of supported languages (should match i18n.ts)
+const SUPPORTED_LANGUAGES = ['en', 'es', 'fr', 'de', 'it', 'pt', 'ru', 'zh', 'ja', 'ko', 'hi'];
+
+// Normalize and validate language code
+const normalizeLanguage = (lng) => {
+    if (!lng || typeof lng !== 'string') return 'en';
+    const normalized = lng.split('-')[0].toLowerCase();
+    return SUPPORTED_LANGUAGES.includes(normalized) ? normalized : 'en';
+};
+
+// Get translation based on stored language preference
+const getTranslation = async () => {
+  try {
+    const result = await chrome.storage.local.get('i18nextLng');
+    const language = normalizeLanguage(result.i18nextLng || 'en');
+    return TRANSLATIONS[language] || TRANSLATIONS.en;
+  } catch (error) {
+    console.error('Error reading language preference:', error);
+    return TRANSLATIONS.en;
+  }
+};
+
+// Update context menu when language changes
+const updateContextMenu = async () => {
+  const title = await getTranslation();
+  chrome.contextMenus.update('save-to-intent', { title });
+};
+
+// Listen for language changes
+chrome.storage.onChanged.addListener((changes) => {
+  if (changes.i18nextLng) {
+    updateContextMenu();
+  }
+});
+
 chrome.action.onClicked.addListener((tab) => {
   chrome.storage.local.get({ linkboard: 0 }, (data) => {
     const isSaved = Number(data.linkboard);
@@ -60,10 +110,11 @@ chrome.action.onClicked.addListener((tab) => {
   });
 });
 
-chrome.runtime.onInstalled.addListener(() => {
+chrome.runtime.onInstalled.addListener(async () => {
+  const title = await getTranslation();
   chrome.contextMenus.create({
     id: "save-to-intent",
-    title: "Save to Intent",
+    title: title,
     contexts: ["image", "link"],
   });
 });
