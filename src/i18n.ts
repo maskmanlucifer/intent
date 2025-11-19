@@ -4,7 +4,7 @@ import Backend from 'i18next-http-backend';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
 // List of supported locales - single source of truth
-export const supportedLanguages = ['en', 'es', 'fr', 'de', 'it', 'pt', 'ru', 'zh', 'ja', 'ko', 'hi'];
+export const supportedLanguages = ['en', 'es', 'fr', 'de', 'it', 'pt', 'ru', 'zh', 'ja', 'ko'];
 
 // Helper function to normalize and validate language
 const normalizeAndValidateLanguage = (lng: string | string[]): string => {
@@ -84,6 +84,9 @@ const initI18n = async () => {
                 loadPath: '/locales/{{lng}}/translation.json',
                 load: 'languageOnly',
                 allowMultiLoading: false,
+                requestOptions: {
+                    cache: 'default'
+                },
             },
             detection: {
                 order: ['localStorage', 'navigator'],

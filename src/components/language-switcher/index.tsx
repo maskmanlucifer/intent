@@ -16,7 +16,6 @@ const languages = [
     { code: "zh", label: "中文" },
     { code: "ja", label: "日本語" },
     { code: "ko", label: "한국어" },
-    { code: "hi", label: "हिन्दी" },
 ].filter((lang) => supportedLanguages.includes(lang.code));
 
 interface LanguageSwitcherProps {

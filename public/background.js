@@ -12,11 +12,10 @@ const TRANSLATIONS = {
   ru: "Сохранить в Intent",
   ja: "Intentに保存",
   ko: "Intent에 저장",
-  hi: "Intent में सहेजें"
 };
 
 // List of supported languages (should match i18n.ts)
-const SUPPORTED_LANGUAGES = ['en', 'es', 'fr', 'de', 'it', 'pt', 'ru', 'zh', 'ja', 'ko', 'hi'];
+const SUPPORTED_LANGUAGES = ['en', 'es', 'fr', 'de', 'it', 'pt', 'ru', 'zh', 'ja', 'ko'];
 
 // Normalize and validate language code
 const normalizeLanguage = (lng) => {
