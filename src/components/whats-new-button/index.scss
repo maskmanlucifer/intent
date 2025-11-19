@@ -1,0 +1,30 @@
+.whats-new-button {
+    position: relative;
+
+    .red-dot-badge {
+        position: absolute;
+        top: 0px;
+        left: 12px;
+        width: 8px;
+        height: 8px;
+        background-color: #ff4d4f;
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+        z-index: 10;
+        border: 1px solid var(--bg-sidebar);
+    }
+
+    @keyframes pulse {
+        0% {
+            box-shadow: 0 0 0 0 rgba(255, 77, 79, 0.7);
+        }
+
+        70% {
+            box-shadow: 0 0 0 6px rgba(255, 77, 79, 0);
+        }
+
+        100% {
+            box-shadow: 0 0 0 0 rgba(255, 77, 79, 0);
+        }
+    }
+}

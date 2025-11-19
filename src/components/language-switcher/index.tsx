@@ -29,7 +29,7 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ isSidebarCollapsed,
 
     // Ensure current language is valid, fallback to 'en' if not
     const currentLanguage = supportedLanguages.includes(i18n.language) ? i18n.language : 'en';
-    
+
     // If current language is invalid, fix it
     React.useEffect(() => {
         if (!supportedLanguages.includes(i18n.language)) {
@@ -70,8 +70,10 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ isSidebarCollapsed,
                     mouseEnterDelay={0}
                     mouseLeaveDelay={0}
                     autoAdjustOverflow={true}
-                    overlayInnerStyle={{
-                        marginLeft: "10px",
+                    styles={{
+                        body: {
+                            marginLeft: "10px",
+                        },
                     }}
                 >
                     {component}
@@ -91,10 +93,10 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ isSidebarCollapsed,
                 value={currentLanguage} // Use validated current language
                 open={isOpen}
                 onClick={(e) => e.stopPropagation()}
-                dropdownRender={(menu) => (
+                popupRender={(menu) => (
                     <div onClick={(e) => e.stopPropagation()}>{menu}</div>
                 )}
-                onDropdownVisibleChange={(open) => setIsOpen(open)}
+                onOpenChange={(open) => setIsOpen(open)}
                 style={{
                     width: isSidebarCollapsed ? 0 : 'auto',
                     opacity: isSidebarCollapsed ? 0 : 1,

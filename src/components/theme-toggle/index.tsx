@@ -23,8 +23,10 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ isSidebarCollapsed }) => {
           mouseEnterDelay={0}
           mouseLeaveDelay={0}
           autoAdjustOverflow={true}
-          overlayInnerStyle={{
-            marginLeft: "10px",
+          styles={{
+            body: {
+              marginLeft: "10px",
+            },
           }}
         >
           {component}

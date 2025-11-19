@@ -38,7 +38,10 @@
         "enterNewName": "Ingresar nuevo nombre",
         "folderCreated": "¡Carpeta {{name}} creada con éxito!",
         "folderUpdated": "¡Carpeta {{name}} actualizada con éxito!",
-        "folderDeleted": "¡Carpeta {{name}} eliminada con éxito!"
+        "folderDeleted": "¡Carpeta {{name}} eliminada con éxito!",
+        "update": "Actualizar",
+        "add": "Añadir",
+        "whatsNew": "Novedades"
     },
     "completed": {
         "confirmDeleteTask": "¿Estás seguro de que quieres eliminar esta tarea?",
@@ -48,5 +51,20 @@
         "confirmDeleteAll": "¿Estás seguro de que quieres eliminar todas las tareas completadas?",
         "deleteAll": "Eliminar todas las tareas completadas",
         "noCompleted": "No hay tareas completadas disponibles"
+    },
+    "whatsNew": {
+        "title": "Novedades en INT3NT",
+        "update1Title": "Navegación Mejorada Tarea ↔ Subtarea",
+        "update1Description": "Navega sin problemas entre tareas y subtareas usando Shift+Enter. En una tarea, salta a la última subtarea o crea una nueva. En una subtarea, muévete a la siguiente tarea o crea una. Trabaja más rápido con navegación por teclado mejorada.",
+        "update2Title": "Abrir Múltiples Enlaces a la Vez",
+        "update2Description": "Selecciona varios enlaces en el Tablero de Enlaces y ábrelos todos con un solo clic. Perfecto para gestionar múltiples recursos y procesar tus enlaces guardados de forma eficiente.",
+        "update3Title": "Soporte Multiidioma",
+        "update3Description": "INT3NT ahora soporta 10 idiomas: Inglés, Español, Francés, Alemán, Italiano, Portugués, Ruso, Chino, Japonés y Coreano. Cambia de idioma en cualquier momento desde la barra lateral.",
+        "gotIt": "Entendido",
+        "feedbackTitle": "Comentarios y Solicitudes de Funciones",
+        "feedbackPlaceholder": "Comparte tus comentarios o solicita nuevas funciones...",
+        "submitFeedback": "Enviar Comentarios",
+        "feedbackSent": "¡Gracias por tus comentarios!",
+        "feedbackFailed": "Error al enviar comentarios. Por favor, inténtalo de nuevo."
     }
 }

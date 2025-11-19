@@ -28,12 +28,15 @@ import { ReactComponent as ClearInputIcon } from "../../assets/icons/clean-input
 import { MessageInstance } from "antd/es/message/interface";
 import { AppDispatch } from "../../redux/store";
 import { KEYBOARD_SHORTCUTS } from "../../constant";
+import { APP_VERSION, hasNewUpdates, setLastSeenVersion } from "../../constants/version";
 import { ReactComponent as QuestionIcon } from "../../assets/icons/question.svg";
 import { ReactComponent as KeyboardOutlined } from "../../assets/icons/keyboard.svg";
 import { ReactComponent as DatabaseIcon } from "../../assets/icons/database.svg";
 import KeyboardShortcuts from "../shortcuts";
 import ThemeToggle from "../theme-toggle";
 import LanguageSwitcher from "../language-switcher";
+import WhatsNewButton from "../whats-new-button";
+import WhatsNewModal from "../whats-new-modal";
 
 interface SidebarProps {
   folders: Category[];
@@ -57,8 +60,10 @@ const withTooltip = (
         mouseEnterDelay={0}
         mouseLeaveDelay={0}
         autoAdjustOverflow={true}
-        overlayInnerStyle={{
-          marginLeft: "10px",
+        styles={{
+          body: {
+            marginLeft: "10px",
+          },
         }}
       >
         {component}
@@ -163,7 +168,9 @@ const Sidebar = ({
   const [isDataStorageModalOpen, setIsDataStorageModalOpen] = useState(false);
   const [isShortcutModalOpen, setIsShortcutModalOpen] = useState(false);
   const [isUpsertCategoryModalOpen, setIsUpsertCategoryModalOpen] = useState(false);
+  const [isWhatsNewModalOpen, setIsWhatsNewModalOpen] = useState(false);
   const [categoryName, setCategoryName] = useState("");
+  const [showWhatsNew, setShowWhatsNew] = useState(false);
   const inputRef = useRef<InputRef>(null);
 
   useEffect(() => {
@@ -175,6 +182,14 @@ const Sidebar = ({
       }, 100);
     }
   }, [isUpsertCategoryModalOpen]);
+
+  useEffect(() => {
+    const checkUpdates = async () => {
+      const hasUpdates = await hasNewUpdates();
+      setShowWhatsNew(hasUpdates);
+    };
+    checkUpdates();
+  }, []);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -210,6 +225,16 @@ const Sidebar = ({
       type: "success",
       content: t('sidebar.folderDeleted', { name: folder.name }),
     });
+  };
+
+  const handleWhatsNewClick = () => {
+    setIsWhatsNewModalOpen(true);
+  };
+
+  const handleWhatsNewClose = async () => {
+    setIsWhatsNewModalOpen(false);
+    await setLastSeenVersion(APP_VERSION);
+    setShowWhatsNew(false);
   };
 
   const menuItems = (folder: Category) => {
@@ -369,6 +394,12 @@ const Sidebar = ({
         </Modal>
       </div>
       <div className="sidebar-bottom-actions">
+        {showWhatsNew && (
+          <WhatsNewButton
+            isSidebarCollapsed={isSidebarCollapsed}
+            onClick={handleWhatsNewClick}
+          />
+        )}
         <div
           className="sidebar-bottom-action-item"
           onClick={() => setIsDataStorageModalOpen(true)}
@@ -386,7 +417,7 @@ const Sidebar = ({
           title={null}
           trigger="click"
           open={isPopoverOpen}
-          destroyTooltipOnHide={true}
+          destroyOnHidden={true}
           onOpenChange={(open) => setIsPopoverOpen(open)}
           placement="bottomRight"
           arrow={false}
@@ -499,7 +530,11 @@ const Sidebar = ({
             setCategoryName("");
             setIsEditing(false);
           }}
-          onCancel={() => setIsUpsertCategoryModalOpen(false)}
+          onCancel={() => {
+            setIsUpsertCategoryModalOpen(false);
+            setCategoryName("");
+            setIsEditing(false);
+          }}
           centered={true}
           okText={isEditing ? t('sidebar.update') : t('sidebar.add')}
           width={460}
@@ -507,14 +542,14 @@ const Sidebar = ({
           cancelButtonProps={{ size: "small" }}
           cancelText={t('sidebar.cancel')}
           closeIcon={<CloseOutlined style={{ fontSize: "14px" }} />}
-          onClose={() => {
-            setIsUpsertCategoryModalOpen(false);
-            setCategoryName("");
-            setIsEditing(false);
-          }}
         >
           <Input size="small" ref={inputRef} value={categoryName} onChange={(e) => setCategoryName(e.target.value)} placeholder={isEditing ? t('sidebar.enterNewName') : t('sidebar.enterNewName')} />
         </Modal>
+        <WhatsNewModal
+          open={isWhatsNewModalOpen}
+          onClose={handleWhatsNewClose}
+          onVersionSeen={() => { }}
+        />
       </div>
     </div>
   );
