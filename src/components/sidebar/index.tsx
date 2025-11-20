@@ -170,7 +170,7 @@ const Sidebar = ({
   const [isUpsertCategoryModalOpen, setIsUpsertCategoryModalOpen] = useState(false);
   const [isWhatsNewModalOpen, setIsWhatsNewModalOpen] = useState(false);
   const [categoryName, setCategoryName] = useState("");
-  const [showWhatsNew, setShowWhatsNew] = useState(false);
+  const [hasUpdates, setHasUpdates] = useState(false);
   const inputRef = useRef<InputRef>(null);
 
   useEffect(() => {
@@ -186,7 +186,7 @@ const Sidebar = ({
   useEffect(() => {
     const checkUpdates = async () => {
       const hasUpdates = await hasNewUpdates();
-      setShowWhatsNew(hasUpdates);
+      setHasUpdates(hasUpdates);
     };
     checkUpdates();
   }, []);
@@ -233,8 +233,7 @@ const Sidebar = ({
 
   const handleWhatsNewClose = async () => {
     setIsWhatsNewModalOpen(false);
-    await setLastSeenVersion(APP_VERSION);
-    setShowWhatsNew(false);
+    setHasUpdates(false);
   };
 
   const menuItems = (folder: Category) => {
@@ -394,12 +393,11 @@ const Sidebar = ({
         </Modal>
       </div>
       <div className="sidebar-bottom-actions">
-        {showWhatsNew && (
-          <WhatsNewButton
-            isSidebarCollapsed={isSidebarCollapsed}
-            onClick={handleWhatsNewClick}
-          />
-        )}
+        <WhatsNewButton
+          isSidebarCollapsed={isSidebarCollapsed}
+          onClick={handleWhatsNewClick}
+          hasUpdates={hasUpdates}
+        />
         <div
           className="sidebar-bottom-action-item"
           onClick={() => setIsDataStorageModalOpen(true)}
@@ -548,7 +546,7 @@ const Sidebar = ({
         <WhatsNewModal
           open={isWhatsNewModalOpen}
           onClose={handleWhatsNewClose}
-          onVersionSeen={() => { }}
+          hasUpdates={hasUpdates}
         />
       </div>
     </div>

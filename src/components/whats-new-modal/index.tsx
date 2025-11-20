@@ -14,13 +14,13 @@ const { TextArea } = Input;
 interface WhatsNewModalProps {
     open: boolean;
     onClose: () => void;
-    onVersionSeen: () => void;
+    hasUpdates: boolean;
 }
 
 const WhatsNewModal: React.FC<WhatsNewModalProps> = ({
     open,
     onClose,
-    onVersionSeen,
+    hasUpdates,
 }) => {
     const { t } = useTranslation();
     const features = getCurrentVersionFeatures();
@@ -30,7 +30,7 @@ const WhatsNewModal: React.FC<WhatsNewModalProps> = ({
 
     // Track when modal is opened
     useEffect(() => {
-        if (open) {
+        if (open && hasUpdates) {
             const trackData: any = {
                 event: "whats_new_opened",
                 version: APP_VERSION,
@@ -54,7 +54,7 @@ const WhatsNewModal: React.FC<WhatsNewModalProps> = ({
                 console.error("Failed to send tracking data:", error);
             });
         }
-    }, [open]);
+    }, [open, hasUpdates]);
 
     const handleFeedbackSubmit = () => {
         if (!feedback.trim() || sendingFeedback) return;
@@ -89,8 +89,9 @@ const WhatsNewModal: React.FC<WhatsNewModalProps> = ({
     };
 
     const handleClose = async () => {
-        await setLastSeenVersion(APP_VERSION);
-        onVersionSeen();
+        if (hasUpdates) {
+            await setLastSeenVersion(APP_VERSION);
+        }
         onClose();
     };
 

@@ -8,18 +8,20 @@ import "./index.scss";
 interface WhatsNewButtonProps {
     isSidebarCollapsed: boolean;
     onClick: () => void;
+    hasUpdates: boolean;
 }
 
 const WhatsNewButton: React.FC<WhatsNewButtonProps> = ({
     isSidebarCollapsed,
     onClick,
+    hasUpdates,
 }) => {
     const { t } = useTranslation();
 
     const buttonContent = (
         <>
             <SparklesIcon />
-            <span className="red-dot-badge" />
+            {hasUpdates && <span className="red-dot-badge" />}
             <span title={t("sidebar.whatsNew")}>{t("sidebar.whatsNew")}</span>
         </>
     );
@@ -27,7 +29,7 @@ const WhatsNewButton: React.FC<WhatsNewButtonProps> = ({
     if (isSidebarCollapsed) {
         return (
             <div
-                className={classNames("sidebar-bottom-action-item", "whats-new-button", "has-badge")}
+                className={classNames("sidebar-bottom-action-item", "whats-new-button", { "has-badge": hasUpdates })}
                 onClick={onClick}
             >
                 <Tooltip
@@ -45,7 +47,7 @@ const WhatsNewButton: React.FC<WhatsNewButtonProps> = ({
                 >
                     <div style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
                         <SparklesIcon />
-                        <span className="red-dot-badge" />
+                        {hasUpdates && <span className="red-dot-badge" />}
                     </div>
                 </Tooltip>
                 <span title={t("sidebar.whatsNew")}>{t("sidebar.whatsNew")}</span>
@@ -55,7 +57,7 @@ const WhatsNewButton: React.FC<WhatsNewButtonProps> = ({
 
     return (
         <div
-            className={classNames("sidebar-bottom-action-item", "whats-new-button", "has-badge")}
+            className={classNames("sidebar-bottom-action-item", "whats-new-button", { "has-badge": hasUpdates })}
             onClick={onClick}
         >
             {buttonContent}
