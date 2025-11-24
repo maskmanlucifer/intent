@@ -1,5 +1,6 @@
 /* eslint-disable no-useless-concat */
 import React, { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import Mousetrap from "mousetrap";
 import { Button, Empty, Layout, Tooltip } from "antd";
 import "./index.scss";
@@ -34,6 +35,7 @@ const Todo = ({
   isSidebarCollapsed: boolean;
   setIsSidebarCollapsed: (isSidebarCollapsed: boolean) => void;
 }) => {
+  const { t } = useTranslation();
   const folders = useSelector(selectCategories);
   const settings = useSelector(selectSettings);
   const { selectedFolder } = settings;
@@ -53,7 +55,7 @@ const Todo = ({
     // Get the current selectedFolder from Redux state to ensure we always use the latest value
     const currentSettings = store.getState().session;
     const currentSelectedFolder = currentSettings.selectedFolder;
-    
+
     // Don't add tasks to the "completed" category
     if (!currentSelectedFolder || currentSelectedFolder === "completed") {
       return;
@@ -110,19 +112,19 @@ const Todo = ({
             <div className="empty-todo">
               <Empty
                 image={<EmptyTodo />}
-                description={<span>All clear, Take a breather. 🍃</span>}
+                description={<span>{t('todo.emptyState')}</span>}
               >
                 <Tooltip
                   arrow={false}
                   title={
-                    "Add new task" + " (" + KEYBOARD_SHORTCUTS.addTask.key + ")"
+                    t('todo.addTask') + " (" + KEYBOARD_SHORTCUTS.addTask.key + ")"
                   }
                   mouseEnterDelay={0}
                   mouseLeaveDelay={0}
                   placement="bottom"
                 >
                   <Button type="primary" size="small" onClick={handleAddTask}>
-                    Add new task
+                    {t('todo.addTask')}
                   </Button>
                 </Tooltip>
               </Empty>

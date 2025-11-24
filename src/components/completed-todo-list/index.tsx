@@ -1,4 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
 import {
   clearCompletedTasks,
   selectCompletedTodoListWithoutFolder,
@@ -12,6 +13,7 @@ import TodoItem from "../todo-item";
 import { DeleteOutlined } from "@ant-design/icons";
 
 const CompletedTodoList = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const completedTodos = useSelector(selectCompletedTodoListWithoutFolder);
   const folders = useSelector(selectCategories);
@@ -21,13 +23,13 @@ const CompletedTodoList = () => {
     return (
       <div className="todo-actions">
         <Popconfirm
-          title="Are you sure you want to delete this task?"
-          okText="Yes, delete"
+          title={t('completed.confirmDeleteTask')}
+          okText={t('completed.yesDelete')}
           onConfirm={() => {
             dispatch(deleteTask({ id: task.id, categoryId: task.categoryId }));
             messageApi.open({
               type: "success",
-              content: `Task ${task.text} deleted successfully!`,
+              content: t('completed.taskDeleted', { text: task.text }),
             });
           }}
         >
@@ -67,7 +69,7 @@ const CompletedTodoList = () => {
     });
     messageApi.open({
       type: "success",
-      content: "All completed todos deleted!",
+      content: t('completed.allDeleted'),
     });
   };
 
@@ -78,12 +80,12 @@ const CompletedTodoList = () => {
         <div className="completed-todo-items-groups">
           {completedTodos.length > 0 && (
             <Popconfirm
-              title="Are you sure you want to delete all completed todos?"
-              okText="Yes, delete"
+              title={t('completed.confirmDeleteAll')}
+              okText={t('completed.yesDelete')}
               onConfirm={handleDeleteAll}
             >
               <Button type="primary" size="small" className="delete-all-button">
-                Delete All Completed Todos
+                {t('completed.deleteAll')}
               </Button>
             </Popconfirm>
           )}
@@ -130,7 +132,7 @@ const CompletedTodoList = () => {
       {completedTodos.length === 0 && (
         <div className="no-completed-todos">
           <Empty
-            description="No completed todos available"
+            description={t('completed.noCompleted')}
             image={Empty.PRESENTED_IMAGE_SIMPLE}
           />
         </div>

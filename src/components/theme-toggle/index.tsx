@@ -1,5 +1,6 @@
 import React from 'react';
 import { Tooltip } from 'antd';
+import { useTranslation } from 'react-i18next';
 import { SunOutlined, MoonOutlined } from '@ant-design/icons';
 import { useTheme } from '../../contexts/ThemeContext';
 import './index.scss';
@@ -10,6 +11,7 @@ interface ThemeToggleProps {
 
 const ThemeToggle: React.FC<ThemeToggleProps> = ({ isSidebarCollapsed }) => {
   const { theme, toggleTheme } = useTheme();
+  const { t } = useTranslation();
 
   const withTooltip = (component: React.ReactNode, tooltip: string) => {
     if (isSidebarCollapsed) {
@@ -21,8 +23,10 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ isSidebarCollapsed }) => {
           mouseEnterDelay={0}
           mouseLeaveDelay={0}
           autoAdjustOverflow={true}
-          overlayInnerStyle={{
-            marginLeft: "10px",
+          styles={{
+            body: {
+              marginLeft: "10px",
+            },
           }}
         >
           {component}
@@ -35,11 +39,11 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ isSidebarCollapsed }) => {
   return (
     <div className="sidebar-bottom-action-item" onClick={toggleTheme}>
       {withTooltip(
-        theme === 'light' ? <MoonOutlined /> : <SunOutlined />,
-        `Switch to ${theme === 'light' ? 'dark' : 'light'} theme`
+        theme === 'light' ? <MoonOutlined  className='theme-toggle-icon'/> : <SunOutlined className='theme-toggle-icon' />,
+        theme === 'light' ? t('sidebar.theme.switchToDark') : t('sidebar.theme.switchToLight')
       )}
       <span>
-        {theme === 'light' ? 'Dark theme' : 'Light theme'}
+        {theme === 'light' ? t('sidebar.theme.darkTheme') : t('sidebar.theme.lightTheme')}
       </span>
     </div>
   );

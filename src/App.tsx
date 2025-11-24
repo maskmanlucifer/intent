@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 import { useEffect, useState } from "react";
 import { KEYBOARD_SHORTCUTS, PAGES } from "./constant";
+import { theme as antdTheme } from 'antd';
 import "./App.scss";
 import { ConfigProvider } from "antd";
 import "./db";
@@ -17,11 +18,14 @@ import LoadingScreen from "./components/loading-screen";
 import Mousetrap from "mousetrap";
 import { ThemeProvider, useTheme } from "./contexts/ThemeContext";
 import { lazy, Suspense } from "react";
+import { useTranslation } from "react-i18next";
+import i18n from "./i18n";
 
 // Lazy load the Linkboard component
 const Linkboard = lazy(() => import("./components/linkboard"));
 
 const AppContent = () => {
+  const { t } = useTranslation();
   const activePage = useSelector(selectActivePage);
   const [isLinkBoardOpen, setIsLinkBoardOpen] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
@@ -32,7 +36,7 @@ const AppContent = () => {
   // Prevent flash during hydration and show loading screen
   useEffect(() => {
     setIsHydrated(true);
-    
+
     // Show minimal loading screen for smooth fog-clearing effect
     const timer = setTimeout(() => {
       setShowLoadingScreen(false);
@@ -70,7 +74,7 @@ const AppContent = () => {
       <LoadingScreen isVisible={showLoadingScreen} theme={theme} />
       <ConfigProvider
         theme={{
-          algorithm: theme === 'dark' ? require('antd').theme.darkAlgorithm : require('antd').theme.defaultAlgorithm,
+          algorithm: theme === 'dark' ? antdTheme.darkAlgorithm : antdTheme.defaultAlgorithm,
           token: {
             controlHeight: 32,
             fontFamily: "Inter",
@@ -98,7 +102,7 @@ const AppContent = () => {
           },
         }}
       >
-          <div className={`App ${showLoadingScreen ? 'loading' : 'loaded'}`}>
+        <div className={`App ${showLoadingScreen ? 'loading' : 'loaded'}`}>
           <Topbar
             isSidebarCollapsed={isSidebarCollapsed}
             setSidebarCollapsed={handleSidebarCollapsed}
@@ -113,13 +117,13 @@ const AppContent = () => {
           <SmoothSidebar
             isOpen={isLinkBoardOpen}
             onClose={() => setIsLinkBoardOpen(false)}
-            title="LINKBOARD"
+            title={t('app.linkboard').toUpperCase()}
           >
             <Suspense fallback={
-              <div style={{ 
-                display: 'flex', 
-                justifyContent: 'center', 
-                alignItems: 'center', 
+              <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
                 height: '200px',
                 color: 'var(--text-secondary)'
               }}>
@@ -129,13 +133,44 @@ const AppContent = () => {
               <Linkboard />
             </Suspense>
           </SmoothSidebar>
-          </div>
+        </div>
       </ConfigProvider>
     </>
   );
 };
 
 function App() {
+  const [i18nReady, setI18nReady] = useState(false);
+
+  useEffect(() => {
+    // Wait for i18next to be ready
+    if (i18n.isInitialized) {
+      setI18nReady(true);
+    } else {
+      i18n.on('initialized', () => {
+        setI18nReady(true);
+      });
+    }
+  }, []);
+
+  // Get theme from document attribute (set by theme-init.js) for loading screen
+  const getInitialTheme = (): 'light' | 'dark' => {
+    const themeAttr = document.documentElement.getAttribute('data-theme');
+    if (themeAttr === 'dark' || themeAttr === 'light') {
+      return themeAttr;
+    }
+    return 'light';
+  };
+
+  // Show loading screen while i18next is initializing
+  if (!i18nReady) {
+    return (
+      <ThemeProvider>
+        <LoadingScreen isVisible={true} theme={getInitialTheme()} />
+      </ThemeProvider>
+    );
+  }
+
   return (
     <ThemeProvider>
       <AppContent />

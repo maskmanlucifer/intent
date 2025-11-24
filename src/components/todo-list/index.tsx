@@ -8,6 +8,7 @@ import {
   Popconfirm,
   Tooltip,
 } from "antd";
+import { useTranslation } from "react-i18next";
 import "./index.scss";
 import TodoItem from "../todo-item";
 import classNames from "classnames";
@@ -38,6 +39,7 @@ const TodoList = ({
   selectedFolder: string;
   todos: Task[];
 }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const [messageApi, contextHolder] = message.useMessage();
   const folders = useSelector((state: RootState) => state.categories.items);
@@ -57,7 +59,7 @@ const TodoList = ({
     );
 
     return (
-      <div 
+      <div
         className="todo-actions"
         onClick={(e) => e.stopPropagation()}
         onMouseDown={(e) => e.stopPropagation()}
@@ -65,7 +67,7 @@ const TodoList = ({
       >
         <Tooltip
           arrow={false}
-          title="Add subtask"
+          title={t('todoList.addSubtask')}
           mouseEnterDelay={0}
           mouseLeaveDelay={0}
         >
@@ -88,7 +90,7 @@ const TodoList = ({
         </Tooltip>
         <Tooltip
           arrow={false}
-          title="Focus task"
+          title={t('todoList.focusTask')}
           mouseEnterDelay={0}
           mouseLeaveDelay={0}
         >
@@ -105,7 +107,7 @@ const TodoList = ({
                 });
                 messageApi.open({
                   type: "success",
-                  content: `Task ${task.text} unfocused!`,
+                  content: t('todoList.unfocusTask', { text: task.text }),
                 });
               } else {
                 syncSettings({
@@ -113,7 +115,7 @@ const TodoList = ({
                 });
                 messageApi.open({
                   type: "success",
-                  content: `Task ${task.text} focused!`,
+                  content: t('todoList.taskFocused', { text: task.text }),
                 });
               }
             }}
@@ -124,7 +126,7 @@ const TodoList = ({
         {filteredFolders.length > 0 && (
           <Tooltip
             arrow={false}
-            title="Move item to folder"
+            title={t('todoList.moveItemToFolder')}
             mouseEnterDelay={0}
             mouseLeaveDelay={0}
           >
@@ -141,7 +143,7 @@ const TodoList = ({
                   items: [
                     {
                       key: "none",
-                      label: "Move item to folder",
+                      label: t('todoList.moveItemToFolder'),
                       className: "folder-move-item-to",
                       disabled: true,
                     },
@@ -173,7 +175,7 @@ const TodoList = ({
                 }}
                 trigger={["click"]}
               >
-                <SwapOutlined 
+                <SwapOutlined
                   onClick={(e: React.MouseEvent) => {
                     e.preventDefault();
                     e.stopPropagation();
@@ -187,13 +189,13 @@ const TodoList = ({
         )}
         <Tooltip
           arrow={false}
-          title="Delete task"
+          title={t('todoList.deleteTask')}
           mouseEnterDelay={0}
           mouseLeaveDelay={0}
         >
           <Popconfirm
-            title="Are you sure you want to delete this task?"
-            okText="Yes, delete"
+            title={t('completed.confirmDeleteTask')}
+            okText={t('completed.yesDelete')}
             onConfirm={(e) => {
               e?.preventDefault();
               e?.stopPropagation();
@@ -205,11 +207,12 @@ const TodoList = ({
               });
               messageApi.open({
                 type: "success",
-                content: `Task ${task.text} deleted successfully!`,
+                content: t('completed.taskDeleted', { text: task.text }),
               });
             }}
+            cancelText={t('sidebar.cancel')}
           >
-            <DeleteOutlined 
+            <DeleteOutlined
               className="delete-icon"
               onClick={(e) => {
                 e.preventDefault();
@@ -222,7 +225,7 @@ const TodoList = ({
         </Tooltip>
       </div>
     );
-  }, [focusedTaskId, folders, dispatch, messageApi]);
+  }, [focusedTaskId, folders, dispatch, messageApi, t]);
 
   const handleToggleCompletedTasks = () => {
     dispatch(
@@ -295,7 +298,7 @@ const TodoList = ({
   // Memoize active keys to prevent unnecessary re-renders
   const activeKeys = useMemo(() => {
     if (focusedTaskId &&
-        finalTodos.filter((task) => task.id === focusedTaskId)[0]?.subtasks?.length > 0) {
+      finalTodos.filter((task) => task.id === focusedTaskId)[0]?.subtasks?.length > 0) {
       return [focusedTaskId + "-" + selectedFolder];
     }
     return finalTodos
@@ -315,7 +318,7 @@ const TodoList = ({
       )}
       {focusedTaskId !== null && (
         <div className="focus-mode">
-          <div className="focus-mode-header">Focus mode is enabled</div>
+          <div className="focus-mode-header">{t('todoList.focusModeEnabled')}</div>
           <Button
             className="disable-focus-mode-button"
             onClick={() =>
@@ -326,7 +329,7 @@ const TodoList = ({
             size="small"
             type="text"
           >
-            Exit focus mode
+            {t('todoList.exitFocusMode')}
           </Button>
         </div>
       )}
@@ -335,8 +338,8 @@ const TodoList = ({
         <div className="completed-tasks-toggle-container">
           {currentFolder?.showCompletedTasks && (
             <Popconfirm
-              title="Are you sure you want to delete all completed todos?"
-              okText="Yes, delete"
+              title={t('completed.confirmDeleteAll')}
+              okText={t('completed.yesDelete')}
               onConfirm={async () => {
                 dispatch(
                   deleteAllCompletedCategoryTasks({
@@ -351,7 +354,7 @@ const TodoList = ({
                 });
                 messageApi.open({
                   type: "success",
-                  content: `All completed todos deleted successfully!`,
+                  content: t('todoList.allCompletedDeleted'),
                 });
                 dispatch(
                   updateCategory({
@@ -360,9 +363,10 @@ const TodoList = ({
                   }),
                 );
               }}
+              cancelText={t('sidebar.cancel')}
             >
               <Button type="primary" size="small" className="delete-all-button">
-                Delete All Completed Todos
+                {t('completed.deleteAll')}
               </Button>
             </Popconfirm>
           )}
@@ -373,8 +377,8 @@ const TodoList = ({
             type="text"
           >
             {!currentFolder?.showCompletedTasks
-              ? "Show completed tasks"
-              : "Hide completed tasks"}
+              ? t('todoList.showCompletedTasks')
+              : t('todoList.hideCompletedTasks')}
           </Button>
         </div>
       )}{" "}
@@ -392,7 +396,7 @@ const TodoList = ({
       {focusedTaskId === null && todos.length > 0 && (
         <Tooltip
           arrow={false}
-          title={"Add new task" + " (" + KEYBOARD_SHORTCUTS.addTask.key + ")"}
+          title={t('todo.addTask') + " (" + KEYBOARD_SHORTCUTS.addTask.key + ")"}
           mouseEnterDelay={0}
           mouseLeaveDelay={0}
           placement={finalTodos.length === 0 ? "top" : "right"}
@@ -413,7 +417,7 @@ const TodoList = ({
             icon={<PlusOutlined />}
             size="small"
           >
-            {finalTodos.length === 0 ? "Add new task" : ""}
+            {finalTodos.length === 0 ? t('todo.addTask') : ""}
           </Button>
         </Tooltip>
       )}

@@ -6,7 +6,7 @@
     background-color: var(--bg-sidebar);
     transition: all 0.3s ease;
 
-    .sidebar-bottom-actions{
+    .sidebar-bottom-actions {
         margin-top: auto;
     }
 
@@ -32,7 +32,7 @@
         min-width: 240px;
 
         &:hover {
-            > svg {
+            >svg {
                 path {
                     fill: var(--primary-color);
                     transition: fill 0.2s ease;
@@ -42,13 +42,14 @@
 
         &.selected {
             color: var(--primary-color);
-            
+
             .folder-item-content {
                 svg {
                     color: var(--primary-color);
                 }
             }
-            > svg {
+
+            >svg {
                 path {
                     fill: var(--primary-color);
                 }
@@ -70,11 +71,12 @@
 
                 &:hover {
                     background-color: var(--bg-selected);
+
                     svg {
                         fill: var(--primary-color);
                     }
                 }
-                
+
                 &.delete-action:hover {
                     svg {
                         fill: var(--red-500);
@@ -89,12 +91,12 @@
             }
         }
 
-        > svg {
+        >svg {
             min-width: 18px;
             min-height: 18px;
             max-width: 18px;
             max-height: 18px;
-            
+
             path {
                 fill: var(--text-secondary);
                 transition: fill 0.2s ease;
@@ -191,7 +193,7 @@
                 display: flex;
                 cursor: pointer;
                 transition: color 0.2s ease;
-                
+
                 &:hover {
                     color: var(--text-secondary);
                 }
@@ -235,6 +237,13 @@
                 margin-left: 4px;
             }
         }
+
+        .folder-item-name,
+        >span {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
     }
 
     .ellipsis-icon {
@@ -277,12 +286,12 @@
 
     .ant-dropdown-menu-item:first-of-type {
         color: var(--primary-color);
-        
+
         &:hover {
             color: var(--primary-color);
             background-color: var(--bg-hover);
         }
-        
+
         .anticon {
             color: var(--primary-color);
         }
@@ -290,12 +299,12 @@
 
     .ant-dropdown-menu-item:last-of-type {
         color: var(--red-500);
-        
+
         &:hover {
             color: var(--red-500);
             background-color: var(--bg-hover);
         }
-        
+
         .anticon {
             color: var(--red-500);
         }
@@ -380,7 +389,7 @@
 .sidebar-bottom-action-item {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 9px;
     padding: 10px 16px;
     padding-left: 6px;
     width: 100%;
@@ -393,8 +402,23 @@
     border-radius: 4px;
     transition: all 0.3s ease;
 
-    span  {
+    span {
         color: var(--text-primary);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .language-switcher-icon svg {
+        min-height: 14px;
+        max-height: 14px;
+        height: 14px;
+    }
+
+    .theme-toggle-icon {
+        min-height: 14px;
+        max-height: 14px;
+        height: 14px;
     }
 
     &:hover {
@@ -410,16 +434,16 @@
         fill: var(--text-secondary);
         color: var(--text-secondary);
         transition: fill 0.3s ease, color 0.3s ease;
-        
+
         path {
             fill: var(--text-secondary);
         }
     }
-    
+
     &:hover svg {
         fill: var(--primary-color);
         color: var(--primary-color);
-        
+
         path {
             fill: var(--primary-color);
         }

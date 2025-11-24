@@ -9,6 +9,10 @@
         display: flex;
         margin-top: 16px;
         justify-content: space-between;
+
+        button {
+            height: 32px;
+        }
     }
 
     .error-message {

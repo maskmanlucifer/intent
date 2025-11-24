@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { ReactComponent as SmilyIcon } from "../../assets/icons/smily.svg";
 import Mousetrap from "mousetrap";
 import { KEYBOARD_SHORTCUTS } from "../../constant";
+import { useTranslation } from "react-i18next";
 
 interface TopbarProps {
   isSidebarCollapsed: boolean;
@@ -23,6 +24,7 @@ const Topbar = ({
   setIsLinkBoardOpen,
   isLinkBoardOpen,
 }: TopbarProps) => {
+  const { t } = useTranslation();
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       e.preventDefault();
@@ -47,14 +49,14 @@ const Topbar = ({
           className="topbar-left-title"
           onClick={() => setSidebarCollapsed(!isSidebarCollapsed)}
         >
-          {!isSidebarCollapsed && "INT3NT"}
+          {!isSidebarCollapsed && t('app.title')}
           {showCollapsedIcon && (
             <Tooltip
               arrow={false}
               autoAdjustOverflow={true}
               placement="right"
               title={
-                (!isSidebarCollapsed ? "Collapse sidebar" : "Expand sidebar") +
+                (!isSidebarCollapsed ? t('app.collapseSidebar') : t('app.expandSidebar')) +
                 " (" +
                 KEYBOARD_SHORTCUTS.toggleSidebar.key +
                 ")"
@@ -71,7 +73,7 @@ const Topbar = ({
               autoAdjustOverflow={true}
               placement="right"
               title={
-                "Expand sidebar" +
+                t('app.expandSidebar') +
                 " (" +
                 KEYBOARD_SHORTCUTS.toggleSidebar.key +
                 ")"
@@ -89,7 +91,7 @@ const Topbar = ({
           arrow={false}
           autoAdjustOverflow={true}
           placement="bottom"
-          title={"Linkboard" + " (" + KEYBOARD_SHORTCUTS.linkboard.key + ")"}
+          title={t('app.linkboard') + " (" + KEYBOARD_SHORTCUTS.linkboard.key + ")"}
           mouseEnterDelay={0}
           mouseLeaveDelay={0}
         >
@@ -99,7 +101,7 @@ const Topbar = ({
             size="small"
             onClick={() => setIsLinkBoardOpen(!isLinkBoardOpen)}
           >
-            Linkboard
+            {t('app.linkboard')}
           </Button>
         </Tooltip>
       </div>

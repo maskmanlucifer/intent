@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Checkbox, CheckboxChangeEvent } from "antd";
 import "./index.scss";
 import { Task, Subtask } from "../../types";
@@ -43,6 +44,7 @@ const TodoItem = ({
   todoItem: Task | Subtask;
   index: number;
 }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const [text, setText] = useState(todoItem.text);
   const [isCompleted, setIsCompleted] = useState(todoItem.isCompleted);
@@ -122,7 +124,7 @@ const TodoItem = ({
             setText(e.target.value);
           }}
           placeholder={
-            todoItem.isSubtask ? "Enter subtask details" : "Enter task details"
+            todoItem.isSubtask ? t('todoList.enterSubtaskDetails') : t('todoList.enterTaskDetails')
           }
           onClick={(event) => event.stopPropagation()}
           onFocus={(event) => {
@@ -250,9 +252,9 @@ const TodoItem = ({
         >
           {text.trim() === "" ? (
             <span style={{ color: "#b0b0b0" }}>
-              {todoItem.isSubtask
-                ? "Enter subtask details"
-                : "Enter task details"}
+                {todoItem.isSubtask
+                  ? t('todoList.enterSubtaskDetails')
+                  : t('todoList.enterTaskDetails')}
             </span>
           ) : (
             makeLinksClickable(text)

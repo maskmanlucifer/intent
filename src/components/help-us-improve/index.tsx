@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button, Input, message } from "antd";
 import "./index.scss";
 
@@ -9,6 +10,7 @@ const HelpUsImprove = ({
 }: {
   setPopoverState: (value: boolean) => void;
 }) => {
+  const { t } = useTranslation();
   const [feedback, setFeedback] = useState("");
   const [isError, setIsError] = useState(false);
   const [sendingFeedback, setSendingFeedback] = useState(false);
@@ -29,12 +31,12 @@ const HelpUsImprove = ({
       },
     )
       .then(() => {
-        messageApi.success("Feedback sent, thank you!");
+        messageApi.success(t('helpUsImprove.feedbackSent'));
         setFeedback("");
         setPopoverState(false);
       })
       .catch(() => {
-        messageApi.error("Failed to send feedback. Please try again.");
+        messageApi.error(t('helpUsImprove.feedbackFailed'));
       })
       .finally(() => setSendingFeedback(false));
   };
@@ -43,7 +45,7 @@ const HelpUsImprove = ({
     <div className="help-us-improve">
       {contextHolder}
       <TextArea
-        placeholder="Help us improve intent app + Include your email for a response"
+        placeholder={t('helpUsImprove.placeholder')}
         autoSize={{ minRows: 3, maxRows: 6 }}
         value={feedback}
         onChange={(e) => {
@@ -53,7 +55,7 @@ const HelpUsImprove = ({
       />
       {isError && (
         <div className="error-message">
-          Feedback should be less than 1000 characters
+          {t('helpUsImprove.errorTooLong')}
         </div>
       )}
       <div className="button-group">
@@ -62,7 +64,7 @@ const HelpUsImprove = ({
           size="small"
           onClick={() => setPopoverState(false)}
         >
-          Cancel
+          {t('helpUsImprove.cancel')}
         </Button>
         <Button
           type="primary"
@@ -71,7 +73,7 @@ const HelpUsImprove = ({
           disabled={!feedback.trim()}
           loading={sendingFeedback}
         >
-          Send Feedback
+          {t('helpUsImprove.sendFeedback')}
         </Button>
       </div>
     </div>
