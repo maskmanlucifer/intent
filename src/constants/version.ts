@@ -8,12 +8,12 @@ export const LAST_SEEN_VERSION_KEY = "lastSeenVersion";
 export const VERSION_FEATURES = {
     "0.1.0": [
         {
-            titleKey: "whatsNew.update1Title",
-            descriptionKey: "whatsNew.update1Description",
-        },
-        {
             titleKey: "whatsNew.update2Title",
             descriptionKey: "whatsNew.update2Description",
+        },
+        {
+            titleKey: "whatsNew.update1Title",
+            descriptionKey: "whatsNew.update1Description",
         },
         {
             titleKey: "whatsNew.update3Title",
@@ -27,7 +27,6 @@ export const VERSION_FEATURES = {
  * Uses chrome.storage in extension mode, localStorage in development
  */
 export const getLastSeenVersion = async (): Promise<string | null> => {
-    // Try chrome.storage first (extension mode)
     if (typeof chrome !== "undefined" && chrome.storage) {
         try {
             const result = await chrome.storage.local.get(LAST_SEEN_VERSION_KEY);

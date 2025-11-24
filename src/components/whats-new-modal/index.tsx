@@ -8,6 +8,7 @@ import {
     setLastSeenVersion,
 } from "../../constants/version";
 import "./index.scss";
+import { getUniqueUserId } from "../../helpers/session.helper";
 
 const { TextArea } = Input;
 
@@ -28,71 +29,73 @@ const WhatsNewModal: React.FC<WhatsNewModalProps> = ({
     const [sendingFeedback, setSendingFeedback] = useState(false);
     const [messageApi, contextHolder] = message.useMessage();
 
-    // Track when modal is opened
     useEffect(() => {
         if (open && hasUpdates) {
             const trackData: any = {
                 event: "whats_new_opened",
                 version: APP_VERSION,
                 timestamp: new Date().toISOString(),
+                feedback: "Analytics: What's New Opened",
             };
 
-            // Get extension ID if available
-            if (typeof chrome !== "undefined" && chrome.runtime && chrome.runtime.id) {
-                trackData.extensionId = chrome.runtime.id;
-            }
-
-            // Send tracking data
-            fetch(
-                "https://intent-server-git-main-lzbs-projects-77777663.vercel.app/addUserFeedback",
-                {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(trackData),
-                }
-            ).catch((error) => {
-                console.error("Failed to send tracking data:", error);
-            });
+            getUniqueUserId()
+                .then(Id => {
+                    fetch(
+                        "https://intent-server-git-main-lzbs-projects-77777663.vercel.app/addUserFeedback",
+                        {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ feedback: JSON.stringify({ ...trackData, userId: Id }) }),
+                        }
+                    )
+                })
+                .catch((error) => {
+                    console.error("Failed to send tracking data:", error);
+                });
         }
     }, [open, hasUpdates]);
 
-    const handleFeedbackSubmit = () => {
+    const handleFeedbackSubmit = async () => {
         if (!feedback.trim() || sendingFeedback) return;
 
         setSendingFeedback(true);
+
         const feedbackData: any = {
             feedback: feedback.trim(),
             source: "whats_new_modal",
             version: APP_VERSION,
         };
 
-        if (typeof chrome !== "undefined" && chrome.runtime && chrome.runtime.id) {
-            feedbackData.extensionId = chrome.runtime.id;
+        try {
+            const Id = await getUniqueUserId();
+            await fetch(
+                "https://intent-server-git-main-lzbs-projects-77777663.vercel.app/addUserFeedback",
+                {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ feedback: JSON.stringify({ ...feedbackData, userId: Id }) }),
+                }
+            );
+            messageApi.success(t("whatsNew.feedbackSent"));
+            setFeedback("");
+        } catch (error) {
+            console.error("Failed to send feedback:", error);
+            messageApi.error(t("whatsNew.feedbackFailed"));
+        } finally {
+            setSendingFeedback(false);
         }
-
-        fetch(
-            "https://intent-server-git-main-lzbs-projects-77777663.vercel.app/addUserFeedback",
-            {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(feedbackData),
-            }
-        )
-            .then(() => {
-                messageApi.success(t("whatsNew.feedbackSent"));
-                setFeedback("");
-            })
-            .catch(() => {
-                messageApi.error(t("whatsNew.feedbackFailed"));
-            })
-            .finally(() => setSendingFeedback(false));
     };
 
     const handleClose = async () => {
-        if (hasUpdates) {
-            await setLastSeenVersion(APP_VERSION);
+        try {
+            if (hasUpdates) {
+                await setLastSeenVersion(APP_VERSION);
+            }
+        } catch (error) {
+            console.error("Error saving last seen version:", error);
+        } finally {
+            onClose();
         }
-        onClose();
     };
 
     return (

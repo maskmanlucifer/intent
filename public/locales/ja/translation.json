@@ -45,7 +45,8 @@
         "folderUpdated": "フォルダ {{name}} が正常に更新されました！",
         "folderDeleted": "フォルダ {{name}} が正常に削除されました！",
         "update": "更新",
-        "add": "追加"
+        "add": "追加",
+        "whatsNew": "新機能"
     },
     "completed": {
         "confirmDeleteTask": "このタスクを削除してもよろしいですか？",

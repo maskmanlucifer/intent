@@ -39,7 +39,7 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ isSidebarCollapsed }) => {
   return (
     <div className="sidebar-bottom-action-item" onClick={toggleTheme}>
       {withTooltip(
-        theme === 'light' ? <MoonOutlined /> : <SunOutlined />,
+        theme === 'light' ? <MoonOutlined  className='theme-toggle-icon'/> : <SunOutlined className='theme-toggle-icon' />,
         theme === 'light' ? t('sidebar.theme.switchToDark') : t('sidebar.theme.switchToLight')
       )}
       <span>
