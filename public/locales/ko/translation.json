@@ -45,7 +45,8 @@
         "folderUpdated": "폴더 {{name}}이(가) 성공적으로 업데이트되었습니다!",
         "folderDeleted": "폴더 {{name}}이(가) 성공적으로 삭제되었습니다!",
         "update": "업데이트",
-        "add": "추가"
+        "add": "추가",
+        "whatsNew": "새로운 기능"
     },
     "completed": {
         "confirmDeleteTask": "이 작업을 삭제하시겠습니까?",

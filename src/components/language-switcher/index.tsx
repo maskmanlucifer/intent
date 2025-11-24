@@ -86,7 +86,7 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ isSidebarCollapsed,
     return (
         <div className="sidebar-bottom-action-item language-switcher" onClick={handleClick}>
             {withTooltip(
-                <GlobalOutlined />,
+                <GlobalOutlined className="language-switcher-icon" />,
                 t('sidebar.changeLanguage')
             )}
             <Select
@@ -98,8 +98,6 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ isSidebarCollapsed,
                 )}
                 onOpenChange={(open) => setIsOpen(open)}
                 style={{
-                    width: isSidebarCollapsed ? 0 : 'auto',
-                    opacity: isSidebarCollapsed ? 0 : 1,
                     flex: 1
                 }}
                 onChange={handleChange}

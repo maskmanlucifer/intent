@@ -45,7 +45,8 @@
         "folderUpdated": "文件夹 {{name}} 更新成功！",
         "folderDeleted": "文件夹 {{name}} 删除成功！",
         "update": "更新",
-        "add": "添加"
+        "add": "添加",
+        "whatsNew": "新功能"
     },
     "completed": {
         "confirmDeleteTask": "您确定要删除此任务吗？",

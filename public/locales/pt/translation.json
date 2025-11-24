@@ -45,7 +45,8 @@
         "folderUpdated": "Pasta {{name}} atualizada com sucesso!",
         "folderDeleted": "Pasta {{name}} excluída com sucesso!",
         "update": "Atualizar",
-        "add": "Adicionar"
+        "add": "Adicionar",
+        "whatsNew": "Novidades"
     },
     "completed": {
         "confirmDeleteTask": "Tem certeza de que deseja excluir esta tarefa?",

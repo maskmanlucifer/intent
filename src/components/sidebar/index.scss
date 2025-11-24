@@ -409,6 +409,18 @@
         white-space: nowrap;
     }
 
+    .language-switcher-icon svg {
+        min-height: 14px;
+        max-height: 14px;
+        height: 14px;
+    }
+
+    .theme-toggle-icon {
+        min-height: 14px;
+        max-height: 14px;
+        height: 14px;
+    }
+
     &:hover {
         cursor: pointer;
         color: var(--text-primary);

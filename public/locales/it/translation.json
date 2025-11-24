@@ -45,7 +45,8 @@
         "folderUpdated": "Cartella {{name}} aggiornata con successo!",
         "folderDeleted": "Cartella {{name}} eliminata con successo!",
         "update": "Aggiorna",
-        "add": "Aggiungi"
+        "add": "Aggiungi",
+        "whatsNew": "Novità"
     },
     "completed": {
         "confirmDeleteTask": "Sei sicuro di voler eliminare questa attività?",

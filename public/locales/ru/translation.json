@@ -45,7 +45,8 @@
         "folderUpdated": "Папка {{name}} успешно обновлена!",
         "folderDeleted": "Папка {{name}} успешно удалена!",
         "update": "Обновить",
-        "add": "Добавить"
+        "add": "Добавить",
+        "whatsNew": "Что нового"
     },
     "completed": {
         "confirmDeleteTask": "Вы уверены, что хотите удалить эту задачу?",
