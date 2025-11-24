@@ -105,13 +105,16 @@
         "confirmRemove": "Are you sure you want to remove this link?",
         "deleteLink": "Delete link",
         "linksSelected": "{{count}} link selected",
-        "linksSelected_plural": "{{count}} links selected",
+        "linksSelected_one": "{{count}} link selected",
+        "linksSelected_other": "{{count}} links selected",
         "openLinks": "Open {{count}} link",
-        "openLinks_plural": "Open {{count}} links",
+        "openLinks_one": "Open {{count}} link",
+        "openLinks_other": "Open {{count}} links",
         "removeLinksTitle": "Remove links from linkboard",
         "linksRemoved": "Links removed from linkboard",
         "deleteLinks": "Delete {{count}} link",
-        "deleteLinks_plural": "Delete {{count}} links"
+        "deleteLinks_one": "Delete {{count}} link",
+        "deleteLinks_other": "Delete {{count}} links"
     },
     "whatsNew": {
         "title": "What's New in INT3NT",

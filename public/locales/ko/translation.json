@@ -104,14 +104,13 @@
         "cancel": "취소",
         "confirmRemove": "이 링크를 제거하시겠습니까?",
         "deleteLink": "링크 삭제",
-        "linksSelected": "{{count}}개 링크 선택됨",
-        "linksSelected_plural": "{{count}}개 링크 선택됨",
-        "openLinks": "{{count}}개 링크 열기",
-        "openLinks_plural": "{{count}}개 링크 열기",
+        "linksSelected_other": "{{count}}개 링크 선택됨",
+        "linksSelected_one": "{{count}}개 링크 선택됨",
+        "openLinks_other": "{{count}}개 링크 열기",
         "removeLinksTitle": "링크 보드에서 링크 제거",
         "linksRemoved": "링크 보드에서 링크가 제거되었습니다",
-        "deleteLinks": "{{count}}개 링크 삭제",
-        "deleteLinks_plural": "{{count}}개 링크 삭제"
+        "deleteLinks_other": "{{count}}개 링크 삭제",
+        "deleteLinks_one": "{{count}}개 링크 삭제"
     },
     "whatsNew": {
         "title": "INT3NT의 새로운 기능",

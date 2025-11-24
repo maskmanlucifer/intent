@@ -104,14 +104,13 @@
         "cancel": "取消",
         "confirmRemove": "您确定要移除此链接吗？",
         "deleteLink": "删除链接",
-        "linksSelected": "已选择 {{count}} 个链接",
-        "linksSelected_plural": "已选择 {{count}} 个链接",
-        "openLinks": "打开 {{count}} 个链接",
-        "openLinks_plural": "打开 {{count}} 个链接",
+        "linksSelected_other": "已选择 {{count}} 个链接",
+        "linksSelected_one": "已选择 {{count}} 个链接",
+        "openLinks_other": "打开 {{count}} 个链接",
         "removeLinksTitle": "从链接板移除链接",
         "linksRemoved": "链接已从链接板移除",
-        "deleteLinks": "删除 {{count}} 个链接",
-        "deleteLinks_plural": "删除 {{count}} 个链接"
+        "deleteLinks_other": "删除 {{count}} 个链接",
+        "deleteLinks_one": "删除 {{count}} 个链接"
     },
     "whatsNew": {
         "title": "INT3NT 的新功能",

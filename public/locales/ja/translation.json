@@ -104,14 +104,13 @@
         "cancel": "キャンセル",
         "confirmRemove": "このリンクを削除してもよろしいですか？",
         "deleteLink": "リンクを削除",
-        "linksSelected": "{{count}} リンクを選択中",
-        "linksSelected_plural": "{{count}} リンクを選択中",
-        "openLinks": "{{count}} リンクを開く",
-        "openLinks_plural": "{{count}} リンクを開く",
+        "linksSelected_other": "{{count}} リンクを選択中",
+        "openLinks_one": "{{count}} リンクを開く",
+        "openLinks_other": "{{count}} リンクを開く",
         "removeLinksTitle": "リンクボードからリンクを削除",
         "linksRemoved": "リンクボードからリンクを削除しました",
-        "deleteLinks": "リンクを{{count}}件削除",
-        "deleteLinks_plural": "リンクを{{count}}件削除"
+        "deleteLinks_other": "リンクを{{count}}件削除",
+        "deleteLinks_one": "リンクを{{count}}件削除"
     },
     "whatsNew": {
         "title": "INT3NTの新機能",

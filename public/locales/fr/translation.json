@@ -104,14 +104,14 @@
         "cancel": "Annuler",
         "confirmRemove": "Êtes-vous sûr de vouloir supprimer ce lien ?",
         "deleteLink": "Supprimer le lien",
-        "linksSelected": "{{count}} lien sélectionné",
-        "linksSelected_plural": "{{count}} liens sélectionnés",
-        "openLinks": "Ouvrir {{count}} lien",
-        "openLinks_plural": "Ouvrir {{count}} liens",
+        "linksSelected_one": "{{count}} lien sélectionné",
+        "linksSelected_other": "{{count}} liens sélectionnés",
+        "openLinks_one": "Ouvrir {{count}} lien",
+        "openLinks_other": "Ouvrir {{count}} liens",
         "removeLinksTitle": "Supprimer les liens du tableau de liens",
         "linksRemoved": "Liens supprimés du tableau de liens",
-        "deleteLinks": "Supprimer {{count}} lien",
-        "deleteLinks_plural": "Supprimer {{count}} liens"
+        "deleteLinks_one": "Supprimer {{count}} lien",
+        "deleteLinks_other": "Supprimer {{count}} liens"
     },
     "whatsNew": {
         "title": "Quoi de neuf dans INT3NT",
