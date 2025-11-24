@@ -252,11 +252,9 @@ const TodoItem = ({
         >
           {text.trim() === "" ? (
             <span style={{ color: "#b0b0b0" }}>
-              <span style={{ color: "#b0b0b0" }}>
                 {todoItem.isSubtask
                   ? t('todoList.enterSubtaskDetails')
                   : t('todoList.enterTaskDetails')}
-              </span>
             </span>
           ) : (
             makeLinksClickable(text)

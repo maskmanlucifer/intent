@@ -28,7 +28,7 @@ import { ReactComponent as ClearInputIcon } from "../../assets/icons/clean-input
 import { MessageInstance } from "antd/es/message/interface";
 import { AppDispatch } from "../../redux/store";
 import { KEYBOARD_SHORTCUTS } from "../../constant";
-import { APP_VERSION, hasNewUpdates, setLastSeenVersion } from "../../constants/version";
+import { hasNewUpdates } from "../../constants/version";
 import { ReactComponent as QuestionIcon } from "../../assets/icons/question.svg";
 import { ReactComponent as KeyboardOutlined } from "../../assets/icons/keyboard.svg";
 import { ReactComponent as DatabaseIcon } from "../../assets/icons/database.svg";
