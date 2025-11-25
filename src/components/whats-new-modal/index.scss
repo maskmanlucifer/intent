@@ -5,8 +5,36 @@
         color: var(--text-primary);
     }
 
+    // Constrain modal body height to viewport with padding
+    :global(.ant-modal-body) {
+        max-height: calc(100vh - 200px); // 200px accounts for header, footer, and padding
+        padding: 16px 24px;
+        overflow: hidden; // Prevent body from scrolling
+    }
+
     .whats-new-content {
         padding: 8px 0;
+        max-height: calc(100vh - 280px); // Account for header, footer, body padding, and content padding
+        overflow-y: auto;
+        overflow-x: hidden;
+        
+        // Custom scrollbar styling (optional, for better appearance)
+        &::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        &::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        &::-webkit-scrollbar-thumb {
+            background: var(--border-color, rgba(0, 0, 0, 0.2));
+            border-radius: 3px;
+            
+            &:hover {
+                background: var(--border-color, rgba(0, 0, 0, 0.3));
+            }
+        }
     }
 
     .whats-new-updates-list {
