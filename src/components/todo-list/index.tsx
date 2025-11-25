@@ -310,7 +310,9 @@ const TodoList = ({
     <div className="todo-list">
       {focusedTaskId === null && (
         <div className="todo-list-header">
-          <div className="todo-list-header-left">{currentFolder?.name}</div>
+            <div className="todo-list-header-left">
+            {currentFolder?.name === "Today" ? t('todo.today') : currentFolder?.name}
+            </div>
           <div className="todo-list-header-right">
             {todos.length - nonCompletedTodos.length}/{todos.length}
           </div>
