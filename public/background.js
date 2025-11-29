@@ -1,6 +1,8 @@
 /* eslint-disable no-undef */
 
 // Static translations for background script
+const OG_FETCHER_URL = "__REACT_APP_OG_FETCHER_URL__";
+
 const TRANSLATIONS = {
   en: "Save to Intent",
   zh: "保存到 Intent",
@@ -19,9 +21,9 @@ const SUPPORTED_LANGUAGES = ['en', 'es', 'fr', 'de', 'it', 'pt', 'ru', 'zh', 'ja
 
 // Normalize and validate language code
 const normalizeLanguage = (lng) => {
-    if (!lng || typeof lng !== 'string') return 'en';
-    const normalized = lng.split('-')[0].toLowerCase();
-    return SUPPORTED_LANGUAGES.includes(normalized) ? normalized : 'en';
+  if (!lng || typeof lng !== 'string') return 'en';
+  const normalized = lng.split('-')[0].toLowerCase();
+  return SUPPORTED_LANGUAGES.includes(normalized) ? normalized : 'en';
 };
 
 // Get translation based on stored language preference
@@ -79,7 +81,7 @@ chrome.action.onClicked.addListener((tab) => {
     putLinkDataToIDB(linkData);
 
     fetch(
-      `https://og-fetcher.onrender.com/preview/?url=${encodeURIComponent(tab.url)}`,
+      `${OG_FETCHER_URL}/preview/?url=${encodeURIComponent(tab.url)}`,
       {
         method: "GET",
         headers: {
@@ -183,7 +185,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
   }
 
   fetch(
-    `https://og-fetcher.onrender.com/preview/?url=${encodeURIComponent(url)}`,
+    `${OG_FETCHER_URL}/preview/?url=${encodeURIComponent(url)}`,
     {
       method: "GET",
       headers: {

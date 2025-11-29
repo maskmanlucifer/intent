@@ -3,6 +3,8 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
+require('dotenv').config();
+
 
 console.log('🚀 Building optimized Chrome extension...\n');
 
@@ -16,6 +18,16 @@ if (fs.existsSync('build')) {
 console.log('⚡ Building with optimizations...');
 execSync('GENERATE_SOURCEMAP=false npm run build', { stdio: 'inherit' });
 
+// Step 2.5: Replace placeholders in background.js
+console.log('🔧 Configuring background script...');
+const backgroundPath = path.join('build', 'background.js');
+if (fs.existsSync(backgroundPath)) {
+  let content = fs.readFileSync(backgroundPath, 'utf8');
+  content = content.replace('__REACT_APP_OG_FETCHER_URL__', process.env.REACT_APP_OG_FETCHER_URL || '');
+  fs.writeFileSync(backgroundPath, content);
+}
+
+
 // Step 3: Analyze bundle size
 console.log('\n📊 Bundle Analysis:');
 const buildDir = 'build';
@@ -23,11 +35,11 @@ const stats = [];
 
 function analyzeDirectory(dir, prefix = '') {
   const items = fs.readdirSync(dir);
-  
+
   items.forEach(item => {
     const itemPath = path.join(dir, item);
     const stat = fs.statSync(itemPath);
-    
+
     if (stat.isDirectory()) {
       analyzeDirectory(itemPath, prefix + item + '/');
     } else {
@@ -51,7 +63,7 @@ stats.slice(0, 10).forEach(file => {
 
 // Calculate total size
 const totalSize = stats.reduce((sum, file) => sum + parseFloat(file.size), 0);
-console.log(`\n📦 Total extension size: ${totalSize.toFixed(2)}KB (${(totalSize/1024).toFixed(2)}MB)`);
+console.log(`\n📦 Total extension size: ${totalSize.toFixed(2)}KB (${(totalSize / 1024).toFixed(2)}MB)`);
 
 // Performance recommendations
 console.log('\n💡 Performance Recommendations:');

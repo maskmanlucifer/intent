@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button, Input, message } from "antd";
 import "./index.scss";
+import config from "../../config";
 
 const { TextArea } = Input;
 
@@ -23,7 +24,7 @@ const HelpUsImprove = ({
     }
     setSendingFeedback(true);
     fetch(
-      "https://intent-server-git-main-lzbs-projects-77777663.vercel.app/addUserFeedback",
+      `${config.API_URL}/addUserFeedback`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

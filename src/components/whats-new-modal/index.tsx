@@ -9,6 +9,7 @@ import {
 } from "../../constants/version";
 import "./index.scss";
 import { getUniqueUserId } from "../../helpers/session.helper";
+import config from "../../config";
 
 const { TextArea } = Input;
 
@@ -41,7 +42,7 @@ const WhatsNewModal: React.FC<WhatsNewModalProps> = ({
             getUniqueUserId()
                 .then(Id => {
                     fetch(
-                        "https://intent-server-git-main-lzbs-projects-77777663.vercel.app/addUserFeedback",
+                        `${config.API_URL}/addUserFeedback`,
                         {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
@@ -69,7 +70,7 @@ const WhatsNewModal: React.FC<WhatsNewModalProps> = ({
         try {
             const Id = await getUniqueUserId();
             await fetch(
-                "https://intent-server-git-main-lzbs-projects-77777663.vercel.app/addUserFeedback",
+                `${config.API_URL}/addUserFeedback`,
                 {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
