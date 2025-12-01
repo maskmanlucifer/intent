@@ -19,6 +19,6 @@ Features in plan
 - Data sync to server
 - Option to add label in saved links
 - Feature to let users club links togather to created moodboards
-- Feature to share bulk links via QA code
+- Feature to share bulk links via QR code
 - Mobile app for intent
 
