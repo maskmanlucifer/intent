@@ -40,7 +40,7 @@ const AppContent = () => {
     // Show minimal loading screen for smooth fog-clearing effect
     const timer = setTimeout(() => {
       setShowLoadingScreen(false);
-    }, 800); // 0.8 seconds for minimal, smooth experience
+    }, 600); // 0.6 seconds for minimal, smooth experience
 
     return () => clearTimeout(timer);
   }, []);
