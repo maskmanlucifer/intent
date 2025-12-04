@@ -6,7 +6,7 @@ module.exports = {
       if (env === 'production') {
         // Remove source maps from production build
         webpackConfig.devtool = false;
-        
+
         // Optimize bundle splitting
         webpackConfig.optimization = {
           ...webpackConfig.optimization,
@@ -23,7 +23,7 @@ module.exports = {
                 name: 'i18next',
                 chunks: 'all',
                 priority: 10,
-            },
+              },
               antd: {
                 test: /[\\/]node_modules[\\/]antd[\\/]/,
                 name: 'antd',
@@ -37,19 +37,8 @@ module.exports = {
             },
           },
         };
-        
-        // Add compression plugin for smaller bundles
-        const CompressionPlugin = require('compression-webpack-plugin');
-        webpackConfig.plugins.push(
-          new CompressionPlugin({
-            algorithm: 'gzip',
-            test: /\.(js|css|html|svg)$/,
-            threshold: 8192,
-            minRatio: 0.8,
-          })
-        );
       }
-      
+
       return webpackConfig;
     },
   },
@@ -59,7 +48,7 @@ module.exports = {
         overrideWebpackConfig: ({ webpackConfig }) => {
           // Optimize images
           const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
-          
+
           webpackConfig.optimization.minimizer = [
             ...webpackConfig.optimization.minimizer,
             new ImageMinimizerPlugin({
@@ -76,7 +65,7 @@ module.exports = {
               },
             }),
           ];
-          
+
           return webpackConfig;
         },
       },

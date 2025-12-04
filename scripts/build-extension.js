@@ -16,8 +16,8 @@ if (fs.existsSync('build')) {
 }
 
 // Step 2: Build with optimizations
-console.log('⚡ Building with optimizations...');
-execSync('GENERATE_SOURCEMAP=false npm run build', { stdio: 'inherit' });
+console.log('⚡ Building with craco optimizations...');
+execSync('GENERATE_SOURCEMAP=false npm run build:prod', { stdio: 'inherit' });
 
 
 // Step 3: Analyze bundle size
